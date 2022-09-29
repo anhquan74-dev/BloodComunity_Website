@@ -5,7 +5,16 @@
 // @tailwind utilities;
 
 :root {
-    --primary: #f26b6b;
+    // --primary: #f26b6b;
+    --primary: #e64848;
+    --second: #c21010;
+    --third: #fffde3;
+    --fourth: #cfe8a9;
+    --hover: rgb(207, 33, 33);
+    --text-primary: #393939;
+    --error-message: #ed4337;
+    --error-bg: #ed43371c;
+    --success: #4bb543;
 }
 
 ::selection {
@@ -28,4 +37,13 @@ body {
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
+}
+
+.errorFormik {
+    border: 1px solid var(--error-message);
+    background-color: var(--error-bg);
+}
+
+button:disabled {
+    opacity: 0.35;
 }
