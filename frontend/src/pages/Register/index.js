@@ -78,6 +78,10 @@ const Register = () => {
     const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm(true);
     const { cityOptions, districtOptions, wardOptions } = state;
 
+    const handleToggleModal = () => {
+        setOpenModal(false);
+    };
+
     return (
         <div className={cx('register-body')}>
             <div className={cx('wrapper', 'mx-auto rounded-2xl bg-white pb-2 shadow-2xl ')}>
@@ -325,7 +329,7 @@ const Register = () => {
                     </div>
 
                     <button
-                        disabled={!(isValid && dirty)}
+                        // disabled={!(isValid && dirty)}
                         className={cx('btn-register')}
                         type="submit"
                         onClick={() => setOpenModal(true)}
@@ -335,6 +339,7 @@ const Register = () => {
                 </form>
 
                 <hr />
+                
                 <p className={cx('footer')}>
                     Bạn đã có tài khoản?
                     <NavLink to="/login" className={cx('btn-login')}>
@@ -342,7 +347,7 @@ const Register = () => {
                     </NavLink>
                 </p>
             </div>
-            {openModal && <Modal />}
+            {openModal && <Modal toggleModal={handleToggleModal} />}
         </div>
     );
 };

@@ -3,13 +3,38 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'react-router-dom';
 import styles from './Modal.module.scss';
 import classNames from 'classnames/bind';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { motion } from 'framer-motion';
 
 const cx = classNames.bind(styles);
 
-function Modal() {
+function Modal({ toggleModal }) {
     return (
-        <div className={cx('overlay')}>
-            <div className={cx('modal')}>
+        <motion.div
+            className={cx('overlay')}
+            onClick={toggleModal}
+            initial={{
+                opacity: 0,
+            }}
+            animate={{
+                opacity: 1,
+            }}
+        >
+            <motion.div
+                className={cx('modal')}
+                onClick={(e) => {
+                    e.stopPropagation();
+                }}
+                initial={{
+                    scale: 0,
+                }}
+                animate={{
+                    scale: 1,
+                }}
+            >
+                <motion.span whileHover={{ scale: 1.1 }} className={cx('modal-cancel')} onClick={toggleModal}>
+                    <FontAwesomeIcon icon={faXmark} />
+                </motion.span>
                 <p className={cx('modal-icon')}>
                     <FontAwesomeIcon icon={faCircleCheck} />
                 </p>
@@ -20,8 +45,8 @@ function Modal() {
                 <NavLink className={cx('modal-button')} to="/login">
                     Đăng nhập
                 </NavLink>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
 
