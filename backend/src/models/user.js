@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasMany(models.Schedule, {
         foreignKey: "hospitalId",
-        as: "hospitalData",
+        as: "hospitalDataSchedule",
       });
       User.hasMany(models.Event, {
         foreignKey: "hospitalId",
-        as: "hospitalData",
+        as: "hospitalDataEvent",
       });
       User.hasOne(models.Reward, { foreignKey: "donorId" });
       User.hasOne(models.Badge, { foreignKey: "donorId" });

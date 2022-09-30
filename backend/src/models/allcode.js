@@ -19,15 +19,15 @@ module.exports = (sequelize, DataTypes) => {
       });
       Allcode.hasMany(models.User, {
         foreignKey: "groupBlood",
-        as: "groupBloodData",
+        as: "groupBloodDataUser",
       });
       Allcode.hasMany(models.Request, {
         foreignKey: "groupBlood",
-        as: "groupBloodData",
+        as: "groupBloodDataRequest",
       });
       Allcode.hasMany(models.Request, {
         foreignKey: "status",
-        as: "statusData",
+        as: "statusDataRequest",
       });
       Allcode.hasMany(models.Booking, {
         foreignKey: "timeType",
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Allcode.hasMany(models.Booking, {
         foreignKey: "status",
-        as: "statusData",
+        as: "statusDataBooking",
       });
       Allcode.hasMany(models.Schedule, {
         foreignKey: "timeType",

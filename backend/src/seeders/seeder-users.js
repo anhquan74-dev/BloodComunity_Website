@@ -7,7 +7,7 @@ module.exports = {
     let passwordHash = bcrypt.hashSync("1234", bcrypt.genSaltSync(10));
     return queryInterface.bulkInsert("Users", [
       {
-        email: "admin@gmail.com",
+        email: "adminCS14@gmail.com",
         password: passwordHash,
         roleId: "admin",
         firstName: "Group",
