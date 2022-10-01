@@ -45,23 +45,23 @@ function Navbar() {
                         />
                     </NavLogo>
                     <NavMenu>
-                        {/* <NavItem>
+                        <NavItem>
                             <NavLinks to="home" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
                                 Home
                             </NavLinks>
-                        </NavItem> */}
+                        </NavItem>
                         <NavItem>
                             <NavLinks to="about" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
                                 Về chúng tôi
                             </NavLinks>
                         </NavItem>
                         <NavItem>
-                            <NavLinks to="donors" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
+                            <NavLinks to="top-donors" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
                                 Người hiến máu
                             </NavLinks>
                         </NavItem>
                         <NavItem>
-                            <NavLinks to="event" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
+                            <NavLinks to="events" smooth="true" duration="500" spy="true" exact="true" offset={-80}>
                                 Sự kiện
                             </NavLinks>
                         </NavItem>

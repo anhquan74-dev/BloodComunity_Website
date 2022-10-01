@@ -71,14 +71,13 @@ export const NavLinks = styled(LinkS)`
         height: 5px;
         background-color: var(--primary);
     }
-    &:active {
+    &.active {
         &::after {
             transition: all 0.3s ease-in-out;
             width: 100%;
             opacity: 1;
         }
 
-        ${'' /* border-bottom: 3px solid black; */}
     }
     ${
         '' /* &:hover {

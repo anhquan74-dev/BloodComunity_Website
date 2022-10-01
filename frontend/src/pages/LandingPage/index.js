@@ -1,8 +1,12 @@
 // import Navbar from './components/NavBar';
 import About from './components/About';
 import Advice from './components/Advice';
+import DonateBox from './components/DonateBox';
 import HomeSection from './components/HomeSection';
 import Navbar from './components/Navbar';
+import TopDonors from './components/TopDonors';
+import DonationEvents from './components/DonationEvents';
+import Faq from './components/Faq';
 
 function LandingPage() {
     return (
@@ -17,6 +21,10 @@ function LandingPage() {
             <HomeSection />
             <About />
             <Advice />
+            <TopDonors />
+            <DonateBox />
+            <DonationEvents />
+            <Faq />
         </div>
     );
 }

@@ -8,7 +8,8 @@ export const HomeContainer = styled.div`
     justify-content: space-between;
     max-width: 1024px;
     margin: 0 auto;
-    padding: 160px 0 80px 0;
+    padding: 160px 0 100px 0;
+    position: relative;
 `;
 
 export const HomeContent = styled.div`

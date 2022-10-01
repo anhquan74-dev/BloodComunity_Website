@@ -1,5 +1,6 @@
 import { ArrowForward, ArrowRight } from '@mui/icons-material';
 import { useState } from 'react';
+import DonateBox from '../DonateBox';
 import {
     HomeContainer,
     HomeContent,
@@ -39,6 +40,7 @@ function HomeSection() {
             <HomeImgWrapper>
                 <HomeImg src={require('../../../../assets/images/landingpage.png')} alt="landingpage" />
             </HomeImgWrapper>
+            {/* <DonateBox position='absolute'/> */}
         </HomeContainer>
     );
 }

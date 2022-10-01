@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 
 function Advice() {
     return (
-        <div className={cx('wrapper')}>
+        <div id='advice' className={cx('wrapper')}>
             <div className={cx('left')}>
                 <h2>Những lời khuyên trước và sau khi hiến máu</h2>
                 <div className={cx('do')}>
