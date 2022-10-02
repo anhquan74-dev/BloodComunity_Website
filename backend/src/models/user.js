@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       hospitalName: DataTypes.STRING,
       gender: DataTypes.STRING, //allcode
       birthday: DataTypes.STRING,
+      ward: DataTypes.STRING,
       district: DataTypes.STRING,
       city: DataTypes.STRING,
       address: DataTypes.STRING,

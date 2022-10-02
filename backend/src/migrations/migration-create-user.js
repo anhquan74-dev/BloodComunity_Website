@@ -32,6 +32,9 @@ module.exports = {
       birthday: {
         type: Sequelize.STRING,
       },
+      ward: {
+        type: Sequelize.STRING,
+      },
       district: {
         type: Sequelize.STRING,
       },

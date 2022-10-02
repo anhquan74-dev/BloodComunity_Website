@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       recipientId: DataTypes.INTEGER,
       groupBlood: DataTypes.STRING,
-      unitRequire: DataTypes.STRING,
+      unitRequire: DataTypes.INTEGER,
       offerBenefit: DataTypes.STRING,
       status: DataTypes.STRING,
     },

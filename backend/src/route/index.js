@@ -1,16 +1,13 @@
 import express from "express";
-import homeController from "../controllers/homeController";
+let router = express.Router();
 import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
 import clinicController from "../controllers/clinicController";
-let router = express.Router();
 
 let initWebRoutes = (app) => {
-  router.get("/", homeController.getHomePage);
-  router.get("/crud", homeController.getCRUD);
-
+  //User
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post("/api/create-new-user", userController.handleCreateNewUser);
