@@ -11,7 +11,7 @@ function DonationEvents() {
     return (
         <div id="events" className={cx('wrapper')}>
             <div className={cx('container')}>
-                <h2>Sự kiện hiến máu</h2>
+                <h2>Các hoạt động hiến máu nhân đạo</h2>
                 <div className={cx('events')}>
                     {events.map((event, index) => {
                         return (

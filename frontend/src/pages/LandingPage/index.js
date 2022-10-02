@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import TopDonors from './components/TopDonors';
 import DonationEvents from './components/DonationEvents';
 import Faq from './components/Faq';
+import Footer from './components/Footer';
 
 function LandingPage() {
     return (
@@ -25,6 +26,7 @@ function LandingPage() {
             <DonateBox />
             <DonationEvents />
             <Faq />
+            <Footer/>
         </div>
     );
 }

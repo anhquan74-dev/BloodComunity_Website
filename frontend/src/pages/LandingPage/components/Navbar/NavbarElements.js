@@ -13,6 +13,7 @@ export const Nav = styled.nav`
     position: sticky;
     top: 0;
     z-index: 10;
+    border-bottom: 1px solid #fffde3;
 `;
 
 export const NavbarContainer = styled.div`
@@ -77,7 +78,6 @@ export const NavLinks = styled(LinkS)`
             width: 100%;
             opacity: 1;
         }
-
     }
     ${
         '' /* &:hover {
