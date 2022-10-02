@@ -1,10 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
-import initWebRoutes from "./route/web";
+import initWebRoutes from "./route/index";
 import connectDB from "./config/connectDB";
-const swaggerUI = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
+// const swaggerUI = require("swagger-ui-express");
+// const swaggerJsDoc = require("swagger-jsdoc");
 // import cors from "cors";
 require("dotenv").config();
 
@@ -35,24 +35,24 @@ app.use(function (req, res, next) {
 });
 
 // swagger
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Library API",
-      version: "1.0.0",
-      description: "API documentation",
-    },
-    servers: [
-      {
-        url: "http://localhost:8080",
-      },
-    ],
-  },
-  apis: ["./route/*.js"],
-};
+// const options = {
+//   definition: {
+//     openapi: "3.0.0",
+//     info: {
+//       title: "Library API",
+//       version: "1.0.0",
+//       description: "API documentation",
+//     },
+//     servers: [
+//       {
+//         url: "http://localhost:8080",
+//       },
+//     ],
+//   },
+//   apis: ["./route/*.js"],
+// };
 
-const specs = swaggerJsDoc(options);
+// const specs = swaggerJsDoc(options);
 // app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // // config app
@@ -68,5 +68,5 @@ connectDB();
 
 let port = process.env.PORT;
 app.listen(port, () => {
-  console.log("listening on port " + port);
+  console.log("Listening on port " + port);
 });

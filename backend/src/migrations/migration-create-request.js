@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       unitRequire: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       offerBenefit: {
         type: Sequelize.STRING,
@@ -24,7 +24,6 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
