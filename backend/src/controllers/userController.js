@@ -1,72 +1,98 @@
 import userService from "../services/userService";
 
-let handleLogin = async (req, res) => {
-  let { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(422).json({
-      statusCode: 422,
-      message: "Missing input parameters",
+let handleRegister = async (req, res) => {
+  try {
+    const { email, password, roleId } = req.body;
+    if (!email || !password || !roleId) {
+      res.send({
+        statusCode: 422,
+        message: "Missing require parameters!",
+      });
+    } else {
+      let userSignup = await userService.registerService(req.body);
+      res.status(userSignup.statusCode).json({
+        statusCode: userSignup.statusCode,
+        message: userSignup.message,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
     });
   }
-  let userData = await userService.handleUserLogin(email, password);
-  return res.status(200).json({
-    errCode: userData.errCode,
-    message: userData.errMessage,
-    user: userData.user ? userData.user : {},
-  });
+};
+let handleLogin = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    if (!email) {
+      res.send({
+        statusCode: 422,
+        message: "Missing email address!",
+      });
+    } else {
+      if (!password) {
+        res.send({
+          statusCode: 422,
+          message: "Missing password!",
+        });
+      } else {
+        let userData = await userService.loginService(email, password);
+        res.status(userData.statusCode).json({
+          statusCode: userData.statusCode,
+          message: userData.message,
+          content: userData.content,
+        });
+      }
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
 };
 let handleGetAllUsers = async (req, res) => {
-  let id = req.query.id;
-  if (!id) {
-    return res.status(200).json({
-      errCode: 1,
-      errMessage: "Missing required parameter id",
-      users: [],
-    });
-  }
-  let users = await userService.getAllUsers(id);
-  return res.status(200).json({
-    errCode: 0,
-    errMessage: "Ok",
-    users,
-  });
-};
-let handleCreateNewUser = async (req, res) => {
-  let message = await userService.createNewUser(req.body);
-  return res.status(200).json(message);
-};
-let handleUpdateUser = async (req, res) => {
-  let data = req.body;
-  let message = await userService.updateUser(data);
-  return res.status(200).json(message);
-};
-let handleDeteleUser = async (req, res) => {
-  if (!req.body.id) {
-    return res.status(200).json({
-      errCode: 1,
-      errMessage: "Missing id",
-    });
-  }
-  let message = await userService.deleteUser(req.body.id);
-  return res.status(200).json(message);
-};
-let getAllCode = async (req, res) => {
   try {
-    let data = await userService.getAllCodeService(req.query.type);
-    return res.status(200).json(data);
+    let users = await userService.getAllUsersService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Get all users successfully!",
+      content: users,
+    });
   } catch (e) {
-    console.log("Get all code error: ", e);
-    return res.status(200).json({
-      errCode: -1,
-      errMessage: "Error from server",
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleGetUserById = async (req, res) => {
+  try {
+    let id = req.query.id;
+    if (!id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing user id!",
+      });
+    } else {
+      let user = await userService.getUserByIdService(id);
+      res.status(user.statusCode).json({
+        statusCode: user.statusCode,
+        message: user.message,
+        content: user.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
     });
   }
 };
 module.exports = {
+  handleRegister,
   handleLogin,
   handleGetAllUsers,
-  handleCreateNewUser,
-  handleUpdateUser,
-  handleDeteleUser,
-  getAllCode,
+  handleGetUserById,
 };

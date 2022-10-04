@@ -8,12 +8,14 @@ import clinicController from "../controllers/clinicController";
 
 let initWebRoutes = (app) => {
   //User
+  router.post("/api/register", userController.handleRegister);
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
-  router.post("/api/create-new-user", userController.handleCreateNewUser);
-  router.put("/api/update-user", userController.handleUpdateUser);
-  router.delete("/api/delete-user", userController.handleDeteleUser);
-  router.get("/api/allcode", userController.getAllCode);
+  router.get("/api/get-user-by-id", userController.handleGetUserById);
+  // router.post("/api/create-new-user", userController.handleCreateNewUser);
+  // router.put("/api/update-user", userController.handleUpdateUser);
+  // router.delete("/api/delete-user", userController.handleDeteleUser);
+  // router.get("/api/allcode", userController.getAllCode);
 
   //Doctor
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
