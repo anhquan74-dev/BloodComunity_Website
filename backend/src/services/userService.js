@@ -43,7 +43,7 @@ let loginService = async (email, password) => {
       where: { email },
     });
     if (!checkUserEmail) {
-      userData.statusCode = 401;
+      userData.statusCode = 404;
       userData.message = "Your Email isn't exist";
       userData.content = {};
     } else {
@@ -52,7 +52,7 @@ let loginService = async (email, password) => {
         checkUserEmail.password
       );
       if (!checkPassword) {
-        userData.statusCode = 401;
+        userData.statusCode = 404;
         userData.message = "Your password is not valid!";
         userData.content = {};
       } else {
@@ -109,7 +109,7 @@ let getUserByIdService = async (userId) => {
       },
     });
     if (!user) {
-      userInfor.statusCode = 401;
+      userInfor.statusCode = 404;
       userInfor.message = "User not found!";
       userInfor.content = {};
     } else {
@@ -123,27 +123,6 @@ let getUserByIdService = async (userId) => {
   }
 };
 
-let deleteUser = (id) => {
-  return new Promise(async (resolve, reject) => {
-    let user = await db.User.findOne({
-      where: { id },
-    });
-    if (!user) {
-      resolve({
-        errCode: 2,
-        errMessage: "User not found",
-      });
-    } else {
-      await db.User.destroy({
-        where: { id },
-      });
-      resolve({
-        errCode: 0,
-        message: "User deleted",
-      });
-    }
-  });
-};
 let updateUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -185,36 +164,53 @@ let updateUser = (data) => {
     }
   });
 };
-let getAllCodeService = (typeInput) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!typeInput) {
-        resolve({
-          errCode: 1,
-          errMessage: "Missing required parameter",
-        });
-      } else {
-        let res = {};
-        let allcode = await db.Allcode.findAll({
-          where: {
-            type: typeInput,
-          },
-        });
-        res.errCode = 0;
-        res.data = allcode;
-        resolve(res);
-      }
-    } catch (e) {
-      reject(e);
+let getAllCodeService = async (typeInput) => {
+  try {
+    let allCode = {};
+    let dataAllCode = await db.Allcode.findAll({
+      where: {
+        type: typeInput,
+      },
+    });
+    if (!dataAllCode || dataAllCode.length <= 0) {
+      allCode.statusCode = 404;
+      allCode.message = "Type is invalid!";
+    } else {
+      allCode.statusCode = 200;
+      allCode.message = "Get all code successfully!";
+      allCode.content = dataAllCode;
     }
-  });
+    return allCode;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let deleteUserService = async (inputId) => {
+  try {
+    let message = {};
+    let user = await db.User.findOne({
+      where: { id: inputId },
+    });
+    if (!user) {
+      message.statusCode = 404;
+      message.message = "User not found!";
+    } else {
+      await db.User.destroy({
+        where: { id: inputId },
+      });
+      message.statusCode = 200;
+      message.message = "User deleted successfully!";
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
 };
 module.exports = {
   loginService,
   getAllUsersService,
   getUserByIdService,
   registerService,
-  deleteUser,
-  updateUser,
   getAllCodeService,
+  deleteUserService,
 };

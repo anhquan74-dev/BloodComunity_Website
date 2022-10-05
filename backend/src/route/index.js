@@ -11,11 +11,12 @@ let initWebRoutes = (app) => {
   router.post("/api/register", userController.handleRegister);
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
-  router.get("/api/get-user-by-id", userController.handleGetUserById);
-  // router.post("/api/create-new-user", userController.handleCreateNewUser);
-  // router.put("/api/update-user", userController.handleUpdateUser);
-  // router.delete("/api/delete-user", userController.handleDeteleUser);
-  // router.get("/api/allcode", userController.getAllCode);
+  router.get("/api/get-user-by-id", userController.handleGetUserById); //admin
+  router.post("/api/create-new-user", userController.handleRegister); //admin
+  router.get("/api/allcode", userController.handleGetAllCode);
+  router.delete("/api/delete-user", userController.handleDeteleUser); //admin
+  router.put("/api/update-user", userController.handleUpdateUser); //admin
+  router.put("/api/update-profile", userController.handleUpdateUser);
 
   //Doctor
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
