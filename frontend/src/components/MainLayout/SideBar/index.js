@@ -5,9 +5,7 @@ function SideBar({ routes }) {
         <>
             {routes.map((item, index) => {
                 return (
-                    <div>
                         <Navigate to={item.to} content={item.content} />
-                    </div>
                 );
             })}
         </>

@@ -52,6 +52,12 @@
     margin: 10px 0 0 0;
 }
 
+.btn-register{
+    &:hover:disabled {
+        cursor: no-drop;
+    }
+}
+
 .error {
     color: var(--error-message);
     font-size: 1.4rem;
