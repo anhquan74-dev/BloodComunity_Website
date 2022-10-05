@@ -52,6 +52,30 @@ let handleLogin = async (req, res) => {
     });
   }
 };
+let handleGetAllCode = async (req, res) => {
+  try {
+    let typeInput = await req.query.type;
+    if (!typeInput) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input type!",
+      });
+    } else {
+      let content = await userService.getAllCodeService(typeInput);
+      res.status(content.statusCode).json({
+        statusCode: content.statusCode,
+        message: content.message,
+        content: content.content,
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 let handleGetAllUsers = async (req, res) => {
   try {
     let users = await userService.getAllUsersService();
@@ -90,9 +114,36 @@ let handleGetUserById = async (req, res) => {
     });
   }
 };
+let handleDeteleUser = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing user id!",
+      });
+    } else {
+      let message = await userService.deleteUserService(req.body.id);
+      res.status(200).json(message);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleUpdateUser = async (req, res) => {
+  let data = req.body;
+  let message = await userService.updateUserService(data);
+  return res.status(200).json(message);
+};
 module.exports = {
   handleRegister,
   handleLogin,
   handleGetAllUsers,
   handleGetUserById,
+  handleGetAllCode,
+  handleDeteleUser,
+  handleUpdateUser,
 };
