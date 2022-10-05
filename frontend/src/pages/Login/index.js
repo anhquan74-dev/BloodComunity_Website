@@ -32,7 +32,9 @@ const Login = () => {
         },
     });
 
-    console.log(touched.email);
+    // console.log(touched.email);
+
+
 
     return (
         <div className={cx('login-body')}>

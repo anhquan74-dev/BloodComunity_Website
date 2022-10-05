@@ -329,7 +329,7 @@ const Register = () => {
                     </div>
 
                     <button
-                        // disabled={!(isValid && dirty)}
+                        disabled={!(isValid && dirty)}
                         className={cx('btn-register')}
                         type="submit"
                         onClick={() => setOpenModal(true)}
@@ -339,7 +339,7 @@ const Register = () => {
                 </form>
 
                 <hr />
-                
+
                 <p className={cx('footer')}>
                     Bạn đã có tài khoản?
                     <NavLink to="/login" className={cx('btn-login')}>

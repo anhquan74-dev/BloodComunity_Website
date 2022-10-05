@@ -21,7 +21,7 @@ function Footer() {
                 <div className={cx('content')}>
                     <div className={cx('aboutus')}>
                         <div className={cx('abu-header')}>
-                            <img src={require('../../../../assets/images/BC_logo.png')} alt="log" />
+                            <img src={require('../../../../assets/images/BC_logo.png')} alt="logo" />
                             <h2>Blood Community</h2>
                         </div>
                         <div className={cx('abu-content')}></div>
