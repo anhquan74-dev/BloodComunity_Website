@@ -4,6 +4,7 @@ import userController from "../controllers/userController";
 import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
 import clinicController from "../controllers/clinicController";
+import hospitalController from "../controllers/hospitalController";
 
 let initWebRoutes = (app) => {
   //User
@@ -18,15 +19,14 @@ let initWebRoutes = (app) => {
   router.put("/api/update-profile", userController.handleUpdateUser);
 
   //Hospital
+  router.post(
+    "/api/create-schedule",
+    hospitalController.handleBulkCreateSchedule
+  ); //hospital, admin  74
 
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
   // router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
-  // router.get(
-  //   "/api/get-detail-doctor-by-id",
-  //   doctorController.getDetailDoctorById
-  // );
-  // router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
   // router.get(
   //   "/api/get-schedule-doctor-by-date",
   //   doctorController.getScheduleByDate
