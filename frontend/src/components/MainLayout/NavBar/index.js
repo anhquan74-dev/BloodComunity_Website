@@ -1,7 +1,8 @@
 import styles from './NavBar.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,11 @@ function NavBar() {
                     <FontAwesomeIcon icon={faBell} />
                 </div>
                 <div className={cx('profile-manage')}>
-                    <img src="" alt="avatar" />
+                    <img src={require('../../../assets/images/aboutus.jpeg')} alt="avatar" />
+                    <div className={cx('arrow-button')}>
+                        <KeyboardArrowDownIcon />
+                    </div>
+                    <div className={cx('layer')}></div>
                 </div>
             </div>
         </div>
