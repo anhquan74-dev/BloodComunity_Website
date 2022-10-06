@@ -6,16 +6,20 @@
     background-color: white;
     position: fixed;
     z-index: 10;
-    width: 22vw;
+    width: 20vw;
     height: 100vh;
     left: 0;
     top: 0;
-    border-right: 2px solid rgba(1, 1, 1, 0.03);
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
+.image {
+    position: absolute;
+    bottom: 24px;
+}
+
 .logo {
-    min-height: 80px;
+    min-height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,8 +48,8 @@
 }
 
 .container {
-    margin: 80px 0 0 22vw;
-    background-color: hsl(220, 10%, 94%);
+    margin: 70px 0 0 20vw;
+    background-color: #eff3fd;
     min-height: 1000px;
     padding: 20px;
     h1 {
@@ -53,16 +57,17 @@
     }
 }
 .navbar {
-    height: 80px;
+    height: 70px;
     position: fixed;
-    z-index: 0;
-    width: 78vw;
-    width: 1065px;
+    z-index: 1;
+    width: 100vw;
+    padding-left: 21vw;
     right: 0;
     top: 0;
     border-bottom: 2px solid rgba(1, 1, 1, 0.03);
     display: flex;
     justify-content: space-between;
+    background-color: #eff3fd;
 }
 .content {
 }

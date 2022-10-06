@@ -1,7 +1,12 @@
-function ManageHospital() {
-    return (<>
-        <h1>ManageHospital</h1>
-    </>);
-}
+
+import './ManageHospital.scss'
+import DataTable from '../../DataTable';
+
+const ManageHospital = () => {
+    
+    return (
+        <DataTable/>
+    );
+};
 
 export default ManageHospital;
