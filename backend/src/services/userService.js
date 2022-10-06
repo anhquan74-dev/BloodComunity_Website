@@ -206,6 +206,48 @@ let deleteUserService = async (inputId) => {
     console.log(e);
   }
 };
+
+let updateUserService = async (data) => {
+  try {
+    let userUpdated = {};
+    let checkUserId = await db.User.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkUserId) {
+      checkUserId.roleId = data.roleId;
+      checkUserId.firstName = data.firstName;
+      checkUserId.lastName = data.lastName;
+      checkUserId.hospitalName = data.hospitalName;
+      checkUserId.gender = data.gender;
+      checkUserId.birthday = data.birthday;
+      checkUserId.ward = data.ward;
+      checkUserId.district = data.district;
+      checkUserId.city = data.city;
+      checkUserId.address = data.address;
+      checkUserId.phoneNumber = data.phoneNumber;
+      checkUserId.groupBlood = data.groupBlood;
+      checkUserId.numberOfDonation = data.numberOfDonation;
+      if (data.image) {
+        checkUserId.image = data.image;
+      }
+      await checkUserId.save();
+      let getUserInforAgain = await db.User.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      userUpdated.content = getUserInforAgain;
+      userUpdated.statusCode = 200;
+      userUpdated.message = "Updated successfully!";
+    } else {
+      userUpdated.statusCode = 404;
+      userUpdated.message = "Couldn't find user";
+    }
+    return userUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
 module.exports = {
   loginService,
   getAllUsersService,
@@ -213,4 +255,5 @@ module.exports = {
   registerService,
   getAllCodeService,
   deleteUserService,
+  updateUserService,
 };

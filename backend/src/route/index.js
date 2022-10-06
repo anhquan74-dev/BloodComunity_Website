@@ -1,7 +1,6 @@
 import express from "express";
 let router = express.Router();
 import userController from "../controllers/userController";
-import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
 import clinicController from "../controllers/clinicController";
@@ -18,32 +17,33 @@ let initWebRoutes = (app) => {
   router.put("/api/update-user", userController.handleUpdateUser); //admin
   router.put("/api/update-profile", userController.handleUpdateUser);
 
-  //Doctor
-  router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
-  router.get("/api/get-all-doctors", doctorController.getAllDoctors);
-  router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
-  router.get(
-    "/api/get-detail-doctor-by-id",
-    doctorController.getDetailDoctorById
-  );
-  router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
-  router.get(
-    "/api/get-schedule-doctor-by-date",
-    doctorController.getScheduleByDate
-  );
-  router.get(
-    "/api/get-extra-infor-doctor-by-id",
-    doctorController.getExtraInforDoctorById
-  );
-  router.get(
-    "/api/get-profile-doctor-by-id",
-    doctorController.getProfileDoctorById
-  );
-  router.get(
-    "/api/get-list-patient-for-doctor",
-    doctorController.getListPatientForDoctor
-  );
-  router.post("/api/send-remedy", doctorController.sendRemedy);
+  //Hospital
+
+  // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
+  // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
+  // router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
+  // router.get(
+  //   "/api/get-detail-doctor-by-id",
+  //   doctorController.getDetailDoctorById
+  // );
+  // router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
+  // router.get(
+  //   "/api/get-schedule-doctor-by-date",
+  //   doctorController.getScheduleByDate
+  // );
+  // router.get(
+  //   "/api/get-extra-infor-doctor-by-id",
+  //   doctorController.getExtraInforDoctorById
+  // );
+  // router.get(
+  //   "/api/get-profile-doctor-by-id",
+  //   doctorController.getProfileDoctorById
+  // );
+  // router.get(
+  //   "/api/get-list-patient-for-doctor",
+  //   doctorController.getListPatientForDoctor
+  // );
+  // router.post("/api/send-remedy", doctorController.sendRemedy);
   //Patient
   router.post(
     "/api/patient-booking-appointment",
