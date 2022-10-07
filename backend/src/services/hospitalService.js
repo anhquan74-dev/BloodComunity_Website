@@ -7,15 +7,17 @@ let bulkCreateScheduleService = async (data) => {
   try {
     let scheduleCreate = {};
     if (!data.arrSchedule || !data.hospitalId || !data.formatedDate) {
-      (scheduleCreate.statusCode = 422),
-        (scheduleCreate.message = "Missing schedules data");
+      console.log("data", data);
+      scheduleCreate.statusCode = 422;
+      scheduleCreate.message = "Missing schedules data";
     } else {
       let schedule = data.arrSchedule;
+      console.log("arr schedule", schedule);
 
       // check existing in database
       let existing = await db.Schedule.findAll({
-        where: { doctorId: data.doctorId, date: data.formatedDate },
-        attributes: ["timeType", "date", "doctorId", "maxNumber"],
+        where: { hospitalId: data.hospitalId, date: data.formatedDate },
+        attributes: ["timeType", "date", "hospitalId", "maxNumber"],
         raw: true,
       });
       // convert date
