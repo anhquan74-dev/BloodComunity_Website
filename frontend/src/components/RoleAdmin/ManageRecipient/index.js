@@ -1,7 +1,9 @@
+import DataTable from "../../DataTable";
+
 function ManageRecipient() {
     return (
         <>
-            <h1>ManageRecipient</h1>
+            <DataTable/>
         </>
     );
 }
