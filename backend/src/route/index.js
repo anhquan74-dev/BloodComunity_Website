@@ -22,15 +22,15 @@ let initWebRoutes = (app) => {
   router.post(
     "/api/create-schedule",
     hospitalController.handleBulkCreateSchedule
-  ); //hospital, admin  74
+  ); //hospital, admin
+  router.get(
+    "/api/get-schedule-hospital-by-date",
+    hospitalController.handleGetScheduleByDate
+  );
 
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
   // router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
-  // router.get(
-  //   "/api/get-schedule-doctor-by-date",
-  //   doctorController.getScheduleByDate
-  // );
   // router.get(
   //   "/api/get-extra-infor-doctor-by-id",
   //   doctorController.getExtraInforDoctorById
