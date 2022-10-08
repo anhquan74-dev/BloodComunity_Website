@@ -144,9 +144,65 @@ let getEventByDateService = async (date) => {
     console.log(e);
   }
 };
+
+let deleteEventService = async (inputId) => {
+  try {
+    let message = {};
+    let event = await db.Event.findOne({
+      where: { id: inputId },
+    });
+    if (!event) {
+      message.statusCode = 404;
+      message.message = "Event not found!";
+    } else {
+      await db.Event.destroy({
+        where: { id: inputId },
+      });
+      message.statusCode = 200;
+      message.message = "Event deleted successfully!";
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+let updateEventService = async (data) => {
+  try {
+    let eventUpdated = {};
+    let checkEventId = await db.Event.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkEventId) {
+      checkEventId.hospitalId = data.hospitalId;
+      checkEventId.location = data.location;
+      checkEventId.date = data.date;
+      checkEventId.description = data.description;
+      checkEventId.nameEvent = data.nameEvent;
+      await checkEventId.save();
+      let getEventInforAgain = await db.Event.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      eventUpdated.content = getEventInforAgain;
+      eventUpdated.statusCode = 200;
+      eventUpdated.message = "Updated successfully!";
+    } else {
+      eventUpdated.statusCode = 404;
+      eventUpdated.message = "Couldn't find event";
+    }
+    return eventUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
+
 module.exports = {
   bulkCreateScheduleService,
   getScheduleByDateService,
   createEventService,
   getEventByDateService,
+  deleteEventService,
+  updateEventService,
 };
