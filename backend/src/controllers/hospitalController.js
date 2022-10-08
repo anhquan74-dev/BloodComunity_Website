@@ -111,7 +111,21 @@ let handleUpdateEvent = async (req, res) => {
     });
   }
 };
-
+let handleGetAllEvents = async (req, res) => {
+  try {
+    let events = await hospitalService.getAllEventsService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Get all events successfully!",
+      content: events,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 module.exports = {
   handleBulkCreateSchedule,
   handleGetScheduleByDate,
@@ -119,4 +133,5 @@ module.exports = {
   handleGetEventByDate,
   handleUpdateEvent,
   handleDeteleEvent,
+  handleGetAllEvents,
 };

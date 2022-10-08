@@ -8,8 +8,6 @@ import hospitalController from "../controllers/hospitalController";
 
 let initWebRoutes = (app) => {
   // get all events
-  // delete event
-  //update event
 
   // get all schedule
   // delete schedule
@@ -36,6 +34,8 @@ let initWebRoutes = (app) => {
   router.put("/api/update-profile", userController.handleUpdateUser);
 
   //Event
+  router.get("/api/get-all-events", hospitalController.handleGetAllEvents);
+
   router.post("/api/create-event", hospitalController.handleCreateEvent); //hospital, admin
   router.get(
     "/api/get-event-hospital-by-date",

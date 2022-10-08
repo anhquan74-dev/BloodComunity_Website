@@ -144,7 +144,6 @@ let getEventByDateService = async (date) => {
     console.log(e);
   }
 };
-
 let deleteEventService = async (inputId) => {
   try {
     let message = {};
@@ -166,7 +165,6 @@ let deleteEventService = async (inputId) => {
     console.log(e);
   }
 };
-
 let updateEventService = async (data) => {
   try {
     let eventUpdated = {};
@@ -197,7 +195,14 @@ let updateEventService = async (data) => {
     console.log("err update: ", e);
   }
 };
-
+let getAllEventsService = async () => {
+  try {
+    let allEvents = await db.Event.findAll();
+    return allEvents;
+  } catch (e) {
+    console.log(e);
+  }
+};
 module.exports = {
   bulkCreateScheduleService,
   getScheduleByDateService,
@@ -205,4 +210,5 @@ module.exports = {
   getEventByDateService,
   deleteEventService,
   updateEventService,
+  getAllEventsService,
 };
