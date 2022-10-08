@@ -7,6 +7,24 @@ import clinicController from "../controllers/clinicController";
 import hospitalController from "../controllers/hospitalController";
 
 let initWebRoutes = (app) => {
+  // get all events
+  // delete event
+  //update event
+
+  // get all schedule
+  // delete schedule
+  //update schedule
+
+  // verify-book-schedule
+  // donor-booking-schedule"
+
+  //Home page
+  // get total donation amount
+  // số donor đã đk trong web
+  // số người nhận máu đã đk
+  // top donors
+  // get event by date
+
   //User
   router.post("/api/register", userController.handleRegister);
   router.post("/api/login", userController.handleLogin);
@@ -19,6 +37,11 @@ let initWebRoutes = (app) => {
   router.put("/api/update-profile", userController.handleUpdateUser);
 
   //Hospital
+  router.post("/api/create-event", hospitalController.handleCreateEvent); //hospital, admin
+  router.get(
+    "/api/get-event-hospital-by-date",
+    hospitalController.handleGetScheduleByDate
+  );
   router.post(
     "/api/create-schedule",
     hospitalController.handleBulkCreateSchedule

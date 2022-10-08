@@ -9,8 +9,20 @@ let handleBulkCreateSchedule = async (req, res) => {
       });
     } else {
       let infor = await hospitalService.bulkCreateScheduleService(req.body);
-      return res.status(200).json(infor);
+      return res.status(infor.statusCode).json(infor);
     }
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleCreateEvent = async (req, res) => {
+  try {
+    let infor = await hospitalService.createEventService(req.body);
+    return res.status(infor.statusCode).json(infor);
   } catch (e) {
     console.log(e);
     return res.status(200).json({
@@ -44,4 +56,5 @@ let handleGetScheduleByDate = async (req, res) => {
 module.exports = {
   handleBulkCreateSchedule,
   handleGetScheduleByDate,
+  handleCreateEvent,
 };

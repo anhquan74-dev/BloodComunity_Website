@@ -32,11 +32,16 @@ let bulkCreateScheduleService = async (data) => {
       });
       // create data
       if (toCreate && toCreate.length > 0) {
-        await db.Schedule.bulkCreate(toCreate);
+        let dataCreate = await db.Schedule.bulkCreate(toCreate);
+        if (dataCreate) {
+          scheduleCreate.statusCode = 201;
+          scheduleCreate.message = "Schedule sent successfully";
+        }
+      } else {
+        scheduleCreate.statusCode = 409;
+        scheduleCreate.message =
+          "This calendar has already been created, please create with another time!";
       }
-
-      scheduleCreate.statusCode = 200;
-      scheduleCreate.message = "Schedule sent successfully";
       return scheduleCreate;
     }
   } catch (e) {
@@ -86,8 +91,25 @@ let getScheduleByDateService = async (hospitalId, date) => {
     console.log(e);
   }
 };
+let createEventService = async (data) => {
+  try {
+    let eventCreate = {};
+    if (!data.hospitalId) {
+      eventCreate.statusCode = 422;
+      eventCreate.message = "Missing hospitalId!";
+    } else {
+      await db.Event.create(data);
+      eventCreate.statusCode = 201;
+      eventCreate.message = "Event created successfully!";
+    }
+    return eventCreate;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 module.exports = {
   bulkCreateScheduleService,
   getScheduleByDateService,
+  createEventService,
 };
