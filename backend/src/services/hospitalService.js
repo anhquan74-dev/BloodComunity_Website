@@ -107,9 +107,46 @@ let createEventService = async (data) => {
     console.log(e);
   }
 };
-
+let getEventByDateService = async (date) => {
+  try {
+    let eventData = {};
+    if (!date) {
+      eventData.statusCode = 422;
+      eventData.message = "Missing require parameters!";
+    } else {
+      let data = await db.Event.findAll({
+        where: {
+          date,
+        },
+        include: [
+          {
+            model: db.User,
+            as: "hospitalData",
+            // attributes: ["firstName", "lastName"],
+            attributes: ["hospitalName"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      if (!data || data.length === 0) {
+        eventData.statusCode = 404;
+        eventData.message = "Not found!";
+        data = [];
+      } else {
+        eventData.statusCode = 200;
+        eventData.message = "Get event data successfully!";
+        eventData.content = data;
+      }
+      return eventData;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 module.exports = {
   bulkCreateScheduleService,
   getScheduleByDateService,
   createEventService,
+  getEventByDateService,
 };
