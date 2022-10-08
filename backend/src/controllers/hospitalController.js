@@ -73,9 +73,50 @@ let handleGetEventByDate = async (req, res) => {
     });
   }
 };
+let handleDeteleEvent = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing event id!",
+      });
+    } else {
+      let message = await hospitalService.deleteEventService(req.body.id);
+      res.status(message.statusCode).json(message);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleUpdateEvent = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input event id!",
+      });
+    } else {
+      let eventUpdated = await hospitalService.updateEventService(req.body);
+      res.status(eventUpdated.statusCode).json(eventUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+
 module.exports = {
   handleBulkCreateSchedule,
   handleGetScheduleByDate,
   handleCreateEvent,
   handleGetEventByDate,
+  handleUpdateEvent,
+  handleDeteleEvent,
 };
