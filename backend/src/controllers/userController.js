@@ -152,7 +152,51 @@ let handleUpdateUser = async (req, res) => {
     });
   }
 };
-
+let handleGetTotalDonation = async (req, res) => {
+  try {
+    let num = await userService.getTotalDonationService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleGetTotalDonor = async (req, res) => {
+  try {
+    let num = await userService.getTotalDonorService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleGetTotalRecipient = async (req, res) => {
+  try {
+    let num = await userService.getTotalRecipientService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 module.exports = {
   handleRegister,
   handleLogin,
@@ -161,4 +205,7 @@ module.exports = {
   handleGetAllCode,
   handleDeteleUser,
   handleUpdateUser,
+  handleGetTotalDonation,
+  handleGetTotalDonor,
+  handleGetTotalRecipient,
 };

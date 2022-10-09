@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db, { sequelize } from "../models/index";
 import authController from "../controllers/authController";
 
 let registerService = async (data) => {
@@ -122,7 +122,6 @@ let getUserByIdService = async (userId) => {
     console.log(e);
   }
 };
-
 let updateUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -206,7 +205,6 @@ let deleteUserService = async (inputId) => {
     console.log(e);
   }
 };
-
 let updateUserService = async (data) => {
   try {
     let userUpdated = {};
@@ -248,6 +246,49 @@ let updateUserService = async (data) => {
     console.log("err update: ", e);
   }
 };
+let getTotalDonationService = async () => {
+  try {
+    let num = await db.User.findAll({
+      attributes: [
+        [
+          sequelize.fn("sum", sequelize.col("numberOfDonation")),
+          "totalDonation",
+        ],
+      ],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let getTotalDonorService = async () => {
+  try {
+    let num = await db.User.findAll({
+      where: {
+        roleId: "donor",
+      },
+      attributes: [[sequelize.fn("count", sequelize.col("id")), "totalDonors"]],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let getTotalRecipientService = async () => {
+  try {
+    let num = await db.User.findAll({
+      where: {
+        roleId: "recipient",
+      },
+      attributes: [
+        [sequelize.fn("count", sequelize.col("id")), "totalRecipients"],
+      ],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
 module.exports = {
   loginService,
   getAllUsersService,
@@ -256,4 +297,7 @@ module.exports = {
   getAllCodeService,
   deleteUserService,
   updateUserService,
+  getTotalDonationService,
+  getTotalDonorService,
+  getTotalRecipientService,
 };
