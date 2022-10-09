@@ -91,6 +91,48 @@ let getScheduleByDateService = async (hospitalId, date) => {
     console.log(e);
   }
 };
+let getScheduleByIdService = async (inputId) => {
+  try {
+    let scheduleData = {};
+    if (!inputId) {
+      scheduleData.statusCode = 422;
+      scheduleData.message = "Missing require parameters!";
+    } else {
+      let data = await db.Schedule.findAll({
+        where: {
+          id: inputId,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "timeTypeData",
+            attributes: ["valueVi", "valueEn"],
+          },
+          {
+            model: db.User,
+            as: "hospitalData",
+            // attributes: ["firstName", "lastName"],
+            attributes: ["hospitalName"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      if (!data || data.length === 0) {
+        scheduleData.statusCode = 404;
+        scheduleData.message = "Not found!";
+        data = [];
+      } else {
+        scheduleData.statusCode = 200;
+        scheduleData.message = "Get schedule data successfully!";
+        scheduleData.content = data;
+      }
+      return scheduleData;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 let createEventService = async (data) => {
   try {
     let eventCreate = {};
@@ -273,4 +315,5 @@ module.exports = {
   getAllSchedulesService,
   deleteScheduleService,
   updateScheduleService,
+  getScheduleByIdService,
 };

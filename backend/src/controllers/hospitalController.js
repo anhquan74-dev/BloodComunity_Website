@@ -53,6 +53,25 @@ let handleGetScheduleByDate = async (req, res) => {
     });
   }
 };
+let handleGetScheduleById = async (req, res) => {
+  try {
+    if (!req.query.id) {
+      res.status(422).json({
+        statusCode: 422,
+        message: "Missing required parameters!",
+      });
+    } else {
+      let infor = await hospitalService.getScheduleByIdService(req.query.id);
+      res.status(infor.statusCode).json(infor);
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 let handleGetEventByDate = async (req, res) => {
   try {
     console.log("req.query.date", req.query.date);
@@ -192,4 +211,5 @@ module.exports = {
   handleGetAllSchedules,
   handleUpdateSchedule,
   handleDeteleSchedule,
+  handleGetScheduleById,
 };

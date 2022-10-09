@@ -197,6 +197,7 @@ let handleGetTotalRecipient = async (req, res) => {
     });
   }
 };
+let postBookingSchedule = async (req, res) => {};
 module.exports = {
   handleRegister,
   handleLogin,
@@ -208,4 +209,5 @@ module.exports = {
   handleGetTotalDonation,
   handleGetTotalDonor,
   handleGetTotalRecipient,
+  postBookingSchedule,
 };

@@ -50,6 +50,10 @@ let initWebRoutes = (app) => {
     "/api/get-schedule-hospital-by-date",
     hospitalController.handleGetScheduleByDate
   );
+  router.get(
+    "/api/get-schedule-hospital-by-id",
+    hospitalController.handleGetScheduleById
+  );
   router.post(
     "/api/create-schedule",
     hospitalController.handleBulkCreateSchedule
@@ -59,6 +63,16 @@ let initWebRoutes = (app) => {
     "/api/delete-schedule",
     hospitalController.handleDeteleSchedule
   ); //admin,hospital
+
+  // trước khi ấn submit form, gọi api: get-schedule-by-id lấy currentNumber so sánh với maxNumber để tiếp tục
+  // router.post(
+  //   "/api/donor-booking-schedule",
+  //   userController.handlePostBookingSchedule
+  // );
+  // router.post(
+  //   "/api/verify-book-appointment",
+  //   userController.handlePostVerifyBookingSchedule
+  // );
 
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
@@ -77,14 +91,6 @@ let initWebRoutes = (app) => {
   // );
   // router.post("/api/send-remedy", doctorController.sendRemedy);
   //Patient
-  router.post(
-    "/api/patient-booking-appointment",
-    patientController.postBookAppointment
-  );
-  router.post(
-    "/api/verify-book-appointment",
-    patientController.postVerifyBookAppointment
-  );
 
   //Specialty
   router.post("/api/create-new-specialty", specialtyController.createSpecialty);
