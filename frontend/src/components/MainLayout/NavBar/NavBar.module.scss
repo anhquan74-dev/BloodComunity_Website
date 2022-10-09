@@ -24,6 +24,10 @@
     font-size: 2rem;
 }
 
+.tooltip {
+    font-size: 1.2rem;
+}
+
 .message,
 .notification {
     width: 40px;
@@ -87,4 +91,53 @@
     height: 100%;
     border-radius: 50%;
     opacity: 0;
+}
+
+// acc popper
+.acc-popper {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 -4px 32px rgb(0 0 0 / 20%);
+    color: #1d2129;
+    margin: 0;
+    overflow: hidden;
+    padding-left: 0;
+    transition: all 0.3s ease-in-out;
+    will-change: opacity, transform;
+    padding: 8px 16px !important;
+    font-size: 1.4rem;
+}
+
+.myacc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    div {
+        &:first-child {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+.another {
+    padding: 10px 0 0 0;
+}
+
+.item {
+    padding: 10px 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
 }
