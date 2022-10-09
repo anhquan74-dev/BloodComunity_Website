@@ -7,12 +7,8 @@ import clinicController from "../controllers/clinicController";
 import hospitalController from "../controllers/hospitalController";
 
 let initWebRoutes = (app) => {
-  // get all events
-
-  // get all schedule
-  // delete schedule
-  //update schedule
-
+  //forgot password
+  //login with socials
   // verify-book-schedule
   // donor-booking-schedule"
 
@@ -35,23 +31,32 @@ let initWebRoutes = (app) => {
 
   //Event
   router.get("/api/get-all-events", hospitalController.handleGetAllEvents);
-
-  router.post("/api/create-event", hospitalController.handleCreateEvent); //hospital, admin
   router.get(
     "/api/get-event-hospital-by-date",
     hospitalController.handleGetEventByDate
   );
-  router.delete("/api/delete-event", hospitalController.handleDeteleEvent); //admin,hospital
+  router.post("/api/create-event", hospitalController.handleCreateEvent); //hospital, admin
   router.put("/api/update-event", hospitalController.handleUpdateEvent); //admin,hospital
+  router.delete("/api/delete-event", hospitalController.handleDeteleEvent); //admin,hospital
+
   //Schedule
-  router.post(
-    "/api/create-schedule",
-    hospitalController.handleBulkCreateSchedule
-  ); //hospital, admin
+  router.get(
+    "/api/get-all-schedules",
+    hospitalController.handleGetAllSchedules
+  );
   router.get(
     "/api/get-schedule-hospital-by-date",
     hospitalController.handleGetScheduleByDate
   );
+  router.post(
+    "/api/create-schedule",
+    hospitalController.handleBulkCreateSchedule
+  ); //hospital, admin
+  router.put("/api/update-schedule", hospitalController.handleUpdateSchedule); //admin,hospital
+  router.delete(
+    "/api/delete-schedule",
+    hospitalController.handleDeteleSchedule
+  ); //admin,hospital
 
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
