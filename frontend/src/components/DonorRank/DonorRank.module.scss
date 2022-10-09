@@ -1,0 +1,27 @@
+.wrapper {
+    margin: 0 auto;
+    width: 80%;
+    h2 {
+        text-align: center;
+        margin: 10px;
+        font-weight: 700;
+        font-size: 3rem;
+    }
+}
+.content {
+}
+.top3 {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    background-color: #1a8cfd;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 20px;
+}
+
+.rest {
+    border-radius: 30px;
+    background-color: white;
+    transform: translateY(-28px);
+}
