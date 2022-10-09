@@ -13,10 +13,12 @@ let initWebRoutes = (app) => {
   // donor-booking-schedule"
 
   //Home page
-  // get total donation amount
-  // số donor đã đk trong web
-  // số người nhận máu đã đk
-  // top donors
+  router.get("/api/get-total-donation", userController.handleGetTotalDonation);
+  router.get("/api/get-total-donor", userController.handleGetTotalDonor);
+  router.get(
+    "/api/get-total-recipient",
+    userController.handleGetTotalRecipient
+  );
 
   //User
   router.post("/api/register", userController.handleRegister);
