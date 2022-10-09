@@ -126,6 +126,61 @@ let handleGetAllEvents = async (req, res) => {
     });
   }
 };
+let handleGetAllSchedules = async (req, res) => {
+  try {
+    let schedules = await hospitalService.getAllSchedulesService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Get all schedules successfully!",
+      content: schedules,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleDeteleSchedule = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing schedule id!",
+      });
+    } else {
+      let message = await hospitalService.deleteScheduleService(req.body.id);
+      res.status(message.statusCode).json(message);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleUpdateSchedule = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input schedule id!",
+      });
+    } else {
+      let scheduleUpdated = await hospitalService.updateScheduleService(
+        req.body
+      );
+      res.status(scheduleUpdated.statusCode).json(scheduleUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 module.exports = {
   handleBulkCreateSchedule,
   handleGetScheduleByDate,
@@ -134,4 +189,7 @@ module.exports = {
   handleUpdateEvent,
   handleDeteleEvent,
   handleGetAllEvents,
+  handleGetAllSchedules,
+  handleUpdateSchedule,
+  handleDeteleSchedule,
 };

@@ -203,6 +203,65 @@ let getAllEventsService = async () => {
     console.log(e);
   }
 };
+let getAllSchedulesService = async () => {
+  try {
+    let allSchedules = await db.Schedule.findAll();
+    return allSchedules;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let deleteScheduleService = async (inputId) => {
+  try {
+    let message = {};
+    let schedule = await db.Schedule.findOne({
+      where: { id: inputId },
+    });
+    if (!schedule) {
+      message.statusCode = 404;
+      message.message = "Schedule not found!";
+    } else {
+      await db.Schedule.destroy({
+        where: { id: inputId },
+      });
+      message.statusCode = 200;
+      message.message = "Schedule deleted successfully!";
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let updateScheduleService = async (data) => {
+  try {
+    let scheduleUpdated = {};
+    let checkScheduleId = await db.Schedule.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkScheduleId) {
+      checkScheduleId.hospitalId = data.hospitalId;
+      checkScheduleId.timeType = data.timeType;
+      checkScheduleId.date = data.date;
+      checkScheduleId.maxNumber = data.maxNumber;
+      checkScheduleId.currentNumber = data.currentNumber;
+      await checkScheduleId.save();
+      let getScheduleInforAgain = await db.Schedule.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      scheduleUpdated.content = getScheduleInforAgain;
+      scheduleUpdated.statusCode = 200;
+      scheduleUpdated.message = "Updated successfully!";
+    } else {
+      scheduleUpdated.statusCode = 404;
+      scheduleUpdated.message = "Couldn't find Schedule";
+    }
+    return scheduleUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
 module.exports = {
   bulkCreateScheduleService,
   getScheduleByDateService,
@@ -211,4 +270,7 @@ module.exports = {
   deleteEventService,
   updateEventService,
   getAllEventsService,
+  getAllSchedulesService,
+  deleteScheduleService,
+  updateScheduleService,
 };
