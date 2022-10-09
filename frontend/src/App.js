@@ -1,32 +1,40 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
-
 import AdminPage from './pages/AdminPage';
 import HospitalPage from './pages/HospitalPage';
 import DonorPage from './pages/DonorPage';
 import RecipientPage from './pages/RecipientPage';
-
 import Dashboard from './components/RoleAdmin/Dashboard';
 import ManageHospital from './components/RoleAdmin/ManageHospital';
 import ManageDonor from './components/RoleAdmin/ManageDonor';
 import ManageRecipient from './components/RoleAdmin/ManageRecipient';
 import ManageAdmin from './components/RoleAdmin/ManageAdmin';
-
 import ManageSchedule from './components/RoleHospital/ManageSchedule';
 import ManageEvents from './components/RoleHospital/ManageEvents';
 import Account from './components/RoleHospital/Account';
-
 import ViewBloodRequest from './components/RoleDonor/ViewBloodRequest';
 import Donate from './components/RoleDonor/Donate';
 import ManageDonateSchedule from './components/RoleDonor/ManageDonateSchedule';
 import DonateEvents from './components/RoleDonor/DonateEvents';
-
 import DonorRank from './components/DonorRank';
-
 import BloodRequest from './components/RoleRecipient/BloodRequest';
 import ManageBloodRequest from './components/RoleRecipient/ManageBloodRequest';
 import Register from './pages/Register';
 import Login from './pages/Login';
+// import { createMuiTheme } from '@material-ui/core/styles';
+// import Typography from '@material-ui/core/Typography';
+// import { ThemeProvider } from '@material-ui/styles';
+// import CssBaseline from '@material-ui/core/CssBaseline';
+
+// const theme = createMuiTheme({
+//     overrides: {
+//         MuiTooltip: {
+//             tooltip: {
+//                 fontSize: "1.4rem",
+//             },
+//         },
+//     },
+// });
 
 function App() {
     return (
