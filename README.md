@@ -2,7 +2,7 @@
 
 --Khiem--
 Các bước chạy code backend: 
--B1: Tải và cài đặt mySQL Workbench trong link sau: https://www.youtube.com/watch?v=DqVDsoG4HXg&t=6s&ab_channel=H%E1%BB%8DcL%E1%BA%ADpTr%C3%ACnhOnline
+-B1: Tải và cài đặt mySQL Workbench trong link hướng dẫn sau: https://www.youtube.com/watch?v=DqVDsoG4HXg&t=6s&ab_channel=H%E1%BB%8DcL%E1%BA%ADpTr%C3%ACnhOnline
 -B2: Setup user và password trong mySQL Workbench: user: root , password: 1234
 -B3: Tạo query: 
     create database blood_community; 
