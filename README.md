@@ -28,7 +28,7 @@
 
 - Cài đặt các phụ thuộc và devDependencies và khởi động máy chủ.
 ```sh
-cd BloodComunity_Website
+cd backend
 npm i
 npx sequelize-cli db:migrate
 npx sequelize-cli db:seed:all
