@@ -197,7 +197,30 @@ let handleGetTotalRecipient = async (req, res) => {
     });
   }
 };
-let postBookingSchedule = async (req, res) => {};
+let handlePostBookingSchedule = async (req, res) => {
+  try {
+    let infor = await userService.postBookingScheduleService(req.body);
+    return res.status(infor.statusCode).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: "Error from server",
+    });
+  }
+};
+let handlePostVerifyBookingSchedule = async (req, res) => {
+  try {
+    let infor = await userService.postVerifyBookingSchedule(req.body);
+    return res.status(infor.statusCode).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: "Error from server",
+    });
+  }
+}
 module.exports = {
   handleRegister,
   handleLogin,
@@ -209,5 +232,6 @@ module.exports = {
   handleGetTotalDonation,
   handleGetTotalDonor,
   handleGetTotalRecipient,
-  postBookingSchedule,
+  handlePostBookingSchedule,
+  handlePostVerifyBookingSchedule
 };

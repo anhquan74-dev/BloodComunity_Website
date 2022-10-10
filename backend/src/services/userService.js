@@ -1,5 +1,8 @@
 import db, { sequelize } from "../models/index";
 import authController from "../controllers/authController";
+import { v4 as uuidv4 } from "uuid";
+require("dotenv").config();
+import emailService from "./emailService";
 
 let registerService = async (data) => {
   try {
@@ -121,47 +124,6 @@ let getUserByIdService = async (userId) => {
   } catch (e) {
     console.log(e);
   }
-};
-let updateUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!data.id || !data.roleId || !data.gender) {
-        resolve({
-          errCode: 2,
-          errMessage: "Missing input",
-        });
-      }
-      let user = await db.User.findOne({
-        where: { id: data.id },
-        raw: false,
-      });
-      if (user) {
-        user.firstName = data.firstName;
-        user.lastName = data.lastName;
-        user.address = data.address;
-        user.roleId = data.roleId;
-        user.positionId = data.positionId;
-        user.gender = data.gender;
-        user.phoneNumber = data.phoneNumber;
-        if (data.avatar) {
-          user.image = data.avatar;
-        }
-        await user.save();
-        resolve({
-          errCode: 0,
-          message: "Updated user successfully",
-        });
-      } else {
-        resolve({
-          errCode: 1,
-          errMessage: "Couldn't find user",
-        });
-      }
-    } catch (e) {
-      reject(e);
-      console.log("err update: ", e);
-    }
-  });
 };
 let getAllCodeService = async (typeInput) => {
   try {
@@ -289,6 +251,89 @@ let getTotalRecipientService = async () => {
     console.log(e);
   }
 };
+let buildUrlEmail = (hospitalId, token) => {
+  let result = `${process.env.URL_REACT}/verify-booking?token=${token}&hospitalId=${hospitalId}`;
+  return result;
+};
+let postBookingScheduleService = async (data) => {
+  try {
+    let booking = {};
+    console.log("check data: ", data);
+    if (
+      !data.email ||
+      !data.hospitalId ||
+      !data.timeType ||
+      !data.date ||
+      !data.fullName ||
+      !data.donorId
+
+    ) {
+      booking.statusCode = 422;
+      booking.message = "Missing required information!"
+    } else {
+      let token = uuidv4();
+      await emailService.sendSimpleEmail({
+        receiverEmail: data.email,
+        donorName: data.fullName,
+        time: data.timeString,
+        hospitalName: data.hospitalName,
+        // language: data.language,
+        redirectLink: buildUrlEmail(data.hospitalId, token),
+      });
+
+      await db.Booking.findOrCreate({
+        where: {
+          date: data.date,
+          timeType: data.timeType,
+        },
+        defaults: {
+          status: "S1",
+          hospitalId: data.hospitalId,
+          donorId: data.donorId,
+          date: data.date,
+          timeType: data.timeType,
+          token: token,
+        },
+      });
+
+      booking.statusCode = 201;
+      booking.message = "Successfully!"
+    }
+    return booking;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let postVerifyBookingSchedule = async (data) => {
+  try {
+    let booking = {}
+    if (!data.token || !data.hospitalId) {
+      booking.statusCode = 422;
+      booking.message = "Missing required parameters!"
+    } else {
+      let appointment = await db.Booking.findOne({
+        where: {
+          hospitalId: data.hospitalId,
+          token: data.token,
+          status: "S1",
+        },
+        raw: false,
+      });
+      if (appointment) {
+        appointment.status = "S2";
+        await appointment.save();
+        booking.statusCode = 200;
+        booking.message = "Update booking successfully";
+      } else {
+        booking.statusCode = 404;
+        booking.message = "Booking has been activated or does not exits!";
+      }
+    }
+    return booking;
+  } catch (e) {
+    console.log(e);
+  }
+};
 module.exports = {
   loginService,
   getAllUsersService,
@@ -300,4 +345,6 @@ module.exports = {
   getTotalDonationService,
   getTotalDonorService,
   getTotalRecipientService,
+  postBookingScheduleService,
+  postVerifyBookingSchedule
 };
