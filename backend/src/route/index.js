@@ -1,7 +1,6 @@
 import express from "express";
 let router = express.Router();
 import userController from "../controllers/userController";
-import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
 import clinicController from "../controllers/clinicController";
 import hospitalController from "../controllers/hospitalController";
@@ -65,14 +64,14 @@ let initWebRoutes = (app) => {
   ); //admin,hospital
 
   // trước khi ấn submit form, gọi api: get-schedule-by-id lấy currentNumber so sánh với maxNumber để tiếp tục
-  // router.post(
-  //   "/api/donor-booking-schedule",
-  //   userController.handlePostBookingSchedule
-  // );
-  // router.post(
-  //   "/api/verify-book-appointment",
-  //   userController.handlePostVerifyBookingSchedule
-  // );
+  router.post(
+    "/api/donor-booking-schedule",
+    userController.handlePostBookingSchedule
+  );
+  router.post(
+    "/api/verify-book-appointment",
+    userController.handlePostVerifyBookingSchedule
+  );
 
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
