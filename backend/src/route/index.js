@@ -24,11 +24,15 @@ let initWebRoutes = (app) => {
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.get("/api/get-user-by-id", userController.handleGetUserById); //admin
+  router.get("/api/get-user-by-type", userController.handleGetUserByType); //admin
   router.post("/api/create-new-user", userController.handleRegister); //admin
   router.get("/api/allcode", userController.handleGetAllCode);
   router.delete("/api/delete-user", userController.handleDeteleUser); //admin
   router.put("/api/update-user", userController.handleUpdateUser); //admin
   router.put("/api/update-profile", userController.handleUpdateUser);
+  router.put("/api/active-user", userController.handleActiveUser); //admin
+  router.put("/api/inactive-user", userController.handleInActiveUser); //admin
+
 
   //Event
   router.get("/api/get-all-events", hospitalController.handleGetAllEvents);
