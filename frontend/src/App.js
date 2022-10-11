@@ -21,20 +21,8 @@ import BloodRequest from './components/RoleRecipient/BloodRequest';
 import ManageBloodRequest from './components/RoleRecipient/ManageBloodRequest';
 import Register from './pages/Register';
 import Login from './pages/Login';
-// import { createMuiTheme } from '@material-ui/core/styles';
-// import Typography from '@material-ui/core/Typography';
-// import { ThemeProvider } from '@material-ui/styles';
-// import CssBaseline from '@material-ui/core/CssBaseline';
-
-// const theme = createMuiTheme({
-//     overrides: {
-//         MuiTooltip: {
-//             tooltip: {
-//                 fontSize: "1.4rem",
-//             },
-//         },
-//     },
-// });
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (
@@ -45,6 +33,7 @@ function App() {
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
                     <Route path="/admin" element={<AdminPage />}>
+                        <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_hospital" element={<ManageHospital />} />
                         <Route path="manage_donor" element={<ManageDonor />} />
@@ -52,12 +41,14 @@ function App() {
                         <Route path="manage_admin" element={<ManageAdmin />} />
                     </Route>
                     <Route path="/hospital" element={<HospitalPage />}>
+                        <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_schedule" element={<ManageSchedule />} />
                         <Route path="manage_events" element={<ManageEvents />} />
                         <Route path="account" element={<Account />} />
                     </Route>
                     <Route path="/donor" element={<DonorPage />}>
+                        <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="blood_request" element={<ViewBloodRequest />} />
                         <Route path="donate" element={<Donate />} />
@@ -67,6 +58,7 @@ function App() {
                         <Route path="account" element={<Account />} />
                     </Route>
                     <Route path="/recipient" element={<RecipientPage />}>
+                        <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="blood_request" element={<BloodRequest />} />
                         <Route path="manage_request" element={<ManageBloodRequest />} />
@@ -74,6 +66,7 @@ function App() {
                         <Route path="account" element={<Account />} />
                     </Route>
                 </Routes>
+                <ToastContainer />
             </div>
         </Router>
     );
