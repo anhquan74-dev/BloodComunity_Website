@@ -125,6 +125,31 @@ let getUserByIdService = async (userId) => {
     console.log(e);
   }
 };
+let getUserByTypeService = async (userType) => {
+  try {
+    let userInfor = {};
+    let users = await db.User.findAll({
+      where: {
+        roleId: userType,
+      },
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    if (!users || users.length <= 0) {
+      userInfor.statusCode = 404;
+      userInfor.message = "User not found!";
+      userInfor.content = {};
+    } else {
+      userInfor.statusCode = 200;
+      userInfor.message = "Get all users successfully!";
+      userInfor.content = users;
+    }
+    return userInfor;
+  } catch (e) {
+    console.log(e);
+  }
+};
 let getAllCodeService = async (typeInput) => {
   try {
     let allCode = {};
@@ -199,6 +224,58 @@ let updateUserService = async (data) => {
       userUpdated.content = getUserInforAgain;
       userUpdated.statusCode = 200;
       userUpdated.message = "Updated successfully!";
+    } else {
+      userUpdated.statusCode = 404;
+      userUpdated.message = "Couldn't find user";
+    }
+    return userUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
+let inActiveUserService = async (inputId) => {
+  try {
+    let userUpdated = {};
+    let checkUserId = await db.User.findOne({
+      where: { id: inputId },
+      raw: false,
+    });
+    if (checkUserId) {
+      checkUserId.status = "inactive";
+      await checkUserId.save();
+      let getUserInforAgain = await db.User.findOne({
+        where: { id: inputId },
+        raw: true,
+      });
+      userUpdated.content = getUserInforAgain;
+      userUpdated.statusCode = 200;
+      userUpdated.message = "Block user successfully!";
+    } else {
+      userUpdated.statusCode = 404;
+      userUpdated.message = "Couldn't find user";
+    }
+    return userUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
+let activeUserService = async (inputId) => {
+  try {
+    let userUpdated = {};
+    let checkUserId = await db.User.findOne({
+      where: { id: inputId },
+      raw: false,
+    });
+    if (checkUserId) {
+      checkUserId.status = "active";
+      await checkUserId.save();
+      let getUserInforAgain = await db.User.findOne({
+        where: { id: inputId },
+        raw: true,
+      });
+      userUpdated.content = getUserInforAgain;
+      userUpdated.statusCode = 200;
+      userUpdated.message = "UnBlock user successfully!";
     } else {
       userUpdated.statusCode = 404;
       userUpdated.message = "Couldn't find user";
@@ -346,5 +423,8 @@ module.exports = {
   getTotalDonorService,
   getTotalRecipientService,
   postBookingScheduleService,
-  postVerifyBookingSchedule
+  postVerifyBookingSchedule,
+  getUserByTypeService,
+  inActiveUserService,
+  activeUserService
 };
