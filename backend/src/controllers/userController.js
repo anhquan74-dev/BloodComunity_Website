@@ -134,10 +134,93 @@ let handleDeteleUser = async (req, res) => {
   }
 };
 let handleUpdateUser = async (req, res) => {
-  let data = req.body;
-  let message = await userService.updateUserService(data);
-  return res.status(200).json(message);
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input user id!",
+      });
+    } else {
+      let userUpdated = await userService.updateUserService(req.body);
+      res.status(200).json(userUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
 };
+let handleGetTotalDonation = async (req, res) => {
+  try {
+    let num = await userService.getTotalDonationService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleGetTotalDonor = async (req, res) => {
+  try {
+    let num = await userService.getTotalDonorService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleGetTotalRecipient = async (req, res) => {
+  try {
+    let num = await userService.getTotalRecipientService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Successfully!",
+      content: num,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handlePostBookingSchedule = async (req, res) => {
+  try {
+    let infor = await userService.postBookingScheduleService(req.body);
+    return res.status(infor.statusCode).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: "Error from server",
+    });
+  }
+};
+let handlePostVerifyBookingSchedule = async (req, res) => {
+  try {
+    let infor = await userService.postVerifyBookingSchedule(req.body);
+    return res.status(infor.statusCode).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: "Error from server",
+    });
+  }
+}
 module.exports = {
   handleRegister,
   handleLogin,
@@ -146,4 +229,9 @@ module.exports = {
   handleGetAllCode,
   handleDeteleUser,
   handleUpdateUser,
+  handleGetTotalDonation,
+  handleGetTotalDonor,
+  handleGetTotalRecipient,
+  handlePostBookingSchedule,
+  handlePostVerifyBookingSchedule
 };

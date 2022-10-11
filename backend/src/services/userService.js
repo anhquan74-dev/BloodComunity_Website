@@ -1,5 +1,8 @@
-import db from "../models/index";
+import db, { sequelize } from "../models/index";
 import authController from "../controllers/authController";
+import { v4 as uuidv4 } from "uuid";
+require("dotenv").config();
+import emailService from "./emailService";
 
 let registerService = async (data) => {
   try {
@@ -122,48 +125,6 @@ let getUserByIdService = async (userId) => {
     console.log(e);
   }
 };
-
-let updateUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!data.id || !data.roleId || !data.gender) {
-        resolve({
-          errCode: 2,
-          errMessage: "Missing input",
-        });
-      }
-      let user = await db.User.findOne({
-        where: { id: data.id },
-        raw: false,
-      });
-      if (user) {
-        user.firstName = data.firstName;
-        user.lastName = data.lastName;
-        user.address = data.address;
-        user.roleId = data.roleId;
-        user.positionId = data.positionId;
-        user.gender = data.gender;
-        user.phoneNumber = data.phoneNumber;
-        if (data.avatar) {
-          user.image = data.avatar;
-        }
-        await user.save();
-        resolve({
-          errCode: 0,
-          message: "Updated user successfully",
-        });
-      } else {
-        resolve({
-          errCode: 1,
-          errMessage: "Couldn't find user",
-        });
-      }
-    } catch (e) {
-      reject(e);
-      console.log("err update: ", e);
-    }
-  });
-};
 let getAllCodeService = async (typeInput) => {
   try {
     let allCode = {};
@@ -206,6 +167,173 @@ let deleteUserService = async (inputId) => {
     console.log(e);
   }
 };
+let updateUserService = async (data) => {
+  try {
+    let userUpdated = {};
+    let checkUserId = await db.User.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkUserId) {
+      checkUserId.roleId = data.roleId;
+      checkUserId.firstName = data.firstName;
+      checkUserId.lastName = data.lastName;
+      checkUserId.hospitalName = data.hospitalName;
+      checkUserId.gender = data.gender;
+      checkUserId.birthday = data.birthday;
+      checkUserId.ward = data.ward;
+      checkUserId.district = data.district;
+      checkUserId.city = data.city;
+      checkUserId.address = data.address;
+      checkUserId.phoneNumber = data.phoneNumber;
+      checkUserId.groupBlood = data.groupBlood;
+      checkUserId.numberOfDonation = data.numberOfDonation;
+      if (data.image) {
+        checkUserId.image = data.image;
+      }
+      await checkUserId.save();
+      let getUserInforAgain = await db.User.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      userUpdated.content = getUserInforAgain;
+      userUpdated.statusCode = 200;
+      userUpdated.message = "Updated successfully!";
+    } else {
+      userUpdated.statusCode = 404;
+      userUpdated.message = "Couldn't find user";
+    }
+    return userUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+};
+let getTotalDonationService = async () => {
+  try {
+    let num = await db.User.findAll({
+      attributes: [
+        [
+          sequelize.fn("sum", sequelize.col("numberOfDonation")),
+          "totalDonation",
+        ],
+      ],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let getTotalDonorService = async () => {
+  try {
+    let num = await db.User.findAll({
+      where: {
+        roleId: "donor",
+      },
+      attributes: [[sequelize.fn("count", sequelize.col("id")), "totalDonors"]],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let getTotalRecipientService = async () => {
+  try {
+    let num = await db.User.findAll({
+      where: {
+        roleId: "recipient",
+      },
+      attributes: [
+        [sequelize.fn("count", sequelize.col("id")), "totalRecipients"],
+      ],
+    });
+    return num;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let buildUrlEmail = (hospitalId, token) => {
+  let result = `${process.env.URL_REACT}/verify-booking?token=${token}&hospitalId=${hospitalId}`;
+  return result;
+};
+let postBookingScheduleService = async (data) => {
+  try {
+    let booking = {};
+    console.log("check data: ", data);
+    if (
+      !data.email ||
+      !data.hospitalId ||
+      !data.timeType ||
+      !data.date ||
+      !data.fullName ||
+      !data.donorId
+
+    ) {
+      booking.statusCode = 422;
+      booking.message = "Missing required information!"
+    } else {
+      let token = uuidv4();
+      await emailService.sendSimpleEmail({
+        receiverEmail: data.email,
+        donorName: data.fullName,
+        time: data.timeString,
+        hospitalName: data.hospitalName,
+        // language: data.language,
+        redirectLink: buildUrlEmail(data.hospitalId, token),
+      });
+
+      await db.Booking.findOrCreate({
+        where: {
+          date: data.date,
+          timeType: data.timeType,
+        },
+        defaults: {
+          status: "S1",
+          hospitalId: data.hospitalId,
+          donorId: data.donorId,
+          date: data.date,
+          timeType: data.timeType,
+          token: token,
+        },
+      });
+
+      booking.statusCode = 201;
+      booking.message = "Successfully!"
+    }
+    return booking;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let postVerifyBookingSchedule = async (data) => {
+  try {
+    let booking = {}
+    if (!data.token || !data.hospitalId) {
+      booking.statusCode = 422;
+      booking.message = "Missing required parameters!"
+    } else {
+      let appointment = await db.Booking.findOne({
+        where: {
+          hospitalId: data.hospitalId,
+          token: data.token,
+          status: "S1",
+        },
+        raw: false,
+      });
+      if (appointment) {
+        appointment.status = "S2";
+        await appointment.save();
+        booking.statusCode = 200;
+        booking.message = "Update booking successfully";
+      } else {
+        booking.statusCode = 404;
+        booking.message = "Booking has been activated or does not exits!";
+      }
+    }
+    return booking;
+  } catch (e) {
+    console.log(e);
+  }
+};
 module.exports = {
   loginService,
   getAllUsersService,
@@ -213,4 +341,10 @@ module.exports = {
   registerService,
   getAllCodeService,
   deleteUserService,
+  updateUserService,
+  getTotalDonationService,
+  getTotalDonorService,
+  getTotalRecipientService,
+  postBookingScheduleService,
+  postVerifyBookingSchedule
 };
