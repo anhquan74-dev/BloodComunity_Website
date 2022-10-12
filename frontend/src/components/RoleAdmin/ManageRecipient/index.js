@@ -1,9 +1,9 @@
-import DataTable from "../../DataTable";
+import DataTable from '../../DataTable';
 
 function ManageRecipient() {
     return (
         <>
-            <DataTable role='user' />
+            <DataTable role="recipient" />
         </>
     );
 }

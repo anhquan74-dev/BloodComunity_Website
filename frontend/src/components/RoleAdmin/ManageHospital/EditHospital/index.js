@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styles from './EditHospital.module.scss'
-import classNames from "classnames/bind";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from "react-redux";
-import { createHospital, fetchHospitalById } from "../../../../redux/actions/actions";
+import styles from './EditHospital.module.scss';
+import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchHospitalById, updateHospital } from '../../../../redux/actions/hospitalManage';
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
 function EditHospital() {
     const [hospital, setHospital] = useState({
@@ -18,44 +18,41 @@ function EditHospital() {
         password: '',
         phoneNumber: '',
         address: '',
-        role: 'R2'
-    })
+        role: 'R2',
+    });
+    const { hospitalName, email, password, phoneNumber, address, role } = hospital;
 
     const [err, setErr] = useState('');
     const { id } = useParams();
-    console.log(Number(id))
     let history = useNavigate();
     const dispatch = useDispatch();
-    const hospitalState = useSelector((state) => state.hospital.hospital)
-    const { hospitalName, email, password, phoneNumber, address, role } = hospital;
+    const hospitalState = useSelector((state) => state.users.hospital);
 
     useEffect(() => {
         dispatch(fetchHospitalById(id));
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (hospitalState) {
-            setHospital({ ...hospitalState })
+            setHospital({ ...hospitalState });
         }
-    }, [hospitalState])
+    }, [hospitalState]);
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        setHospital({ ...hospital, [name]: value })
-    }
+        setHospital({ ...hospital, [name]: value });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!hospitalName || !email || !password || !phoneNumber || !address) {
-            setErr('Vui lòng nhập đầy đủ thông tin')
+        if (!hospitalName || !phoneNumber || !address) {
+            setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
-            dispatch(createHospital(hospital));
+            dispatch(updateHospital(hospital));
             history('/admin/manage_hospital/');
             setErr('');
         }
-    }
-
-
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -63,7 +60,7 @@ function EditHospital() {
                 <FontAwesomeIcon icon={faArrowLeft} />
                 &nbsp; Trở về
             </div>
-            <h3>Thêm mới bệnh viện</h3>
+            <h3>Cập nhật thông tin bệnh viện</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <form className={cx('content')} onSubmit={handleSubmit}>
                 <TextField
@@ -71,25 +68,16 @@ function EditHospital() {
                     InputLabelProps={{ style: { fontSize: 14 } }}
                     margin="normal"
                     fullWidth
-                    id="standard-basic" label="Tên bệnh viện"
-                    variant="standard"
-                    value={hospitalName || ''}
-                    type='text'
-                    name='hospitalName'
-                    onChange={handleInputChange} />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
                     id="standard-basic"
                     label="Email"
-                    variant="standard"
+                    variant="outlined"
+                    color="info"
                     value={email || ''}
-                    type='email'
-                    name='email'
-                    onChange={handleInputChange} />
+                    type="email"
+                    name="email"
+                    onChange={handleInputChange}
+                    disabled
+                />
                 <br />
                 <TextField
                     inputProps={{ style: { fontSize: 14 } }}
@@ -98,11 +86,29 @@ function EditHospital() {
                     fullWidth
                     id="standard-basic"
                     label="Mật khẩu"
-                    variant="standard"
+                    variant="outlined"
+                    color="info"
                     value={password || ''}
-                    type='password'
-                    name='password'
-                    onChange={handleInputChange} />
+                    type="password"
+                    name="password"
+                    onChange={handleInputChange}
+                    disabled
+                />
+                <br />
+                <TextField
+                    inputProps={{ style: { fontSize: 14 } }}
+                    InputLabelProps={{ style: { fontSize: 14 } }}
+                    margin="normal"
+                    fullWidth
+                    id="standard-basic"
+                    label="Tên bệnh viện"
+                    variant="outlined"
+                    color="info"
+                    value={hospitalName || ''}
+                    type="text"
+                    name="hospitalName"
+                    onChange={handleInputChange}
+                />
                 <br />
                 <TextField
                     inputProps={{ style: { fontSize: 14 } }}
@@ -111,11 +117,13 @@ function EditHospital() {
                     fullWidth
                     id="standard-basic"
                     label="Số điện thoại"
-                    variant="standard"
+                    variant="outlined"
+                    color="info"
                     value={phoneNumber || ''}
-                    type='text'
-                    name='phoneNumber'
-                    onChange={handleInputChange} />
+                    type="text"
+                    name="phoneNumber"
+                    onChange={handleInputChange}
+                />
                 <br />
                 <TextField
                     inputProps={{ style: { fontSize: 14 } }}
@@ -124,18 +132,21 @@ function EditHospital() {
                     fullWidth
                     id="standard-basic"
                     label="Địa chỉ"
-                    variant="standard"
+                    variant="outlined"
+                    color="info"
                     value={address || ''}
-                    type='text'
-                    name='address'
-                    onChange={handleInputChange} />
+                    type="text"
+                    name="address"
+                    onChange={handleInputChange}
+                />
                 <br />
                 <div className={cx('button')}>
-
-                    <Button variant="contained" type='submit'>Thêm</Button>
+                    <Button variant="contained" type="submit">
+                        Lưu thay đổi
+                    </Button>
                 </div>
-            </form >
-        </div >
+            </form>
+        </div>
     );
 }
 

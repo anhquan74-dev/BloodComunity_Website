@@ -1,0 +1,52 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 40px;
+    h3 {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+}
+
+.back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary);
+
+    &:hover {
+        color: var(--second);
+    }
+}
+
+.content {
+    width: 100%;
+}
+
+.button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+        font-size: 14px !important;
+
+    }
+}
+
+.content-flex {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4%;
+    > div {
+        width: 40%;
+    }
+}
+

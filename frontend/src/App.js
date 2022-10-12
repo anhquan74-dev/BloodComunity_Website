@@ -25,6 +25,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import EditHospital from './components/RoleAdmin/ManageHospital/EditHospital';
 import AddNewHospital from './components/RoleAdmin/ManageHospital/AddNewHospital';
+import ViewHospital from './components/RoleAdmin/ManageHospital/ViewHospital';
+import ViewDonor from './components/RoleAdmin/ManageDonor/ViewDonor';
+import EditDonor from './components/RoleAdmin/ManageDonor/EditDonor';
 
 function App() {
     return (
@@ -38,11 +41,16 @@ function App() {
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_hospital" element={<ManageHospital />} />
+                        <Route path="manage_hospital/viewUser/:id" element={<ViewHospital />} />
                         <Route path="manage_hospital/editUser/:id" element={<EditHospital />} />
                         <Route path="manage_hospital/addUser" element={<AddNewHospital />} />
                         <Route path="manage_donor" element={<ManageDonor />} />
+                        <Route path="manage_donor/viewUser/:id" element={<ViewDonor />} />
+                        <Route path="manage_donor/editUser/:id" element={<EditDonor />} />
                         <Route path="manage_recipient" element={<ManageRecipient />} />
-                        <Route path="manage_admin" element={<ManageAdmin />} />
+                        <Route path="manage_recipient/viewUser/:id" element={<ViewDonor />} />
+                        <Route path="manage_recipient/editUser/:id" element={<EditDonor />} />
+
                     </Route>
                     <Route path="/hospital" element={<HospitalPage />}>
                         <Route index element={<Dashboard />} />

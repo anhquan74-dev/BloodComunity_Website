@@ -3,7 +3,7 @@
     padding: 20px;
 
     .datagrid {
-        font-size: 1.4rem;
+        font-size: 1.25rem;
     }
     .datatableTitle {
         width: 100%;
@@ -67,6 +67,14 @@
             border-radius: 5px;
             color: darkblue;
             border: 1px dotted rgba(0, 0, 139, 0.596);
+            cursor: pointer;
+        }
+
+        .editButton {
+            padding: 2px 5px;
+            border-radius: 5px;
+            color: rgb(201, 201, 0);
+            border: 1px dotted rgb(201, 201, 0);
             cursor: pointer;
         }
 

@@ -4,7 +4,7 @@ function ManageDonor() {
     return (
         <>
             
-            <DataTable role='user' />
+            <DataTable role='donor' />
         </>
     );
 }

@@ -136,7 +136,7 @@ export const hospitalColumns = [
     {
         field: 'hospitalName',
         headerName: 'hospitalName',
-        width: 220,
+        width: 200,
         // renderCell: (params) => {
         //     return (
         //         <div className="cellWithImg">
@@ -149,52 +149,33 @@ export const hospitalColumns = [
     {
         field: 'email',
         headerName: 'Email',
-        width: 230,
+        width: 200,
     },
 
     {
         field: 'phoneNumber',
         headerName: 'phoneNumber',
-        width: 120,
+        width: 100,
     },
 
     {
         field: 'address',
         headerName: 'Số nhà',
-        width: 160,
-    },
-    {
-        field: 'ward',
-        headerName: 'Phường / Xã',
         width: 120,
     },
     {
-        field: 'district',
-        headerName: 'Quận / Huyện',
-        width: 120,
+        field: 'status',
+        headerName: 'Status',
+        width: 80,
     },
-
-    {
-        field: 'city',
-        headerName: 'Tỉnh / Thành',
-        width: 120,
-    },
-    // {
-    //     field: 'status',
-    //     headerName: 'Status',
-    //     width: 160,
-    //     renderCell: (params) => {
-    //         return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
-    //     },
-    // },
 ];
 
-export const userColumns = [
+export const donorColumns = [
     { field: 'id', headerName: 'ID', width: 50 },
     {
         field: 'email',
         headerName: 'email',
-        width: 220,
+        width: 180,
         // renderCell: (params) => {
         //     return (
         //         <div className="cellWithImg">
@@ -207,65 +188,142 @@ export const userColumns = [
     {
         field: 'firstName',
         headerName: 'firstName',
-        width: 230,
+        width: 100,
     },
 
-    {
-        field: 'lastName',
-        headerName: 'lastName',
-        width: 120,
-    },
-    {
-        field: 'phoneNumber',
-        headerName: 'phoneNumber',
-        width: 120,
-    },
+    // {
+    //     field: 'lastName',
+    //     headerName: 'lastName',
+    //     width: 100,
+    // },
+    // {
+    //     field: 'phoneNumber',
+    //     headerName: 'phoneNumber',
+    //     width: 120,
+    // },
     {
         field: 'gender',
         headerName: 'gender',
-        width: 160,
+        width: 80,
     },
-    {
-        field: 'birthday',
-        headerName: 'birthday',
-        width: 160,
-    },
+    // {
+    //     field: 'birthday',
+    //     headerName: 'birthday',
+    //     width: 160,
+    // },
     {
         field: 'address',
         headerName: 'address',
         width: 160,
     },
-    {
-        field: 'ward',
-        headerName: 'Phường / Xã',
-        width: 120,
-    },
-    {
-        field: 'district',
-        headerName: 'Quận / Huyện',
-        width: 120,
-    },
+    // {
+    //     field: 'ward',
+    //     headerName: 'Phường / Xã',
+    //     width: 120,
+    // },
+    // {
+    //     field: 'district',
+    //     headerName: 'Quận / Huyện',
+    //     width: 120,
+    // },
 
-    {
-        field: 'city',
-        headerName: 'Tỉnh / Thành',
-        width: 120,
-    },
+    // {
+    //     field: 'city',
+    //     headerName: 'Tỉnh / Thành',
+    //     width: 120,
+    // },
     {
         field: 'groupBlood',
         headerName: 'Nhóm máu',
-        width: 120,
+        width: 100,
     },
     {
         field: 'numberOfDonation',
         headerName: 'Số lần hiến máu',
         width: 120,
     },
+    // {
+    //     field: 'status',
+    //     headerName: 'Status',
+    //     width: 160,
+    //     renderCell: (params) => {
+    //         return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
+    //     },
+    // },
+];
+
+export const recipientColumns = [
+    { field: 'id', headerName: 'ID', width: 50 },
     {
-        field: 'roleId',
-        headerName: 'Quyền',
-        width: 120,
+        field: 'email',
+        headerName: 'email',
+        width: 180,
+        // renderCell: (params) => {
+        //     return (
+        //         <div className="cellWithImg">
+        //             <img className="cellImg" src={params.row.image} alt="avatar" />
+        //             {params.row.hospitalName}
+        //         </div>
+        //     );
+        // },
     },
+    {
+        field: 'firstName',
+        headerName: 'firstName',
+        width: 100,
+    },
+
+    // {
+    //     field: 'lastName',
+    //     headerName: 'lastName',
+    //     width: 100,
+    // },
+    // {
+    //     field: 'phoneNumber',
+    //     headerName: 'phoneNumber',
+    //     width: 120,
+    // },
+    {
+        field: 'gender',
+        headerName: 'gender',
+        width: 80,
+    },
+    // {
+    //     field: 'birthday',
+    //     headerName: 'birthday',
+    //     width: 160,
+    // },
+    {
+        field: 'address',
+        headerName: 'address',
+        width: 160,
+    },
+    // {
+    //     field: 'ward',
+    //     headerName: 'Phường / Xã',
+    //     width: 120,
+    // },
+    // {
+    //     field: 'district',
+    //     headerName: 'Quận / Huyện',
+    //     width: 120,
+    // },
+
+    // {
+    //     field: 'city',
+    //     headerName: 'Tỉnh / Thành',
+    //     width: 120,
+    // },
+    {
+        field: 'groupBlood',
+        headerName: 'Nhóm máu',
+        width: 100,
+    },
+    // {
+    //     field: 'numberOfDonation',
+    //     headerName: 'Số lần hiến máu',
+    //     width: 120,
+    // },
     // {
     //     field: 'status',
     //     headerName: 'Status',

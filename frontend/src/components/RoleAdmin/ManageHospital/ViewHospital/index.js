@@ -1,63 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styles from './AddNewHospital.module.scss';
+import styles from './ViewHospital.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { createHospital } from '../../../../redux/actions/hospitalManage';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchHospitalById, updateUser } from '../../../../redux/actions/hospitalManage';
 
 const cx = classNames.bind(styles);
 
-function AddNewHospital() {
+function ViewHospital() {
     const [hospital, setHospital] = useState({
-        // id: '',
-        // firstName: "",
-        // lastName: "",
-        // gender: "",
-        // birthday: "",
-        // ward: null,
-        // district: "",
-        // city: "",
-        // image: {
-        //     type: "Buffer",
-        //     data: []
-        // },
-        // groupBlood: "",
-        // numberOfDonation: 0,
-        // status: "active",
         hospitalName: '',
         email: '',
         password: '',
         phoneNumber: '',
         address: '',
-        roleId: 'R2',
+        role: 'R2',
     });
+    const { hospitalName, email, password, phoneNumber, address, role } = hospital;
 
-    const { hospitalName, email, password, phoneNumber, address, roleId } = hospital;
     const [err, setErr] = useState('');
-
+    const { id } = useParams();
     let history = useNavigate();
+
     const dispatch = useDispatch();
+    const hospitalState = useSelector((state) => state.users.hospital);
 
-    const handleInputChange = (e) => {
-        let { name, value } = e.target;
-        setHospital({ ...hospital, [name]: value });
-    };
+    useEffect(() => {
+        dispatch(fetchHospitalById(id));
+    }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!hospitalName || !email || !password || !phoneNumber || !address) {
-            setErr('Vui lòng nhập đầy đủ thông tin');
-        } else {
-            console.log(hospital);
-            dispatch(createHospital(hospital));
-            history('/admin/manage_hospital/');
-            setErr('');
+    useEffect(() => {
+        if (hospitalState) {
+            setHospital({ ...hospitalState });
         }
-    };
+    }, [hospitalState]);
 
     return (
         <div className={cx('wrapper')}>
@@ -65,24 +45,9 @@ function AddNewHospital() {
                 <FontAwesomeIcon icon={faArrowLeft} />
                 &nbsp; Trở về
             </div>
-            <h3>Thêm mới bệnh viện</h3>
+            <h3>Xem thông tin bệnh viện</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
-            <form className={cx('content')} onSubmit={handleSubmit}>
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Tên bệnh viện"
-                    variant="outlined"
-                    color="info"
-                    value={hospitalName}
-                    type="text"
-                    name="hospitalName"
-                    onChange={handleInputChange}
-                />
-                <br />
+            <div className={cx('content')}>
                 <TextField
                     inputProps={{ style: { fontSize: 14 } }}
                     InputLabelProps={{ style: { fontSize: 14 } }}
@@ -92,10 +57,9 @@ function AddNewHospital() {
                     label="Email"
                     variant="outlined"
                     color="info"
-                    value={email}
+                    value={email || ''}
                     type="email"
                     name="email"
-                    onChange={handleInputChange}
                 />
                 <br />
                 <TextField
@@ -107,10 +71,23 @@ function AddNewHospital() {
                     label="Mật khẩu"
                     variant="outlined"
                     color="info"
-                    value={password}
+                    value={password || ''}
                     type="password"
                     name="password"
-                    onChange={handleInputChange}
+                />
+                <br />
+                <TextField
+                    inputProps={{ style: { fontSize: 14 } }}
+                    InputLabelProps={{ style: { fontSize: 14 } }}
+                    margin="normal"
+                    fullWidth
+                    id="standard-basic"
+                    label="Tên bệnh viện"
+                    variant="outlined"
+                    color="info"
+                    value={hospitalName || ''}
+                    type="text"
+                    name="hospitalName"
                 />
                 <br />
                 <TextField
@@ -122,10 +99,9 @@ function AddNewHospital() {
                     label="Số điện thoại"
                     variant="outlined"
                     color="info"
-                    value={phoneNumber}
+                    value={phoneNumber || ''}
                     type="text"
                     name="phoneNumber"
-                    onChange={handleInputChange}
                 />
                 <br />
                 <TextField
@@ -137,20 +113,19 @@ function AddNewHospital() {
                     label="Địa chỉ"
                     variant="outlined"
                     color="info"
-                    value={address}
+                    value={address || ''}
                     type="text"
                     name="address"
-                    onChange={handleInputChange}
                 />
                 <br />
                 <div className={cx('button')}>
-                    <Button variant="contained" type="submit">
-                        Thêm
+                    <Button variant="contained" type="submit" onClick={() => history('/admin/manage_hospital/')}>
+                        Trở về
                     </Button>
                 </div>
-            </form>
+            </div>
         </div>
     );
 }
 
-export default AddNewHospital;
+export default ViewHospital;
