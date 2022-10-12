@@ -23,6 +23,8 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EditHospital from './components/RoleAdmin/ManageHospital/EditHospital';
+import AddNewHospital from './components/RoleAdmin/ManageHospital/AddNewHospital';
 
 function App() {
     return (
@@ -36,6 +38,8 @@ function App() {
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_hospital" element={<ManageHospital />} />
+                        <Route path="manage_hospital/editUser/:id" element={<EditHospital />} />
+                        <Route path="manage_hospital/addUser" element={<AddNewHospital />} />
                         <Route path="manage_donor" element={<ManageDonor />} />
                         <Route path="manage_recipient" element={<ManageRecipient />} />
                         <Route path="manage_admin" element={<ManageAdmin />} />

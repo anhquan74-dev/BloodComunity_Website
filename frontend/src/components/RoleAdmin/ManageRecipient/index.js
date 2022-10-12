@@ -3,7 +3,7 @@ import DataTable from "../../DataTable";
 function ManageRecipient() {
     return (
         <>
-            <DataTable/>
+            <DataTable role='user' />
         </>
     );
 }
