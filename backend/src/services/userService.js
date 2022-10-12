@@ -12,7 +12,7 @@ let registerService = async (data) => {
     });
     if (checkUserEmail) {
       userSignup.statusCode = 409;
-      userSignup.message = "Your Email already exist!";
+      userSignup.message = "Email này đã tồn tại trong hệ thống!";
     } else {
       await db.User.create({
         email: data.email,
@@ -32,7 +32,7 @@ let registerService = async (data) => {
         groupBlood: data.groupBlood,
       });
       userSignup.statusCode = 201;
-      userSignup.message = "Create account successfully!";
+      userSignup.message = "Tạo tài khoản thành công!";
     }
     return userSignup;
   } catch (e) {
@@ -47,7 +47,7 @@ let loginService = async (email, password) => {
     });
     if (!checkUserEmail) {
       userData.statusCode = 404;
-      userData.message = "Your Email isn't exist";
+      userData.message = "Email này đã tồn tại trong hệ thống!";
       userData.content = {};
     } else {
       let checkPassword = await authController.comparePassword(
@@ -56,7 +56,7 @@ let loginService = async (email, password) => {
       );
       if (!checkPassword) {
         userData.statusCode = 404;
-        userData.message = "Your password is not valid!";
+        userData.message = "Mật khẩu của bạn không khớp!";
         userData.content = {};
       } else {
         const token = authController.generateToken(checkUserEmail);
@@ -79,7 +79,7 @@ let loginService = async (email, password) => {
           accessToken: token,
         };
         userData.statusCode = 200;
-        userData.message = "Login successfully!";
+        userData.message = "Đăng nhập thành công!";
         userData.content = data;
       }
     }
@@ -113,11 +113,11 @@ let getUserByIdService = async (userId) => {
     });
     if (!user) {
       userInfor.statusCode = 404;
-      userInfor.message = "User not found!";
+      userInfor.message = "Không tìm thấy!";
       userInfor.content = {};
     } else {
       userInfor.statusCode = 200;
-      userInfor.message = "Get user infor successfully!";
+      userInfor.message = "Lấy thông tin người dùng thành công!";
       userInfor.content = user;
     }
     return userInfor;
@@ -138,11 +138,11 @@ let getUserByTypeService = async (userType) => {
     });
     if (!users || users.length <= 0) {
       userInfor.statusCode = 404;
-      userInfor.message = "User not found!";
+      userInfor.message = "Không tìm thấy!";
       userInfor.content = {};
     } else {
       userInfor.statusCode = 200;
-      userInfor.message = "Get all users successfully!";
+      userInfor.message = "Lấy thông tin người dùng thành công!";
       userInfor.content = users;
     }
     return userInfor;
@@ -160,10 +160,10 @@ let getAllCodeService = async (typeInput) => {
     });
     if (!dataAllCode || dataAllCode.length <= 0) {
       allCode.statusCode = 404;
-      allCode.message = "Type is invalid!";
+      allCode.message = "Vai trò không đúng!";
     } else {
       allCode.statusCode = 200;
-      allCode.message = "Get all code successfully!";
+      allCode.message = "Lấy dữ liệu thành công!";
       allCode.content = dataAllCode;
     }
     return allCode;
@@ -179,13 +179,13 @@ let deleteUserService = async (inputId) => {
     });
     if (!user) {
       message.statusCode = 404;
-      message.message = "User not found!";
+      message.message = "Không tìm thấy!!";
     } else {
       await db.User.destroy({
         where: { id: inputId },
       });
       message.statusCode = 200;
-      message.message = "User deleted successfully!";
+      message.message = "Xóa thành công!";
     }
     return message;
   } catch (e) {
@@ -223,10 +223,10 @@ let updateUserService = async (data) => {
       });
       userUpdated.content = getUserInforAgain;
       userUpdated.statusCode = 200;
-      userUpdated.message = "Updated successfully!";
+      userUpdated.message = "Cập nhật thành công!";
     } else {
       userUpdated.statusCode = 404;
-      userUpdated.message = "Couldn't find user";
+      userUpdated.message = "Không tìm thấy!";
     }
     return userUpdated;
   } catch (e) {
@@ -249,10 +249,10 @@ let inActiveUserService = async (inputId) => {
       });
       userUpdated.content = getUserInforAgain;
       userUpdated.statusCode = 200;
-      userUpdated.message = "Block user successfully!";
+      userUpdated.message = "Khóa tài khoản thành công!";
     } else {
       userUpdated.statusCode = 404;
-      userUpdated.message = "Couldn't find user";
+      userUpdated.message = "Không tìm thấy!";
     }
     return userUpdated;
   } catch (e) {
@@ -275,10 +275,10 @@ let activeUserService = async (inputId) => {
       });
       userUpdated.content = getUserInforAgain;
       userUpdated.statusCode = 200;
-      userUpdated.message = "UnBlock user successfully!";
+      userUpdated.message = "Mở khóa thành công!";
     } else {
       userUpdated.statusCode = 404;
-      userUpdated.message = "Couldn't find user";
+      userUpdated.message = "Không tìm thấy!";
     }
     return userUpdated;
   } catch (e) {
@@ -335,7 +335,6 @@ let buildUrlEmail = (hospitalId, token) => {
 let postBookingScheduleService = async (data) => {
   try {
     let booking = {};
-    console.log("check data: ", data);
     if (
       !data.email ||
       !data.hospitalId ||
@@ -346,7 +345,7 @@ let postBookingScheduleService = async (data) => {
 
     ) {
       booking.statusCode = 422;
-      booking.message = "Missing required information!"
+      booking.message = "Thiếu thông số bắt buộc!"
     } else {
       let token = uuidv4();
       await emailService.sendSimpleEmail({
@@ -374,7 +373,7 @@ let postBookingScheduleService = async (data) => {
       });
 
       booking.statusCode = 201;
-      booking.message = "Successfully!"
+      booking.message = "Thành công!"
     }
     return booking;
   } catch (e) {
@@ -386,7 +385,7 @@ let postVerifyBookingSchedule = async (data) => {
     let booking = {}
     if (!data.token || !data.hospitalId) {
       booking.statusCode = 422;
-      booking.message = "Missing required parameters!"
+      booking.message = "Thiếu thông số bắt buộc!"
     } else {
       let appointment = await db.Booking.findOne({
         where: {
@@ -400,10 +399,10 @@ let postVerifyBookingSchedule = async (data) => {
         appointment.status = "S2";
         await appointment.save();
         booking.statusCode = 200;
-        booking.message = "Update booking successfully";
+        booking.message = "Cập nhật trạng thái lịch hẹn thành công!";
       } else {
         booking.statusCode = 404;
-        booking.message = "Booking has been activated or does not exits!";
+        booking.message = "Lịch hẹn đã được xác nhận hoặc không tồn tại!";
       }
     }
     return booking;

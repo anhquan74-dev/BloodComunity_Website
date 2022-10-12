@@ -18,7 +18,7 @@ let handleRegister = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -48,7 +48,7 @@ let handleLogin = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -72,7 +72,7 @@ let handleGetAllCode = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -87,7 +87,7 @@ let handleGetAllUsers = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -110,7 +110,7 @@ let handleGetUserById = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -133,7 +133,7 @@ let handleGetUserByType = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -152,7 +152,7 @@ let handleDeteleUser = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -171,7 +171,7 @@ let handleUpdateUser = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -186,7 +186,7 @@ let handleGetTotalDonation = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -201,7 +201,7 @@ let handleGetTotalDonor = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -216,7 +216,7 @@ let handleGetTotalRecipient = async (req, res) => {
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -228,7 +228,7 @@ let handlePostBookingSchedule = async (req, res) => {
     console.log(e);
     return res.status(500).json({
       statusCode: 500,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -240,7 +240,7 @@ let handlePostVerifyBookingSchedule = async (req, res) => {
     console.log(e);
     return res.status(500).json({
       statusCode: 500,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 }
@@ -259,7 +259,7 @@ let handleActiveUser = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -278,7 +278,7 @@ let handleInActiveUser = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };

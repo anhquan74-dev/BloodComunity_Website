@@ -5,7 +5,7 @@ let handleBulkCreateSchedule = async (req, res) => {
     if (!req.body) {
       res.status(422).json({
         statusCode: 422,
-        message: "Missing required parameters!",
+        message: "Thiếu thông số bắt buộc!",
       });
     } else {
       let infor = await hospitalService.bulkCreateScheduleService(req.body);
@@ -15,7 +15,7 @@ let handleBulkCreateSchedule = async (req, res) => {
     console.log(e);
     res.status(200).json({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -27,7 +27,7 @@ let handleCreateEvent = async (req, res) => {
     console.log(e);
     res.status(200).json({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -36,7 +36,7 @@ let handleGetScheduleByDate = async (req, res) => {
     if (!req.query.hospitalId || !req.query.date) {
       res.status(422).json({
         statusCode: 422,
-        message: "Missing required parameters!",
+        message: "Thiếu thông số bắt buộc!",
       });
     } else {
       let infor = await hospitalService.getScheduleByDateService(
@@ -49,7 +49,7 @@ let handleGetScheduleByDate = async (req, res) => {
     console.log(e);
     res.status(200).json({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -58,7 +58,7 @@ let handleGetScheduleById = async (req, res) => {
     if (!req.query.id) {
       res.status(422).json({
         statusCode: 422,
-        message: "Missing required parameters!",
+        message: "Thiếu thông số bắt buộc!",
       });
     } else {
       let infor = await hospitalService.getScheduleByIdService(req.query.id);
@@ -68,17 +68,16 @@ let handleGetScheduleById = async (req, res) => {
     console.log(e);
     res.status(200).json({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
 let handleGetEventByDate = async (req, res) => {
   try {
-    console.log("req.query.date", req.query.date);
     if (!req.query.date) {
       res.status(422).json({
         statusCode: 422,
-        message: "Missing required parameters!",
+        message: "Thiếu thông số bắt buộc!",
       });
     } else {
       let infor = await hospitalService.getEventByDateService(req.query.date);
@@ -88,7 +87,7 @@ let handleGetEventByDate = async (req, res) => {
     console.log(e);
     res.status(200).json({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -97,7 +96,7 @@ let handleDeteleEvent = async (req, res) => {
     if (!req.body.id) {
       res.send({
         statusCode: 422,
-        message: "Missing event id!",
+        message: "Không thể xác định id của sự kiện!",
       });
     } else {
       let message = await hospitalService.deleteEventService(req.body.id);
@@ -107,7 +106,7 @@ let handleDeteleEvent = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -116,7 +115,7 @@ let handleUpdateEvent = async (req, res) => {
     if (!req.body.id) {
       res.send({
         statusCode: 422,
-        message: "Missing input event id!",
+        message: "Không thể xác định id của sự kiện!",
       });
     } else {
       let eventUpdated = await hospitalService.updateEventService(req.body);
@@ -126,7 +125,7 @@ let handleUpdateEvent = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -135,13 +134,13 @@ let handleGetAllEvents = async (req, res) => {
     let events = await hospitalService.getAllEventsService();
     res.status(200).json({
       statusCode: 200,
-      message: "Get all events successfully!",
+      message: "Lấy thông tin các sự kiện thành công!",
       content: events,
     });
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -150,13 +149,13 @@ let handleGetAllSchedules = async (req, res) => {
     let schedules = await hospitalService.getAllSchedulesService();
     res.status(200).json({
       statusCode: 200,
-      message: "Get all schedules successfully!",
+      message: "Lấy thông tin các lịch hẹn hiến máu thành công!",
       content: schedules,
     });
   } catch (e) {
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -165,7 +164,7 @@ let handleDeteleSchedule = async (req, res) => {
     if (!req.body.id) {
       res.send({
         statusCode: 422,
-        message: "Missing schedule id!",
+        message: "Không thể xác định id của lịch hẹn!",
       });
     } else {
       let message = await hospitalService.deleteScheduleService(req.body.id);
@@ -175,7 +174,7 @@ let handleDeteleSchedule = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };
@@ -184,7 +183,7 @@ let handleUpdateSchedule = async (req, res) => {
     if (!req.body.id) {
       res.send({
         statusCode: 422,
-        message: "Missing input schedule id!",
+        message: "Không thể xác định id của lịch hẹn!",
       });
     } else {
       let scheduleUpdated = await hospitalService.updateScheduleService(
@@ -196,7 +195,7 @@ let handleUpdateSchedule = async (req, res) => {
     console.log(e);
     res.send({
       statusCode: 500,
-      message: "Error from server!",
+      message: "Lỗi từ Server!",
     });
   }
 };

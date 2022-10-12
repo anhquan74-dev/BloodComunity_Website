@@ -7,7 +7,7 @@ let createClinic = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -19,7 +19,7 @@ let getAllClinic = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -31,7 +31,7 @@ let getDetailClinicById = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
