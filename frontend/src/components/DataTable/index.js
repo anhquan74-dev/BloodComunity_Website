@@ -1,15 +1,26 @@
 import { DataGrid } from '@mui/x-data-grid';
-import { userColumns, userRows } from '../../services/data';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { hospitalColumns, userColumns } from '../../services/data';
+import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import './DataTable.scss'
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllHospital } from '../../redux/actions/actions';
 
-const DataTable = () => {
-    const [data, setData] = useState(userRows);
+const DataTable = (props) => {
 
-    const handleDelete = (id) => {
-        setData(data.filter((item) => item.id !== id));
-    };
+    let columns;
+    switch (props.role) {
+        case 'user':
+            columns = userColumns;
+            break;
+        case 'hospital':
+            columns = hospitalColumns;
+            break;
+        default:
+
+            break;
+    }
 
     const actionColumn = [
         {
@@ -19,10 +30,10 @@ const DataTable = () => {
             renderCell: (params) => {
                 return (
                     <div className="cellAction">
-                        <Link to="/users/test" style={{ textDecoration: 'none' }}>
-                            <div className="viewButton">View</div>
-                        </Link>
-                        <div className="deleteButton" onClick={() => handleDelete(params.row.id)}>
+                        <NavLink to={`/admin/manage_hospital/editUser/${params.row.id}`} style={{ textDecoration: 'none' }}>
+                            <div className="viewButton">Edit</div>
+                        </NavLink>
+                        <div className="deleteButton">
                             Delete
                         </div>
                     </div>
@@ -30,18 +41,29 @@ const DataTable = () => {
             },
         },
     ];
+
+    const dispatch = useDispatch();
+    const listHospitals = useSelector((state) => state.hospital.listHospitals)
+
+    useEffect(() => {
+        dispatch(fetchAllHospital());
+    }, [])
+
     return (
         <div className="datatable">
             <div className="datatableTitle">
                 Add New User
-                <Link to="/users/new" className="link">
+                <NavLink to="/admin/manage_hospital/addUser" className="link">
                     Add New
-                </Link>
+                </NavLink>
+                {/* <button className="link" >
+                    Add New
+                </button> */}
             </div>
             <DataGrid
                 className="datagrid"
-                rows={data}
-                columns={userColumns.concat(actionColumn)}
+                rows={listHospitals || []}
+                columns={columns.concat(actionColumn)}
                 pageSize={9}
                 rowsPerPageOptions={[9]}
                 checkboxSelection

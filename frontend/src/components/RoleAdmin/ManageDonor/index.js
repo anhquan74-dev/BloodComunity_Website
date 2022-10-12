@@ -3,7 +3,8 @@ import DataTable from "../../DataTable";
 function ManageDonor() {
     return (
         <>
-            <DataTable/>
+            
+            <DataTable role='user' />
         </>
     );
 }
