@@ -32,7 +32,7 @@ let registerService = async (data) => {
         groupBlood: data.groupBlood,
       });
       userSignup.statusCode = 201;
-      userSignup.message = "Register successfully!";
+      userSignup.message = "Create account successfully!";
     }
     return userSignup;
   } catch (e) {
