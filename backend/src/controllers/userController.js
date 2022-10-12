@@ -114,6 +114,29 @@ let handleGetUserById = async (req, res) => {
     });
   }
 };
+let handleGetUserByType = async (req, res) => {
+  try {
+    let type = req.query.type;
+    if (!type) {
+      res.send({
+        statusCode: 422,
+        message: "Missing user type!",
+      });
+    } else {
+      let user = await userService.getUserByTypeService(type);
+      res.status(user.statusCode).json({
+        statusCode: user.statusCode,
+        message: user.message,
+        content: user.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 let handleDeteleUser = async (req, res) => {
   try {
     if (!req.body.id) {
@@ -123,7 +146,7 @@ let handleDeteleUser = async (req, res) => {
       });
     } else {
       let message = await userService.deleteUserService(req.body.id);
-      res.status(200).json(message);
+      res.status(message.statusCode).json(message);
     }
   } catch (e) {
     console.log(e);
@@ -221,11 +244,50 @@ let handlePostVerifyBookingSchedule = async (req, res) => {
     });
   }
 }
+let handleActiveUser = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input user id!",
+      });
+    } else {
+      let userUpdated = await userService.activeUserService(req.body.id);
+      res.status(userUpdated.statusCode).json(userUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
+let handleInActiveUser = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Missing input user id!",
+      });
+    } else {
+      let userUpdated = await userService.inActiveUserService(req.body.id);
+      res.status(userUpdated.statusCode).json(userUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Error from server!",
+    });
+  }
+};
 module.exports = {
   handleRegister,
   handleLogin,
   handleGetAllUsers,
   handleGetUserById,
+  handleGetUserByType,
   handleGetAllCode,
   handleDeteleUser,
   handleUpdateUser,
@@ -233,5 +295,7 @@ module.exports = {
   handleGetTotalDonor,
   handleGetTotalRecipient,
   handlePostBookingSchedule,
-  handlePostVerifyBookingSchedule
+  handlePostVerifyBookingSchedule,
+  handleActiveUser,
+  handleInActiveUser
 };
