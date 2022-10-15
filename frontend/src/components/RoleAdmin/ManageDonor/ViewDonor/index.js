@@ -23,6 +23,7 @@ function ViewDonor() {
         phoneNumber: '',
         address: '',
         groupBlood: '',
+        image: '',
         numberOfDonation: 0,
         status: 'active',
         roleId: 'R3',
@@ -53,6 +54,7 @@ function ViewDonor() {
         address,
         groupBlood,
         numberOfDonation,
+        image,
         status,
         roleId,
     } = donor;
@@ -67,6 +69,13 @@ function ViewDonor() {
         }
     }, [donorState]);
 
+    let previewImage = '';
+    let imageBase64 = '';
+    if (image) {
+        imageBase64 = new Buffer(image, 'base64').toString('binary');
+    }
+    previewImage = imageBase64;
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('back')} onClick={() => history('/admin/manage_donor/')}>
@@ -76,177 +85,39 @@ function ViewDonor() {
             <h3>Xem thông tin người hiến máu</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <div className={cx('content')}>
-                <div className={cx('content-flex')}>
+                <div className={cx('content-info')}>
                     <div>
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Email"
-                            variant="outlined"
-                            color="info"
-                            value={email || ''}
-                            type="email"
-                            name="email"
-                        />
+                        {previewImage ? <img src={previewImage} alt="preview-avatar" /> : <span>Preview Image</span>}
+                    </div>
+                    <div>
+                        <h3>Tên: </h3>
+                        <p>{firstName}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Mật khẩu"
-                            variant="outlined"
-                            color="info"
-                            value={password || ''}
-                            type="password"
-                            name="password"
-                        />
+                        <h3>Họ: </h3>
+                        <p>{lastName}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Tên đầu"
-                            variant="outlined"
-                            color="info"
-                            value={firstName || ''}
-                            type="text"
-                            name="firstName"
-                        />
+                        <h3>Email: </h3>
+                        <p>{email}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Tên cuối"
-                            variant="outlined"
-                            color="info"
-                            value={lastName || ''}
-                            type="text"
-                            name="lastName"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Giới tính"
-                            variant="outlined"
-                            color="info"
-                            value={gender || ''}
-                            type="text"
-                            name="gender"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Ngày sinh"
-                            variant="outlined"
-                            color="info"
-                            value={birthday || ''}
-                            type="text"
-                            name="birthday"
-                        />
+                        <h3>Giới tính: </h3>
+                        <p>{gender}</p>
                         <br />
                     </div>
                     <div>
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Số điện thoại"
-                            variant="outlined"
-                            color="info"
-                            value={phoneNumber || ''}
-                            type="text"
-                            name="phoneNumber"
-                        />
+                        <h3>Ngày sinh: </h3>
+                        <p>{birthday}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Địa chỉ"
-                            variant="outlined"
-                            color="info"
-                            value={address || ''}
-                            type="text"
-                            name="address"
-                        />
+                        <h3>Số điện thoại: </h3>
+                        <p>{phoneNumber}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Nhóm máu"
-                            variant="outlined"
-                            color="info"
-                            value={groupBlood || ''}
-                            type="text"
-                            name="groupBlood"
-                        />
+                        <h3>Địa chỉ: </h3>
+                        <p>{address}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Số lần hiến máu"
-                            variant="outlined"
-                            color="info"
-                            value={numberOfDonation || ''}
-                            type="text"
-                            name="numberOfDonation"
-                        />
+                        <h3>Nhóm máu: </h3>
+                        <p>{groupBlood}</p>
                         <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Trạng thái"
-                            variant="outlined"
-                            color="info"
-                            value={status || ''}
-                            type="text"
-                            name="status"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Quyền"
-                            variant="outlined"
-                            color="info"
-                            value={roleId || ''}
-                            type="text"
-                            name="roleId"
-                        />
+                        <h3>Số lần hiến máu: </h3>
+                        <p>{numberOfDonation}</p>
                         <br />
                     </div>
                 </div>

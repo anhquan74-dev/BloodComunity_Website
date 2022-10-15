@@ -8,6 +8,9 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDonorById, updateDonor } from '../../../../redux/actions/donorManage';
+import { Fab, MenuItem } from '@mui/material';
+import { GridAddIcon } from '@mui/x-data-grid';
+import { getBase64 } from '../../../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
@@ -22,18 +25,11 @@ function EditDonor() {
         phoneNumber: '',
         address: '',
         groupBlood: '',
+        image: '',
         numberOfDonation: 0,
         status: 'active',
         roleId: 'R3',
     });
-
-    const [err, setErr] = useState('');
-    const { id } = useParams();
-    let history = useNavigate();
-
-    const dispatch = useDispatch();
-    const donorState = useSelector((state) => state.users.donor);
-
     const {
         email,
         password,
@@ -45,9 +41,17 @@ function EditDonor() {
         address,
         groupBlood,
         numberOfDonation,
+        image,
         status,
         roleId,
     } = donor;
+    const [previewImageUpload, setPreviewImageUpload] = useState('');
+    const [err, setErr] = useState('');
+    const { id } = useParams();
+    let history = useNavigate();
+
+    const dispatch = useDispatch();
+    const donorState = useSelector((state) => state.users.donor);
 
     useEffect(() => {
         dispatch(fetchDonorById(id));
@@ -58,6 +62,14 @@ function EditDonor() {
             setDonor({ ...donorState });
         }
     }, [donorState]);
+
+    let previewImageDisplay = '';
+    let imageBase64 = '';
+    if (image) {
+        imageBase64 = new Buffer(image, 'base64').toString('binary');
+    }
+    previewImageDisplay = imageBase64;
+    console.log(previewImageDisplay);
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -75,6 +87,16 @@ function EditDonor() {
         }
     };
 
+    const handleUploadImage = async (e) => {
+        let data = e.target.files;
+        let file = data[0];
+        if (file) {
+            setPreviewImageUpload(URL.createObjectURL(file));
+            let base64 = await getBase64(file);
+            setDonor({ ...donor, image: base64 });
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('back')} onClick={() => history('/admin/manage_donor/')}>
@@ -84,8 +106,61 @@ function EditDonor() {
             <h3>Cập nhật thông tin người hiến máu</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <form className={cx('content')} onSubmit={handleSubmit}>
-                <div className={cx('content-flex')}>
+                <div className={cx('content-info')}>
                     <div>
+                        {previewImageUpload ? (
+                            <img src={previewImageUpload} alt="preview-avatar" />
+                        ) : previewImageDisplay ? (
+                            <img src={previewImageDisplay} alt="preview-avatar" />
+                        ) : (
+                            <span>Preview Image</span>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="upload-image">
+                            <input
+                                style={{ display: 'none' }}
+                                id="upload-image"
+                                name="image"
+                                type="file"
+                                onChange={(e) => handleUploadImage(e)}
+                            />
+                            <Fab color="info" size="small" component="span" aria-label="add" variant="extended">
+                                <GridAddIcon /> Upload photo
+                            </Fab>
+                        </label>
+
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Tên"
+                            variant="filled"
+                            color="info"
+                            value={firstName || ''}
+                            type="text"
+                            name="firstName"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Họ"
+                            variant="filled"
+                            color="info"
+                            value={lastName || ''}
+                            type="text"
+                            name="lastName"
+                            onChange={handleInputChange}
+                        />
+                        <br />
                         <TextField
                             inputProps={{ style: { fontSize: 14 } }}
                             InputLabelProps={{ style: { fontSize: 14 } }}
@@ -93,11 +168,12 @@ function EditDonor() {
                             fullWidth
                             id="standard-basic"
                             label="Email"
-                            variant="outlined"
+                            variant="filled"
                             color="info"
                             value={email || ''}
-                            type="email"
+                            type="text"
                             name="email"
+                            onChange={handleInputChange}
                         />
                         <br />
                         <TextField
@@ -107,39 +183,12 @@ function EditDonor() {
                             fullWidth
                             id="standard-basic"
                             label="Mật khẩu"
-                            variant="outlined"
+                            variant="filled"
                             color="info"
                             value={password || ''}
-                            type="password"
+                            type="text"
                             name="password"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Tên đầu"
-                            variant="outlined"
-                            color="info"
-                            value={firstName || ''}
-                            type="text"
-                            name="firstName"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Tên cuối"
-                            variant="outlined"
-                            color="info"
-                            value={lastName || ''}
-                            type="text"
-                            name="lastName"
+                            onChange={handleInputChange}
                         />
                         <br />
                         <TextField
@@ -149,25 +198,12 @@ function EditDonor() {
                             fullWidth
                             id="standard-basic"
                             label="Giới tính"
-                            variant="outlined"
+                            variant="filled"
                             color="info"
                             value={gender || ''}
                             type="text"
                             name="gender"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Ngày sinh"
-                            variant="outlined"
-                            color="info"
-                            value={birthday || ''}
-                            type="text"
-                            name="birthday"
+                            onChange={handleInputChange}
                         />
                         <br />
                     </div>
@@ -178,68 +214,12 @@ function EditDonor() {
                             margin="normal"
                             fullWidth
                             id="standard-basic"
-                            label="Số điện thoại"
-                            variant="outlined"
+                            label="Ngày sinh"
+                            variant="filled"
                             color="info"
-                            value={phoneNumber || ''}
+                            value={birthday || ''}
                             type="text"
-                            name="phoneNumber"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Địa chỉ"
-                            variant="outlined"
-                            color="info"
-                            value={address || ''}
-                            type="text"
-                            name="address"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Nhóm máu"
-                            variant="outlined"
-                            color="info"
-                            value={groupBlood || ''}
-                            type="text"
-                            name="groupBlood"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Số lần hiến máu"
-                            variant="outlined"
-                            color="info"
-                            value={numberOfDonation || ''}
-                            type="text"
-                            name="numberOfDonation"
-                        />
-                        <br />
-                        <TextField
-                            inputProps={{ style: { fontSize: 14 } }}
-                            InputLabelProps={{ style: { fontSize: 14 } }}
-                            margin="normal"
-                            fullWidth
-                            id="standard-basic"
-                            label="Trạng thái"
-                            variant="outlined"
-                            color="info"
-                            value={status || ''}
-                            type="text"
-                            name="status"
+                            name="birthday"
                             onChange={handleInputChange}
                         />
                         <br />
@@ -249,13 +229,82 @@ function EditDonor() {
                             margin="normal"
                             fullWidth
                             id="standard-basic"
-                            label="Quyền"
-                            variant="outlined"
+                            label="Số điện tho"
+                            variant="filled"
                             color="info"
-                            value={roleId || ''}
+                            value={phoneNumber || ''}
                             type="text"
-                            name="roleId"
+                            name="phoneNumber"
+                            onChange={handleInputChange}
                         />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Địa chỉ"
+                            variant="filled"
+                            color="info"
+                            value={address || ''}
+                            type="text"
+                            name="address"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Nhóm máu"
+                            variant="filled"
+                            color="info"
+                            value={groupBlood || ''}
+                            type="text"
+                            name="groupBlood"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Số lần hiến máu"
+                            variant="filled"
+                            color="info"
+                            value={numberOfDonation || ''}
+                            type="text"
+                            name="numberOfDonation"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Trạng thái"
+                            variant="filled"
+                            color="info"
+                            value={status || 'active'}
+                            select
+                            name="status"
+                            // onChange={handleSelectChange}
+                            onChange={handleInputChange}
+                        >
+                            {/* {statusArr.map((item, index) => {
+                                return ( */}
+                            <MenuItem value="active">Active</MenuItem>
+                            <MenuItem value="inactive">Inactive</MenuItem>
+                            {/* ); */}
+                            {/* })} */}
+                        </TextField>
                         <br />
                     </div>
                 </div>

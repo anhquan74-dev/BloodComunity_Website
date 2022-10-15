@@ -28,6 +28,8 @@ import AddNewHospital from './components/RoleAdmin/ManageHospital/AddNewHospital
 import ViewHospital from './components/RoleAdmin/ManageHospital/ViewHospital';
 import ViewDonor from './components/RoleAdmin/ManageDonor/ViewDonor';
 import EditDonor from './components/RoleAdmin/ManageDonor/EditDonor';
+import ViewRecipient from './components/RoleAdmin/ManageRecipient/ViewRecipient';
+import EditRecipient from './components/RoleAdmin/ManageRecipient/EditRecipient';
 
 function App() {
     return (
@@ -48,9 +50,8 @@ function App() {
                         <Route path="manage_donor/viewUser/:id" element={<ViewDonor />} />
                         <Route path="manage_donor/editUser/:id" element={<EditDonor />} />
                         <Route path="manage_recipient" element={<ManageRecipient />} />
-                        <Route path="manage_recipient/viewUser/:id" element={<ViewDonor />} />
-                        <Route path="manage_recipient/editUser/:id" element={<EditDonor />} />
-
+                        <Route path="manage_recipient/viewUser/:id" element={<ViewRecipient />} />
+                        <Route path="manage_recipient/editUser/:id" element={<EditRecipient />} />
                     </Route>
                     <Route path="/hospital" element={<HospitalPage />}>
                         <Route index element={<Dashboard />} />

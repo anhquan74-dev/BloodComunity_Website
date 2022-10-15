@@ -134,7 +134,7 @@ export const updateHospital = (hospital) => {
             const res = await axios.put('http://localhost:8080/api/update-user', hospital);
             const data = res && res.data ? res.data : [];
             dispatch(updateHospitalSuccess(data));
-            // dispatch(fetchAllHospital());
+            dispatch(fetchAllHospital());
         } catch (error) {
             console.log(error);
             dispatch(updateHospitalError());

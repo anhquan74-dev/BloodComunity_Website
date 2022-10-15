@@ -8,10 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllDonor } from '../../redux/actions/donorManage';
 import { fetchAllRecipient } from '../../redux/actions/recipientManage';
 import { fetchAllHospital } from '../../redux/actions/hospitalManage';
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 const DataTable = (props) => {
     let columns = [];
     let listUsers = [];
+    let title = '';
 
     const dispatch = useDispatch();
     const listHospitals = useSelector((state) => state.users.listHospitals);
@@ -36,14 +39,17 @@ const DataTable = (props) => {
 
     switch (props.role) {
         case 'donor':
+            title = 'người thông tin hiến máu';
             listUsers = listDonors;
             columns = donorColumns;
             break;
         case 'recipient':
+            title = 'người thông tin nhận máu';
             listUsers = listRecipients;
             columns = recipientColumns;
             break;
         case 'hospital':
+            title = 'người thông tin bệnh viện';
             listUsers = listHospitals;
             columns = hospitalColumns;
             break;
@@ -63,15 +69,21 @@ const DataTable = (props) => {
                             to={`/admin/manage_${props.role}/viewUser/${params.row.id}`}
                             style={{ textDecoration: 'none' }}
                         >
-                            <div className="viewButton">View</div>
+                            <div className="viewButton">
+                                <VisibilityIcon />
+                            </div>
                         </NavLink>
                         <NavLink
                             to={`/admin/manage_${props.role}/editUser/${params.row.id}`}
                             style={{ textDecoration: 'none' }}
                         >
-                            <div className="editButton">Edit</div>
+                            <div className="editButton">
+                                <EditIcon />
+                            </div>
                         </NavLink>
-                        <div className="deleteButton">Delete</div>
+                        <div className="deleteButton">
+                            <DeleteIcon />
+                        </div>
                     </div>
                 );
             },
@@ -81,13 +93,12 @@ const DataTable = (props) => {
     return (
         <div className="datatable">
             <div className="datatableTitle">
-                Add New User
-                <NavLink to="/admin/manage_hospital/addUser" className="link">
-                    Add New
-                </NavLink>
-                {/* <button className="link" >
-                    Add New
-                </button> */}
+                Quản lý {title}
+                {props.role === 'hospital' && (
+                    <NavLink to="/admin/manage_hospital/addUser" className="link">
+                        Thêm mới
+                    </NavLink>
+                )}
             </div>
             <DataGrid
                 className="datagrid"

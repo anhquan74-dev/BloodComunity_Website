@@ -91,7 +91,7 @@ export const updateRecipient = (recipient) => {
             const res = await axios.put('http://localhost:8080/api/update-user', recipient);
             const data = res && res.data ? res.data : [];
             dispatch(updateRecipientSuccess(data));
-            // dispatch(fetchAllRecipient());
+            dispatch(fetchAllRecipient());
         } catch (error) {
             console.log(error);
             dispatch(updateRecipientError());

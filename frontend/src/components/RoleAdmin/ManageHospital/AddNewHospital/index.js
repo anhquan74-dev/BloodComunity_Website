@@ -8,35 +8,28 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createHospital } from '../../../../redux/actions/hospitalManage';
+import { Fab } from '@mui/material';
+import { GridAddIcon } from '@mui/x-data-grid';
+import { getBase64 } from '../../../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
 function AddNewHospital() {
     const [hospital, setHospital] = useState({
-        // id: '',
-        // firstName: "",
-        // lastName: "",
-        // gender: "",
-        // birthday: "",
-        // ward: null,
-        // district: "",
-        // city: "",
-        // image: {
-        //     type: "Buffer",
-        //     data: []
-        // },
-        // groupBlood: "",
-        // numberOfDonation: 0,
-        // status: "active",
         hospitalName: '',
         email: '',
         password: '',
         phoneNumber: '',
         address: '',
+        image: '',
         roleId: 'R2',
     });
 
-    const { hospitalName, email, password, phoneNumber, address, roleId } = hospital;
+    // const [image, setImage] = useState('');
+
+    const [previewImage, setPreviewImage] = useState('');
+
+    const { hospitalName, email, password, phoneNumber, address, image, roleId } = hospital;
     const [err, setErr] = useState('');
 
     let history = useNavigate();
@@ -44,18 +37,28 @@ function AddNewHospital() {
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        setHospital({ ...hospital, [name]: value });
+        setHospital({ ...hospital, roleId: 'R2', [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!hospitalName || !email || !password || !phoneNumber || !address) {
+        if (!hospitalName || !email || !password || !phoneNumber || !address || !image) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
             console.log(hospital);
             dispatch(createHospital(hospital));
             history('/admin/manage_hospital/');
             setErr('');
+        }
+    };
+
+    const handleUploadImage = async (e) => {
+        let data = e.target.files;
+        let file = data[0];
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file));
+            let base64 = await getBase64(file);
+            setHospital({ ...hospitalName, roleId: 'R2', image: base64 });
         }
     };
 
@@ -68,81 +71,105 @@ function AddNewHospital() {
             <h3>Thêm mới bệnh viện</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <form className={cx('content')} onSubmit={handleSubmit}>
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Tên bệnh viện"
-                    variant="outlined"
-                    color="info"
-                    value={hospitalName}
-                    type="text"
-                    name="hospitalName"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Email"
-                    variant="outlined"
-                    color="info"
-                    value={email}
-                    type="email"
-                    name="email"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Mật khẩu"
-                    variant="outlined"
-                    color="info"
-                    value={password}
-                    type="password"
-                    name="password"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Số điện thoại"
-                    variant="outlined"
-                    color="info"
-                    value={phoneNumber}
-                    type="text"
-                    name="phoneNumber"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Địa chỉ"
-                    variant="outlined"
-                    color="info"
-                    value={address}
-                    type="text"
-                    name="address"
-                    onChange={handleInputChange}
-                />
-                <br />
+                <div className={cx('content-info')}>
+                    <div>
+                        {previewImage ? <img src={previewImage} alt="preview-avatar" /> : <span>Preview Image</span>}
+                    </div>
+                    <div>
+                        <label htmlFor="upload-image">
+                            <input
+                                style={{ display: 'none' }}
+                                id="upload-image"
+                                name="image"
+                                type="file"
+                                onChange={(e) => handleUploadImage(e)}
+                            />
+                            <Fab color="info" size="small" component="span" aria-label="add" variant="extended">
+                                <GridAddIcon /> Upload photo
+                            </Fab>
+                        </label>
+
+                        <br />
+
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Email"
+                            variant="filled"
+                            color="info"
+                            value={email || ''}
+                            type="email"
+                            name="email"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Mật khẩu"
+                            variant="filled"
+                            color="info"
+                            value={password || ''}
+                            type="password"
+                            name="password"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                    </div>
+                    <div>
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Tên bệnh viện"
+                            variant="filled"
+                            color="info"
+                            value={hospitalName || ''}
+                            type="text"
+                            name="hospitalName"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Số điện thoại"
+                            variant="filled"
+                            color="info"
+                            value={phoneNumber || ''}
+                            type="text"
+                            name="phoneNumber"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Địa chỉ"
+                            variant="filled"
+                            color="info"
+                            value={address || ''}
+                            type="text"
+                            name="address"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                    </div>
+                </div>
                 <div className={cx('button')}>
                     <Button variant="contained" type="submit">
                         Thêm

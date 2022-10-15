@@ -91,7 +91,7 @@ export const updateDonor = (donor) => {
             const res = await axios.put('http://localhost:8080/api/update-user', donor);
             const data = res && res.data ? res.data : [];
             dispatch(updateDonorSuccess(data));
-            // dispatch(fetchAllDonor());
+            dispatch(fetchAllDonor());
         } catch (error) {
             console.log(error);
             dispatch(updateDonorError());

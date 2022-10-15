@@ -78,8 +78,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isError: false,
             };
         case CREATE_HOSPITAL_SUCCESS:
-            const { message } = action.payload;
-            toast.success(message);
+            toast.success(action.payload.message);
             return {
                 ...state,
                 // listHospitals: action.payload.content,
@@ -121,6 +120,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isError: false,
             };
         case UPDATE_HOSPITAL_SUCCESS:
+            toast.success(action.payload.message);
             return {
                 ...state,
                 isLoading: false,
@@ -179,6 +179,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isError: false,
             };
         case UPDATE_DONOR_SUCCESS:
+            toast.success(action.payload.message);
             return {
                 ...state,
                 isLoading: false,
@@ -237,6 +238,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isError: false,
             };
         case UPDATE_RECIPIENT_SUCCESS:
+            toast.success(action.payload.message);
             return {
                 ...state,
                 isLoading: false,

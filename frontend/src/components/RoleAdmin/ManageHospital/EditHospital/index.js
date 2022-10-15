@@ -8,23 +8,32 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHospitalById, updateHospital } from '../../../../redux/actions/hospitalManage';
+import { getBase64 } from '../../../../utils/getBase64';
+import { Fab, MenuItem } from '@mui/material';
+import { GridAddIcon } from '@mui/x-data-grid';
+import { Buffer } from 'buffer';
+Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
+// const statusArr = ['active', 'inactive'];
 
 function EditHospital() {
     const [hospital, setHospital] = useState({
         hospitalName: '',
         email: '',
-        password: '',
+        status: '',
         phoneNumber: '',
         address: '',
-        role: 'R2',
+        image: '',
+        roleId: 'R2',
     });
-    const { hospitalName, email, password, phoneNumber, address, role } = hospital;
-
+    const { hospitalName, email, status, phoneNumber, address, image, roleId } = hospital;
+    const [previewImageUpload, setPreviewImageUpload] = useState('');
     const [err, setErr] = useState('');
+
     const { id } = useParams();
     let history = useNavigate();
+
     const dispatch = useDispatch();
     const hospitalState = useSelector((state) => state.users.hospital);
 
@@ -34,112 +43,181 @@ function EditHospital() {
 
     useEffect(() => {
         if (hospitalState) {
+            console.log(hospitalState);
             setHospital({ ...hospitalState });
         }
     }, [hospitalState]);
 
+    let previewImageDisplay = '';
+    let imageBase64 = '';
+    if (image) {
+        imageBase64 = new Buffer(image, 'base64').toString('binary');
+    }
+    previewImageDisplay = imageBase64;
+    console.log(previewImageDisplay);
+
     const handleInputChange = (e) => {
         let { name, value } = e.target;
+        console.log(name, value);
         setHospital({ ...hospital, [name]: value });
+        console.log(hospital);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!hospitalName || !phoneNumber || !address) {
+        if (!hospitalName || !email || !phoneNumber || !address || !image) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
-            dispatch(updateHospital(hospital));
-            history('/admin/manage_hospital/');
-            setErr('');
+            console.log(hospital);
+            // dispatch(updateHospital(hospital));
+            // history('/admin/manage_hospital/');
+            // setErr('');
         }
+        // console.log(hospital);
+    };
+
+    const handleUploadImage = async (e) => {
+        let data = e.target.files;
+        let file = data[0];
+        if (file) {
+            setPreviewImageUpload(URL.createObjectURL(file));
+            let base64 = await getBase64(file);
+            setHospital({ ...hospital, image: base64 });
+        }
+    };
+
+    // const [statusState, setStatusState] = useState('active');
+    // const handleSelectChange = (e) => {
+    //     setStatusState(e.target.value);
+    //     setHospital({ ...hospital, status: e.target.value });
+    // };
+    const handleBack = () => {
+        history('/admin/manage_hospital/');
+        // setPreviewImage('');
     };
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('back')} onClick={() => history('/admin/manage_hospital/')}>
+            <div className={cx('back')} onClick={handleBack}>
                 <FontAwesomeIcon icon={faArrowLeft} />
                 &nbsp; Trở về
             </div>
             <h3>Cập nhật thông tin bệnh viện</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <form className={cx('content')} onSubmit={handleSubmit}>
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Email"
-                    variant="outlined"
-                    color="info"
-                    value={email || ''}
-                    type="email"
-                    name="email"
-                    onChange={handleInputChange}
-                    disabled
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Mật khẩu"
-                    variant="outlined"
-                    color="info"
-                    value={password || ''}
-                    type="password"
-                    name="password"
-                    onChange={handleInputChange}
-                    disabled
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Tên bệnh viện"
-                    variant="outlined"
-                    color="info"
-                    value={hospitalName || ''}
-                    type="text"
-                    name="hospitalName"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Số điện thoại"
-                    variant="outlined"
-                    color="info"
-                    value={phoneNumber || ''}
-                    type="text"
-                    name="phoneNumber"
-                    onChange={handleInputChange}
-                />
-                <br />
-                <TextField
-                    inputProps={{ style: { fontSize: 14 } }}
-                    InputLabelProps={{ style: { fontSize: 14 } }}
-                    margin="normal"
-                    fullWidth
-                    id="standard-basic"
-                    label="Địa chỉ"
-                    variant="outlined"
-                    color="info"
-                    value={address || ''}
-                    type="text"
-                    name="address"
-                    onChange={handleInputChange}
-                />
-                <br />
+                <div className={cx('content-info')}>
+                    <div>
+                        {previewImageUpload ? (
+                            <img src={previewImageUpload} alt="preview-avatar" />
+                        ) : previewImageDisplay ? (
+                            <img src={previewImageDisplay} alt="preview-avatar" />
+                        ) : (
+                            <span>Preview Image</span>
+                        )}
+                    </div>
+                    <div>
+                        <label htmlFor="upload-image">
+                            <input
+                                style={{ display: 'none' }}
+                                id="upload-image"
+                                name="image"
+                                type="file"
+                                onChange={(e) => handleUploadImage(e)}
+                            />
+                            <Fab color="info" size="small" component="span" aria-label="add" variant="extended">
+                                <GridAddIcon /> Upload photo
+                            </Fab>
+                        </label>
+
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Tên bệnh viện"
+                            variant="filled"
+                            color="info"
+                            value={hospitalName || ''}
+                            type="text"
+                            name="hospitalName"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Email"
+                            variant="filled"
+                            color="info"
+                            value={email || ''}
+                            type="email"
+                            name="email"
+                            onChange={handleInputChange}
+                            disabled
+                        />
+                        <br />
+                    </div>
+                    <div>
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Số điện thoại"
+                            variant="filled"
+                            color="info"
+                            value={phoneNumber || ''}
+                            type="text"
+                            name="phoneNumber"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Địa chỉ"
+                            variant="filled"
+                            color="info"
+                            value={address || ''}
+                            type="text"
+                            name="address"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Trạng thái"
+                            variant="filled"
+                            color="info"
+                            value={status || 'active'}
+                            select
+                            name="status"
+                            // onChange={handleSelectChange}
+                            onChange={handleInputChange}
+                        >
+                            {/* {statusArr.map((item, index) => {
+                                return ( */}
+                            <MenuItem value="active">Active</MenuItem>
+                            <MenuItem value="inactive">Inactive</MenuItem>
+                            {/* ); */}
+                            {/* })} */}
+                        </TextField>
+                        <br />
+                    </div>
+                </div>
                 <div className={cx('button')}>
                     <Button variant="contained" type="submit">
                         Lưu thay đổi

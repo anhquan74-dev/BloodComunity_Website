@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+Buffer.from('anything', 'base64');
 export const topDonors = [
     {
         id: 1,
@@ -138,13 +140,26 @@ export const hospitalColumns = [
         headerName: 'hospitalName',
         width: 200,
         // renderCell: (params) => {
+        //     let url = new Buffer(params.row.image, 'base64').toString('binary');
         //     return (
         //         <div className="cellWithImg">
-        //             <img className="cellImg" src={params.row.image} alt="avatar" />
+        //             <img className="cellImg" src={'url'} alt="avatar" />
         //             {params.row.hospitalName}
         //         </div>
         //     );
         // },
+        renderCell: (params) => {
+            let url = '';
+            if (params.row.image) {
+                url = new Buffer(params.row.image, 'base64').toString('binary');
+            }
+            return (
+                <div className="cellWithImg">
+                    <img className="cellImg" src={url} alt="avt" />
+                    {params.row.hospitalName}
+                </div>
+            );
+        },
     },
     {
         field: 'email',
@@ -167,6 +182,9 @@ export const hospitalColumns = [
         field: 'status',
         headerName: 'Status',
         width: 80,
+        renderCell: (params) => {
+            return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
+        },
     },
 ];
 
@@ -176,14 +194,18 @@ export const donorColumns = [
         field: 'email',
         headerName: 'email',
         width: 180,
-        // renderCell: (params) => {
-        //     return (
-        //         <div className="cellWithImg">
-        //             <img className="cellImg" src={params.row.image} alt="avatar" />
-        //             {params.row.hospitalName}
-        //         </div>
-        //     );
-        // },
+        renderCell: (params) => {
+            let url = '';
+            if (params.row.image) {
+                url = new Buffer(params.row.image, 'base64').toString('binary');
+            }
+            return (
+                <div className="cellWithImg">
+                    <img className="cellImg" src={url} alt="avt" />
+                    {params.row.email}
+                </div>
+            );
+        },
     },
     {
         field: 'firstName',
@@ -258,14 +280,18 @@ export const recipientColumns = [
         field: 'email',
         headerName: 'email',
         width: 180,
-        // renderCell: (params) => {
-        //     return (
-        //         <div className="cellWithImg">
-        //             <img className="cellImg" src={params.row.image} alt="avatar" />
-        //             {params.row.hospitalName}
-        //         </div>
-        //     );
-        // },
+        renderCell: (params) => {
+            let url = '';
+            if (params.row.image) {
+                url = new Buffer(params.row.image, 'base64').toString('binary');
+            }
+            return (
+                <div className="cellWithImg">
+                    <img className="cellImg" src={url} alt="avt" />
+                    {params.row.email}
+                </div>
+            );
+        },
     },
     {
         field: 'firstName',
