@@ -177,6 +177,7 @@ let handleGetUserByType = async (req, res) => {
 };
 let handleDeteleUser = async (req, res) => {
   try {
+    console.log("req.body", req.body);
     if (!req.body) {
       res.send({
         statusCode: 422,
