@@ -418,6 +418,59 @@ let postVerifyBookingSchedule = async (data) => {
     console.log(e);
   }
 };
+let buildUrlResetPassword = (email) => {
+  let result = `${process.env.URL_REACT}/reset-password?email=${email}`;
+  return result;
+};
+let postResetPasswordService = async (emailReset) => {
+  try {
+    let dataReset = {};
+    let checkUserEmail = await db.User.findOne({
+      where: { email: emailReset },
+    });
+    if (!checkUserEmail) {
+      dataReset.statusCode = 404;
+      dataReset.message = "Email này không tồn tại trong hệ thống!"
+    } else {
+      await emailService.sendEmailResetPassword({
+        receiverEmail: emailReset,
+        // language: data.language,
+        redirectLink: buildUrlResetPassword(emailReset),
+      });
+      dataReset.statusCode = 200;
+      dataReset.message = "Email đã được gửi thành công!"
+    }
+    return dataReset;
+  } catch (e) {
+    console.log(e);
+  }
+};
+let postVerifyResetPassword = async (data) => {
+  try {
+    let dataReset = {}
+    if (!data.email || !data.password) {
+      dataReset.statusCode = 422;
+      dataReset.message = "Thiếu thông số bắt buộc!"
+    } else {
+      let checkUserEmail = await db.User.findOne({
+        where: { email: data.email },
+        raw: false,
+      });
+      if (checkUserEmail) {
+        checkUserEmail.password = authController.hashPassword(data.password);
+        await checkUserEmail.save();
+        dataReset.statusCode = 200;
+        dataReset.message = "Đặt lại mật khẩu thành công!"
+      } else {
+        dataReset.statusCode = 404;
+        dataReset.message = "Đặt lại mật khẩu thất bại vì không tìm thấy email!"
+      }
+    }
+    return dataReset;
+  } catch (e) {
+    console.log("Lỗi service", e);
+  }
+};
 module.exports = {
   loginService,
   getAllUsersService,
@@ -433,5 +486,7 @@ module.exports = {
   postVerifyBookingSchedule,
   getUserByTypeService,
   inActiveUserService,
-  activeUserService
+  activeUserService,
+  postResetPasswordService,
+  postVerifyResetPassword
 };
