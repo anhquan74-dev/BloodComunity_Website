@@ -177,13 +177,13 @@ let handleGetUserByType = async (req, res) => {
 };
 let handleDeteleUser = async (req, res) => {
   try {
-    if (!req.body.id) {
+    if (!req.body) {
       res.send({
         statusCode: 422,
         message: "Missing user id!",
       });
     } else {
-      let message = await userService.deleteUserService(req.body.id);
+      let message = await userService.deleteUserService(req.body);
       res.status(message.statusCode).json(message);
     }
   } catch (e) {

@@ -6,7 +6,6 @@ import clinicController from "../controllers/clinicController";
 import hospitalController from "../controllers/hospitalController";
 
 let initWebRoutes = (app) => {
-  //forgot password
   //login with socials
   //realtime api
   // add like and share
@@ -47,7 +46,7 @@ let initWebRoutes = (app) => {
     "/api/verify-reset-password",
     userController.handlePostVerifyResetPassword
   );
-  // B7: Dựa vào message từ api để hiển thị ra giao diện rồi set Time out khoảng 3 giây để redirectLink lại trang đăng nhập
+  // B7: Dựa vào message từ api để hiển thị ra giao diện rồi set Time out khoảng 3 giây để redirect lại trang đăng nhập
 
   //Event
   router.get("/api/get-all-events", hospitalController.handleGetAllEvents);
