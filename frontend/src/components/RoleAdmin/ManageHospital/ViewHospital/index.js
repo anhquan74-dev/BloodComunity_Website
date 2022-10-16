@@ -8,6 +8,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHospitalById, updateUser } from '../../../../redux/actions/hospitalManage';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 import { Buffer } from 'buffer';
 Buffer.from('anything', 'base64');
 
@@ -24,7 +26,7 @@ function ViewHospital() {
         roleId: 'R2',
     });
     const { hospitalName, email, password, phoneNumber, address, image, roleId } = hospital;
-
+    const [isOpen, setIsOpen] = useState(false);
     const [err, setErr] = useState('');
     const { id } = useParams();
     let history = useNavigate();
@@ -60,9 +62,15 @@ function ViewHospital() {
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <div className={cx('content')}>
                 <div className={cx('content-info')}>
-                    <div>
+                    <div
+                        onClick={() => {
+                            if (!previewImage) return;
+                            setIsOpen(true);
+                        }}
+                    >
                         {previewImage ? <img src={previewImage} alt="preview-avatar" /> : <span>Preview Image</span>}
                     </div>
+                    {isOpen && <Lightbox mainSrc={previewImage} onCloseRequest={() => setIsOpen(false)} />}
                     <div>
                         <h3>Tên bệnh viện: </h3>
                         <p>{hospitalName}</p>

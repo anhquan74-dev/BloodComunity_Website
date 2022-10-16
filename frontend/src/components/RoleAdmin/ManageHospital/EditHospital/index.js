@@ -69,9 +69,9 @@ function EditHospital() {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
             console.log(hospital);
-            // dispatch(updateHospital(hospital));
-            // history('/admin/manage_hospital/');
-            // setErr('');
+            dispatch(updateHospital(hospital));
+            history('/admin/manage_hospital/');
+            setErr('');
         }
         // console.log(hospital);
     };
@@ -205,15 +205,10 @@ function EditHospital() {
                             value={status || 'active'}
                             select
                             name="status"
-                            // onChange={handleSelectChange}
                             onChange={handleInputChange}
                         >
-                            {/* {statusArr.map((item, index) => {
-                                return ( */}
                             <MenuItem value="active">Active</MenuItem>
                             <MenuItem value="inactive">Inactive</MenuItem>
-                            {/* ); */}
-                            {/* })} */}
                         </TextField>
                         <br />
                     </div>

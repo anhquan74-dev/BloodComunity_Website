@@ -14,6 +14,9 @@ import {
     UPDATE_HOSPITAL_REQUEST,
     UPDATE_HOSPITAL_SUCCESS,
     UPDATE_HOSPITAL_ERROR,
+    DELETE_HOSPITAL_REQUEST,
+    DELETE_HOSPITAL_SUCCESS,
+    DELETE_HOSPITAL_ERROR,
 } from './types';
 
 // fetch all hospital
@@ -158,5 +161,41 @@ export const updateHospitalSuccess = (payload) => {
 export const updateHospitalError = () => {
     return {
         type: UPDATE_HOSPITAL_ERROR,
+    };
+};
+
+export const deleteHospital = (id) => {
+    return async (dispatch, getState) => {
+        dispatch(deleteHospitalRequest());
+        try {
+            console.log('dl', id);
+            const res = await axios.delete('http://localhost:8080/api/delete-user', id);
+            const data = res && res.data ? res.data : [];
+            console.log(data);
+            dispatch(deleteHospitalSuccess(data));
+            dispatch(fetchAllHospital());
+        } catch (error) {
+            console.log(error);
+            dispatch(deleteHospitalError());
+        }
+    };
+};
+
+export const deleteHospitalRequest = () => {
+    return {
+        type: DELETE_HOSPITAL_REQUEST,
+    };
+};
+
+export const deleteHospitalSuccess = (payload) => {
+    return {
+        type: DELETE_HOSPITAL_SUCCESS,
+        payload,
+    };
+};
+
+export const deleteHospitalError = () => {
+    return {
+        type: DELETE_HOSPITAL_ERROR,
     };
 };

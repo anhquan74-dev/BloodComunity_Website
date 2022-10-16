@@ -13,6 +13,9 @@ import {
     UPDATE_HOSPITAL_REQUEST,
     UPDATE_HOSPITAL_SUCCESS,
     UPDATE_HOSPITAL_ERROR,
+    DELETE_HOSPITAL_REQUEST,
+    DELETE_HOSPITAL_SUCCESS,
+    DELETE_HOSPITAL_ERROR,
     FETCH_DONOR_REQUEST,
     FETCH_DONOR_SUCCESS,
     FETCH_DONOR_ERROR,
@@ -127,6 +130,26 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isError: false,
             };
         case UPDATE_HOSPITAL_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+            };
+        case DELETE_HOSPITAL_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                isError: false,
+            };
+        case DELETE_HOSPITAL_SUCCESS:
+            toast.success(action.payload);
+            toast.success(action.payload.message);
+            return {
+                ...state,
+                isLoading: false,
+                isError: false,
+            };
+        case DELETE_HOSPITAL_ERROR:
             return {
                 ...state,
                 isLoading: false,

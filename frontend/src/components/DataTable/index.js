@@ -1,13 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { hospitalColumns, donorColumns, recipientColumns } from '../../services/data';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import './DataTable.scss';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllDonor } from '../../redux/actions/donorManage';
 import { fetchAllRecipient } from '../../redux/actions/recipientManage';
-import { fetchAllHospital } from '../../redux/actions/hospitalManage';
+import { deleteHospital, fetchAllHospital, fetchHospitalById } from '../../redux/actions/hospitalManage';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -57,11 +57,10 @@ const DataTable = (props) => {
             break;
     }
 
-    
-
     const handleDelete = (id) => {
-        
-    }
+        window.confirm(`Bạn có chắc chắn muốn xoá!`);
+        dispatch(deleteHospital(id));
+    };
 
     const actionColumn = [
         {
@@ -87,8 +86,12 @@ const DataTable = (props) => {
                                 <EditIcon />
                             </div>
                         </NavLink>
-                        <div className="deleteButton"
-                         onClick={() => handleDelete(params.row.id)}>
+                        <div
+                            className="deleteButton"
+                            onClick={() => {
+                                handleDelete(params.row.id);
+                            }}
+                        >
                             <DeleteIcon />
                         </div>
                     </div>

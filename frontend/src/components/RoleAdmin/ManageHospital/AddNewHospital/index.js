@@ -11,6 +11,8 @@ import { createHospital } from '../../../../redux/actions/hospitalManage';
 import { Fab } from '@mui/material';
 import { GridAddIcon } from '@mui/x-data-grid';
 import { getBase64 } from '../../../../utils/getBase64';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css'; 
 
 const cx = classNames.bind(styles);
 
