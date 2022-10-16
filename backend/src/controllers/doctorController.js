@@ -12,7 +12,7 @@ let getTopDoctorHome = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -24,7 +24,7 @@ let getAllDoctors = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -36,7 +36,7 @@ let postInforDoctor = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -48,7 +48,7 @@ let getDetailDoctorById = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -60,7 +60,7 @@ let bulkCreateSchedule = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -76,7 +76,7 @@ let getScheduleByDate = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -88,7 +88,7 @@ let getExtraInforDoctorById = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -100,7 +100,7 @@ let getProfileDoctorById = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -115,7 +115,7 @@ let getListPatientForDoctor = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };
@@ -127,7 +127,7 @@ let sendRemedy = async (req, res) => {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from server",
+      message: "Lỗi từ Server",
     });
   }
 };

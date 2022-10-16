@@ -8,7 +8,7 @@ let bulkCreateScheduleService = async (data) => {
     let scheduleCreate = {};
     if (!data.arrSchedule || !data.hospitalId || !data.formatedDate) {
       scheduleCreate.statusCode = 422;
-      scheduleCreate.message = "Missing schedules data";
+      scheduleCreate.message = "Không có dữ liệu đặt lịch!";
     } else {
       let schedule = data.arrSchedule;
 
@@ -35,12 +35,12 @@ let bulkCreateScheduleService = async (data) => {
         let dataCreate = await db.Schedule.bulkCreate(toCreate);
         if (dataCreate) {
           scheduleCreate.statusCode = 201;
-          scheduleCreate.message = "Schedule sent successfully";
+          scheduleCreate.message = "Lịch hẹn đã được tạo thành công!";
         }
       } else {
         scheduleCreate.statusCode = 409;
         scheduleCreate.message =
-          "This calendar has already been created, please create with another time!";
+          "Lịch hẹn này đã được tạo, hãy chọn mốc thời gian khác!";
       }
       return scheduleCreate;
     }
@@ -53,7 +53,7 @@ let getScheduleByDateService = async (hospitalId, date) => {
     let scheduleData = {};
     if (!hospitalId || !date) {
       scheduleData.statusCode = 422;
-      scheduleData.message = "Missing require parameters!";
+      scheduleData.message = "Thiếu thông số bắt buộc!";
     } else {
       let data = await db.Schedule.findAll({
         where: {
@@ -78,11 +78,11 @@ let getScheduleByDateService = async (hospitalId, date) => {
       });
       if (!data || data.length === 0) {
         scheduleData.statusCode = 404;
-        scheduleData.message = "Not found!";
+        scheduleData.message = "Không có lịch hẹn!";
         data = [];
       } else {
         scheduleData.statusCode = 200;
-        scheduleData.message = "Get schedule data successfully!";
+        scheduleData.message = "Lấy dữ liệu lịch hẹn thành công!";
         scheduleData.content = data;
       }
       return scheduleData;
@@ -96,7 +96,7 @@ let getScheduleByIdService = async (inputId) => {
     let scheduleData = {};
     if (!inputId) {
       scheduleData.statusCode = 422;
-      scheduleData.message = "Missing require parameters!";
+      scheduleData.message = "Thiếu thông số bắt buộc!";
     } else {
       let data = await db.Schedule.findAll({
         where: {
@@ -120,11 +120,11 @@ let getScheduleByIdService = async (inputId) => {
       });
       if (!data || data.length === 0) {
         scheduleData.statusCode = 404;
-        scheduleData.message = "Not found!";
+        scheduleData.message = "Không tìm thấy!";
         data = [];
       } else {
         scheduleData.statusCode = 200;
-        scheduleData.message = "Get schedule data successfully!";
+        scheduleData.message = "Lấy dữ liệu lịch hẹn thành công!";
         scheduleData.content = data;
       }
       return scheduleData;
@@ -138,11 +138,11 @@ let createEventService = async (data) => {
     let eventCreate = {};
     if (!data.hospitalId) {
       eventCreate.statusCode = 422;
-      eventCreate.message = "Missing hospitalId!";
+      eventCreate.message = "Thiếu thông số bắt buộc!";
     } else {
       await db.Event.create(data);
       eventCreate.statusCode = 201;
-      eventCreate.message = "Event created successfully!";
+      eventCreate.message = "Tạo sự kiện thành công!";
     }
     return eventCreate;
   } catch (e) {
@@ -154,7 +154,7 @@ let getEventByDateService = async (date) => {
     let eventData = {};
     if (!date) {
       eventData.statusCode = 422;
-      eventData.message = "Missing require parameters!";
+      eventData.message = "Thiếu thông số bắt buộc!";
     } else {
       let data = await db.Event.findAll({
         where: {
@@ -173,11 +173,11 @@ let getEventByDateService = async (date) => {
       });
       if (!data || data.length === 0) {
         eventData.statusCode = 404;
-        eventData.message = "Not found!";
+        eventData.message = "Không tìm thấy!";
         data = [];
       } else {
         eventData.statusCode = 200;
-        eventData.message = "Get event data successfully!";
+        eventData.message = "Lấy thông tin sự kiện thành công!";
         eventData.content = data;
       }
       return eventData;
@@ -194,13 +194,13 @@ let deleteEventService = async (inputId) => {
     });
     if (!event) {
       message.statusCode = 404;
-      message.message = "Event not found!";
+      message.message = "Không tìm thấy!";
     } else {
       await db.Event.destroy({
         where: { id: inputId },
       });
       message.statusCode = 200;
-      message.message = "Event deleted successfully!";
+      message.message = "Xóa sự kiện thành công!";
     }
     return message;
   } catch (e) {
@@ -227,10 +227,10 @@ let updateEventService = async (data) => {
       });
       eventUpdated.content = getEventInforAgain;
       eventUpdated.statusCode = 200;
-      eventUpdated.message = "Updated successfully!";
+      eventUpdated.message = "Cập nhật thành công!";
     } else {
       eventUpdated.statusCode = 404;
-      eventUpdated.message = "Couldn't find event";
+      eventUpdated.message = "Không tìm thấy!";
     }
     return eventUpdated;
   } catch (e) {
@@ -261,13 +261,13 @@ let deleteScheduleService = async (inputId) => {
     });
     if (!schedule) {
       message.statusCode = 404;
-      message.message = "Schedule not found!";
+      message.message = "Không tìm thấy!";
     } else {
       await db.Schedule.destroy({
         where: { id: inputId },
       });
       message.statusCode = 200;
-      message.message = "Schedule deleted successfully!";
+      message.message = "Xóa lịch hẹn thành công!";
     }
     return message;
   } catch (e) {
@@ -294,10 +294,10 @@ let updateScheduleService = async (data) => {
       });
       scheduleUpdated.content = getScheduleInforAgain;
       scheduleUpdated.statusCode = 200;
-      scheduleUpdated.message = "Updated successfully!";
+      scheduleUpdated.message = "Cập nhật thành công!";
     } else {
       scheduleUpdated.statusCode = 404;
-      scheduleUpdated.message = "Couldn't find Schedule";
+      scheduleUpdated.message = "Không tìm thấy!";
     }
     return scheduleUpdated;
   } catch (e) {
