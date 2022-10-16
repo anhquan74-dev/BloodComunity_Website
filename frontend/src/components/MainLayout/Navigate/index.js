@@ -38,9 +38,9 @@ function Navigate({ to, content }) {
         case '/admin/manage_recipient':
             icon = <FontAwesomeIcon icon={faHospitalUser} />;
             break;
-        case '/admin/manage_admin':
-            icon = <AdminPanelSettingsIcon />;
-            break;
+        // case '/admin/manage_admin':
+        //     icon = <AdminPanelSettingsIcon />;
+        //     break;
         case '/donor/blood_request':
         case '/recipient/blood_request':
             icon = <BloodtypeIcon />;
