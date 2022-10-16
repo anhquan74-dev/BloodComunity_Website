@@ -57,6 +57,12 @@ const DataTable = (props) => {
             break;
     }
 
+    
+
+    const handleDelete = (id) => {
+        
+    }
+
     const actionColumn = [
         {
             field: 'action',
@@ -81,7 +87,8 @@ const DataTable = (props) => {
                                 <EditIcon />
                             </div>
                         </NavLink>
-                        <div className="deleteButton">
+                        <div className="deleteButton"
+                         onClick={() => handleDelete(params.row.id)}>
                             <DeleteIcon />
                         </div>
                     </div>
