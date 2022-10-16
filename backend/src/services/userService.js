@@ -45,42 +45,49 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
+
     if (!checkUserEmail) {
       userData.statusCode = 404;
-      userData.message = "Email này đã tồn tại trong hệ thống!";
+      userData.message = "Email này không tồn tại trong hệ thống!";
       userData.content = {};
     } else {
-      let checkPassword = await authController.comparePassword(
-        password,
-        checkUserEmail.password
-      );
-      if (!checkPassword) {
-        userData.statusCode = 404;
-        userData.message = "Mật khẩu của bạn không khớp!";
-        userData.content = {};
-      } else {
-        const token = authController.generateToken(checkUserEmail);
-        const data = {
-          email: checkUserEmail.email,
-          roleId: checkUserEmail.roleId,
-          firstName: checkUserEmail.firstName,
-          lastName: checkUserEmail.lastName,
-          hospitalName: checkUserEmail.hospitalName,
-          gender: checkUserEmail.gender,
-          birthday: checkUserEmail.birthday,
-          ward: checkUserEmail.ward,
-          district: checkUserEmail.district,
-          city: checkUserEmail.city,
-          address: checkUserEmail.address,
-          phoneNumber: checkUserEmail.phoneNumber,
-          image: checkUserEmail.image,
-          groupBlood: checkUserEmail.groupBlood,
-          numberOfDonation: checkUserEmail.numberOfDonation,
-          accessToken: token,
-        };
-        userData.statusCode = 200;
-        userData.message = "Đăng nhập thành công!";
-        userData.content = data;
+      if (checkUserEmail.status === "inactive") {
+        userData.statusCode = 403;
+        userData.message = "Tài khoản của bạn đã bị khóa!"
+      }
+      if (checkUserEmail.status === "active") {
+        let checkPassword = await authController.comparePassword(
+          password,
+          checkUserEmail.password
+        );
+        if (!checkPassword) {
+          userData.statusCode = 404;
+          userData.message = "Mật khẩu của bạn không khớp!";
+          userData.content = {};
+        } else {
+          const token = authController.generateToken(checkUserEmail);
+          const data = {
+            email: checkUserEmail.email,
+            roleId: checkUserEmail.roleId,
+            firstName: checkUserEmail.firstName,
+            lastName: checkUserEmail.lastName,
+            hospitalName: checkUserEmail.hospitalName,
+            gender: checkUserEmail.gender,
+            birthday: checkUserEmail.birthday,
+            ward: checkUserEmail.ward,
+            district: checkUserEmail.district,
+            city: checkUserEmail.city,
+            address: checkUserEmail.address,
+            phoneNumber: checkUserEmail.phoneNumber,
+            image: checkUserEmail.image,
+            groupBlood: checkUserEmail.groupBlood,
+            numberOfDonation: checkUserEmail.numberOfDonation,
+            accessToken: token,
+          };
+          userData.statusCode = 200;
+          userData.message = "Đăng nhập thành công!";
+          userData.content = data;
+        }
       }
     }
     return userData;
@@ -213,6 +220,7 @@ let updateUserService = async (data) => {
       checkUserId.phoneNumber = data.phoneNumber;
       checkUserId.groupBlood = data.groupBlood;
       checkUserId.numberOfDonation = data.numberOfDonation;
+      checkUserId.status = data.status;
       if (data.image) {
         checkUserId.image = data.image;
       }
