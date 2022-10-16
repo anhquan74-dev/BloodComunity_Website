@@ -8,8 +8,8 @@ import hospitalController from "../controllers/hospitalController";
 let initWebRoutes = (app) => {
   //forgot password
   //login with socials
-  // verify-book-schedule
-  // donor-booking-schedule"
+  //realtime api
+  // add like and share
 
   //Home page
   router.get("/api/get-total-donation", userController.handleGetTotalDonation);
@@ -33,6 +33,21 @@ let initWebRoutes = (app) => {
   router.put("/api/active-user", userController.handleActiveUser); //admin
   router.put("/api/inactive-user", userController.handleInActiveUser); //admin
 
+  // Quên mật khẩu: 
+  // B1: click vào nút quên mật khẩu để hiện lên form điền vào email 
+  // B2: điền email vào ô input rồi bấm nút gửi
+  // Tại B2 khi người dùng bấm nút gửi thì gọi api sau để gửi email về hệ thống: (gửi qua body)
+  router.post("/api/reset-password", userController.handleResetPassword)
+  // B3: hiện lên gif loading cho đến khi email đc gửi xong
+  // B4: toastify : Lấy từ mesage trong api gửi về  !
+  // B5: Khi người dùng click vào link trong email thì sẽ chuyển đến trang để nhập lại password + confirmPassword
+  // Trang nhập lại:localhost:3000/reset-password?email=${email}`;
+  // B6: Sau khi nhập pass + confirmPass vào thì ấn nút gửi để gọi api sau: để gửi lên email, password
+  router.post(
+    "/api/verify-reset-password",
+    userController.handlePostVerifyResetPassword
+  );
+  // B7: Dựa vào message từ api để hiển thị ra giao diện rồi set Time out khoảng 3 giây để redirectLink lại trang đăng nhập
 
   //Event
   router.get("/api/get-all-events", hospitalController.handleGetAllEvents);

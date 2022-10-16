@@ -20,11 +20,30 @@ let sendSimpleEmail = async (dataSend) => {
     html: getBodyHTMLEmail(dataSend),
   });
 };
+let sendEmailResetPassword = async (dataSend) => {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_APP, // generated ethereal user
+      pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: '"Blood Community Website" <ledohoangkhiem3k@gmail.com>', // sender address
+    to: dataSend.receiverEmail, // list of receivers
+    subject: "Đặt lại mật khẩu của bạn ✔", // Subject line
+    html: getBodyHTMLResetPassword(dataSend),
+  });
+}
 let getBodyHTMLEmail = (dataSend) => {
   let result = "";
   console.log("dataSend: ", dataSend);
   // if (dataSend.language === "vi") {
-    result = `
+  result = `
     
     <h3>Xin chào ${dataSend.donorName}!</h3>
     <p>Bạn nhận được email này vì đã đặt lịch hiến máu ở website của chúng tôi.</p>
@@ -62,6 +81,43 @@ let getBodyHTMLEmail = (dataSend) => {
   // }
   return result;
 };
+let getBodyHTMLResetPassword = (dataSend) => {
+  let result = "";
+  // if (dataSend.language === "vi") {
+  result = `
+    
+    <h3>Xin chào!</h3>
+    <p>Bạn nhận được email để xác nhận việc đặt lại mật khẩu.</p>
+    <p>Hãy click vào link bên dưới để hoàn tất thủ tục đặt lại mật khẩu </p> <a href=${dataSend.redirectLink} target="_blank">Click here</a>
+    </div>
+
+    <p>Mỗi giọt máu cho đi,
+    một cuộc đời ở lại!</p>
+    
+    <div>Với mỗi lần hiến máu bạn có thể
+    mang lại cơ hội cứu sống 3 người.</div>
+
+    <div>Hãy cứu lấy mạng người bằng ít máu của mình!</div>
+    <div>Xin chân thành cảm ơn.</div>
+
+    `;
+  // }
+  // if (dataSend.language === "en") {
+  //   result = `
+
+  //    <h3>Hello ${dataSend.patientName}!</h3>
+  //    <p>You received this email because you booked a medical appointment on the website</p>
+  //    <div><b>Time: ${dataSend.time}</b></div>
+  //    <div><b>Doctor: ${dataSend.doctorName}</b></div>
+
+  //    <p>If the above information is correct, please click on the link below to complete the medical appointment booking procedure</p>
+  //    <div><a href=${dataSend.redirectLink} target="_blank">Click here</a></div>
+
+  //    <div>Thank you very much</div>
+  //   `;
+  // }
+  return result;
+};
 // let getBodyHTMLRemedy = (dataSend) => {
 //   let result = "";
 //   // if (dataSend.language === "vi") {
@@ -69,7 +125,7 @@ let getBodyHTMLEmail = (dataSend) => {
 //     <h3>Xin chào ${dataSend.patientName}!</h3>
 //     <p>Bạn nhận được email này vì đã đặt lịch khám bệnh ở website</p>
 //     <p>Thông tin đơn thuốc, hóa đơn được sửi trong file đính kèm</p>
-    
+
 
 //     <div>Chân thành cảm ơn</div>
 //     `;
@@ -118,4 +174,4 @@ let getBodyHTMLEmail = (dataSend) => {
 //     }
 //   });
 // };
-module.exports = { sendSimpleEmail };
+module.exports = { sendSimpleEmail, sendEmailResetPassword };

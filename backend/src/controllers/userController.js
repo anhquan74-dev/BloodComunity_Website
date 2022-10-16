@@ -52,6 +52,44 @@ let handleLogin = async (req, res) => {
     });
   }
 };
+let handleResetPassword = async (req, res) => {
+  try {
+    let { email } = req.body;
+    if (!email) {
+      res.send({
+        statusCode: 422,
+        message: "Missing email address!",
+      });
+    } else {
+
+      let userData = await userService.postResetPasswordService(email);
+      res.status(userData.statusCode).json({
+        statusCode: userData.statusCode,
+        message: userData.message,
+        content: userData.content,
+      });
+
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handlePostVerifyResetPassword = async (req, res) => {
+  try {
+    let infor = await userService.postVerifyResetPassword(req.body);
+    return res.status(infor.statusCode).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: "Lỗi từ Server",
+    });
+  }
+}
 let handleGetAllCode = async (req, res) => {
   try {
     let typeInput = await req.query.type;
@@ -297,5 +335,8 @@ module.exports = {
   handlePostBookingSchedule,
   handlePostVerifyBookingSchedule,
   handleActiveUser,
-  handleInActiveUser
+  handleInActiveUser,
+  handleResetPassword,
+  handlePostVerifyResetPassword
+
 };
