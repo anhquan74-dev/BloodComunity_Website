@@ -1,13 +1,11 @@
-
-import './ManageHospital.scss'
+import './ManageHospital.scss';
 import DataTable from '../../DataTable';
 
-
-
 const ManageHospital = () => {
-
-    return (          
-            <DataTable role='hospital' />
+    return (
+        // <div className="manage-account_wrapper">
+        <DataTable role="hospital" />
+        // </div>
     );
 };
 

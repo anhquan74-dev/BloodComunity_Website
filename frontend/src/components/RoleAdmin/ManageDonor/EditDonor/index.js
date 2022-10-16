@@ -1,52 +1,67 @@
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import styles from './EditHospital.module.scss';
+import styles from './EditDonor.module.scss';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHospitalById, updateHospital } from '../../../../redux/actions/hospitalManage';
-import { getBase64 } from '../../../../utils/getBase64';
+import { fetchDonorById, updateDonor } from '../../../../redux/actions/donorManage';
 import { Fab, MenuItem } from '@mui/material';
 import { GridAddIcon } from '@mui/x-data-grid';
-import { Buffer } from 'buffer';
-Buffer.from('anything', 'base64');
+import { getBase64 } from '../../../../utils/getBase64';
 
 const cx = classNames.bind(styles);
-// const statusArr = ['active', 'inactive'];
 
-function EditHospital() {
-    const [hospital, setHospital] = useState({
-        hospitalName: '',
+function EditDonor() {
+    const [donor, setDonor] = useState({
         email: '',
-        status: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        gender: '',
+        birthday: '',
         phoneNumber: '',
         address: '',
+        groupBlood: '',
         image: '',
-        roleId: 'R2',
+        numberOfDonation: 0,
+        status: 'active',
+        roleId: 'R3',
     });
-    const { hospitalName, email, status, phoneNumber, address, image, roleId } = hospital;
+    const {
+        email,
+        password,
+        firstName,
+        lastName,
+        gender,
+        birthday,
+        phoneNumber,
+        address,
+        groupBlood,
+        numberOfDonation,
+        image,
+        status,
+        roleId,
+    } = donor;
     const [previewImageUpload, setPreviewImageUpload] = useState('');
     const [err, setErr] = useState('');
-
     const { id } = useParams();
     let history = useNavigate();
 
     const dispatch = useDispatch();
-    const hospitalState = useSelector((state) => state.users.hospital);
+    const donorState = useSelector((state) => state.users.donor);
 
     useEffect(() => {
-        dispatch(fetchHospitalById(id));
+        dispatch(fetchDonorById(id));
     }, []);
 
     useEffect(() => {
-        if (hospitalState) {
-            console.log(hospitalState);
-            setHospital({ ...hospitalState });
+        if (donorState) {
+            setDonor({ ...donorState });
         }
-    }, [hospitalState]);
+    }, [donorState]);
 
     let previewImageDisplay = '';
     let imageBase64 = '';
@@ -58,22 +73,18 @@ function EditHospital() {
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        console.log(name, value);
-        setHospital({ ...hospital, [name]: value });
-        console.log(hospital);
+        setDonor({ ...donor, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!hospitalName || !email || !phoneNumber || !address || !image) {
+        if (!status) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
-            console.log(hospital);
-            // dispatch(updateHospital(hospital));
-            // history('/admin/manage_hospital/');
-            // setErr('');
+            dispatch(updateDonor(donor));
+            history('/admin/manage_donor/');
+            setErr('');
         }
-        // console.log(hospital);
     };
 
     const handleUploadImage = async (e) => {
@@ -82,27 +93,17 @@ function EditHospital() {
         if (file) {
             setPreviewImageUpload(URL.createObjectURL(file));
             let base64 = await getBase64(file);
-            setHospital({ ...hospital, image: base64 });
+            setDonor({ ...donor, image: base64 });
         }
-    };
-
-    // const [statusState, setStatusState] = useState('active');
-    // const handleSelectChange = (e) => {
-    //     setStatusState(e.target.value);
-    //     setHospital({ ...hospital, status: e.target.value });
-    // };
-    const handleBack = () => {
-        history('/admin/manage_hospital/');
-        // setPreviewImage('');
     };
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('back')} onClick={handleBack}>
+            <div className={cx('back')} onClick={() => history('/admin/manage_donor/')}>
                 <FontAwesomeIcon icon={faArrowLeft} />
                 &nbsp; Trở về
             </div>
-            <h3>Cập nhật thông tin bệnh viện</h3>
+            <h3>Cập nhật thông tin người hiến máu</h3>
             {err && <h4 style={{ color: 'red' }}>{err}</h4>}
             <form className={cx('content')} onSubmit={handleSubmit}>
                 <div className={cx('content-info')}>
@@ -136,12 +137,27 @@ function EditHospital() {
                             margin="normal"
                             fullWidth
                             id="standard-basic"
-                            label="Tên bệnh viện"
+                            label="Tên"
                             variant="filled"
                             color="info"
-                            value={hospitalName || ''}
+                            value={firstName || ''}
                             type="text"
-                            name="hospitalName"
+                            name="firstName"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Họ"
+                            variant="filled"
+                            color="info"
+                            value={lastName || ''}
+                            type="text"
+                            name="lastName"
                             onChange={handleInputChange}
                         />
                         <br />
@@ -155,10 +171,39 @@ function EditHospital() {
                             variant="filled"
                             color="info"
                             value={email || ''}
-                            type="email"
+                            type="text"
                             name="email"
                             onChange={handleInputChange}
-                            disabled
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Mật khẩu"
+                            variant="filled"
+                            color="info"
+                            value={password || ''}
+                            type="text"
+                            name="password"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Giới tính"
+                            variant="filled"
+                            color="info"
+                            value={gender || ''}
+                            type="text"
+                            name="gender"
+                            onChange={handleInputChange}
                         />
                         <br />
                     </div>
@@ -169,7 +214,22 @@ function EditHospital() {
                             margin="normal"
                             fullWidth
                             id="standard-basic"
-                            label="Số điện thoại"
+                            label="Ngày sinh"
+                            variant="filled"
+                            color="info"
+                            value={birthday || ''}
+                            type="text"
+                            name="birthday"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Số điện tho"
                             variant="filled"
                             color="info"
                             value={phoneNumber || ''}
@@ -190,6 +250,36 @@ function EditHospital() {
                             value={address || ''}
                             type="text"
                             name="address"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Nhóm máu"
+                            variant="filled"
+                            color="info"
+                            value={groupBlood || ''}
+                            type="text"
+                            name="groupBlood"
+                            onChange={handleInputChange}
+                        />
+                        <br />
+                        <TextField
+                            inputProps={{ style: { fontSize: 14 } }}
+                            InputLabelProps={{ style: { fontSize: 14 } }}
+                            margin="normal"
+                            fullWidth
+                            id="standard-basic"
+                            label="Số lần hiến máu"
+                            variant="filled"
+                            color="info"
+                            value={numberOfDonation || ''}
+                            type="text"
+                            name="numberOfDonation"
                             onChange={handleInputChange}
                         />
                         <br />
@@ -228,4 +318,4 @@ function EditHospital() {
     );
 }
 
-export default EditHospital;
+export default EditDonor;
