@@ -5,8 +5,7 @@
     align-items: center;
     position: relative;
     padding: 40px;
-    background-color: white;
-    h3 {
+    > h3 {
         font-size: 3rem;
         font-weight: 700;
         margin: 30px 0 40px 0;
@@ -30,10 +29,15 @@
     width: 100%;
 }
 
+
 .content-info {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
+    h3 {
+        font-size: 1.6rem;
+        font-weight: 600;
+    }
     > div {
         width: 32%;
         &:first-child {
@@ -58,8 +62,21 @@
     justify-content: center;
     align-items: center;
     margin-top: 40px;
+
     button {
         font-size: 14px !important;
 
     }
 }
+
+.content-flex {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4%;
+    > div {
+        width: 40%;
+    }
+}
+
