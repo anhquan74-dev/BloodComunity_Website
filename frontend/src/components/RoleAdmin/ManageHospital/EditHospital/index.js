@@ -15,7 +15,6 @@ import { Buffer } from 'buffer';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
-// const statusArr = ['active', 'inactive'];
 
 function EditHospital() {
     const [hospital, setHospital] = useState({
@@ -48,12 +47,13 @@ function EditHospital() {
         }
     }, [hospitalState]);
 
-    let previewImageDisplay = '';
+    let previewImageDisplay = image || '';
     let imageBase64 = '';
-    if (image) {
+    if (image && typeof image === 'object') {
+        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
+        previewImageDisplay = imageBase64;
     }
-    previewImageDisplay = imageBase64;
     console.log(previewImageDisplay);
 
     const handleInputChange = (e) => {
@@ -65,15 +65,17 @@ function EditHospital() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!hospitalName || !email || !phoneNumber || !address || !image) {
+        if (!hospitalName || !email || !phoneNumber || !address) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
+            if (image && typeof image === 'object') {
+                hospital.image = new Buffer(image, 'base64').toString('binary');
+            }
             console.log(hospital);
-            // dispatch(updateHospital(hospital));
-            // history('/admin/manage_hospital/');
-            // setErr('');
+            dispatch(updateHospital(hospital));
+            history('/admin/manage_hospital/');
+            setErr('');
         }
-        // console.log(hospital);
     };
 
     const handleUploadImage = async (e) => {
@@ -82,18 +84,13 @@ function EditHospital() {
         if (file) {
             setPreviewImageUpload(URL.createObjectURL(file));
             let base64 = await getBase64(file);
+            console.log(base64);
             setHospital({ ...hospital, image: base64 });
         }
     };
 
-    // const [statusState, setStatusState] = useState('active');
-    // const handleSelectChange = (e) => {
-    //     setStatusState(e.target.value);
-    //     setHospital({ ...hospital, status: e.target.value });
-    // };
     const handleBack = () => {
         history('/admin/manage_hospital/');
-        // setPreviewImage('');
     };
 
     return (
@@ -205,15 +202,10 @@ function EditHospital() {
                             value={status || 'active'}
                             select
                             name="status"
-                            // onChange={handleSelectChange}
                             onChange={handleInputChange}
                         >
-                            {/* {statusArr.map((item, index) => {
-                                return ( */}
                             <MenuItem value="active">Active</MenuItem>
                             <MenuItem value="inactive">Inactive</MenuItem>
-                            {/* ); */}
-                            {/* })} */}
                         </TextField>
                         <br />
                     </div>

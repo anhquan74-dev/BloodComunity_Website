@@ -8,6 +8,8 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDonorById, updateDonor } from '../../../../redux/actions/donorManage';
+import { Buffer } from 'buffer';
+Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
 

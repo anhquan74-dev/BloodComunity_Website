@@ -11,6 +11,8 @@ import { fetchDonorById, updateDonor } from '../../../../redux/actions/donorMana
 import { Fab, MenuItem } from '@mui/material';
 import { GridAddIcon } from '@mui/x-data-grid';
 import { getBase64 } from '../../../../utils/getBase64';
+import { Buffer } from 'buffer';
+Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
 
@@ -66,10 +68,11 @@ function EditDonor() {
     let previewImageDisplay = '';
     let imageBase64 = '';
     if (image) {
+        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
+        console.log(imageBase64);
+        previewImageDisplay = imageBase64;
     }
-    previewImageDisplay = imageBase64;
-    console.log(previewImageDisplay);
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -81,6 +84,7 @@ function EditDonor() {
         if (!status) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
+            console.log(donor);
             dispatch(updateDonor(donor));
             history('/admin/manage_donor/');
             setErr('');
@@ -108,10 +112,10 @@ function EditDonor() {
             <form className={cx('content')} onSubmit={handleSubmit}>
                 <div className={cx('content-info')}>
                     <div>
-                        {previewImageUpload ? (
-                            <img src={previewImageUpload} alt="preview-avatar" />
-                        ) : previewImageDisplay ? (
+                        {previewImageDisplay ? (
                             <img src={previewImageDisplay} alt="preview-avatar" />
+                        ) : previewImageUpload ? (
+                            <img src={previewImageUpload} alt="preview-avatar" />
                         ) : (
                             <span>Preview Image</span>
                         )}
