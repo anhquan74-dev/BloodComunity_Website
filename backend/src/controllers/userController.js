@@ -61,14 +61,12 @@ let handleResetPassword = async (req, res) => {
         message: "Missing email address!",
       });
     } else {
-
       let userData = await userService.postResetPasswordService(email);
       res.status(userData.statusCode).json({
         statusCode: userData.statusCode,
         message: userData.message,
         content: userData.content,
       });
-
     }
   } catch (e) {
     console.log(e);
@@ -77,7 +75,7 @@ let handleResetPassword = async (req, res) => {
       message: "Lỗi từ Server!",
     });
   }
-}
+};
 let handlePostVerifyResetPassword = async (req, res) => {
   try {
     let infor = await userService.postVerifyResetPassword(req.body);
@@ -89,7 +87,7 @@ let handlePostVerifyResetPassword = async (req, res) => {
       message: "Lỗi từ Server",
     });
   }
-}
+};
 let handleGetAllCode = async (req, res) => {
   try {
     let typeInput = await req.query.type;
@@ -177,7 +175,8 @@ let handleGetUserByType = async (req, res) => {
 };
 let handleDeteleUser = async (req, res) => {
   try {
-    if (!req.body.deleteUserService) {
+    console.log("req.body", req.body);
+    if (!req.body) {
       res.send({
         statusCode: 422,
         message: "Missing user id!",
@@ -281,7 +280,7 @@ let handlePostVerifyBookingSchedule = async (req, res) => {
       message: "Lỗi từ Server",
     });
   }
-}
+};
 let handleActiveUser = async (req, res) => {
   try {
     if (!req.body.id) {
@@ -337,6 +336,5 @@ module.exports = {
   handleActiveUser,
   handleInActiveUser,
   handleResetPassword,
-  handlePostVerifyResetPassword
-
+  handlePostVerifyResetPassword,
 };

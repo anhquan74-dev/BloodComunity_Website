@@ -178,18 +178,18 @@ let getAllCodeService = async (typeInput) => {
     console.log(e);
   }
 };
-let deleteUserService = async (inputId) => {
+let deleteUserService = async (data) => {
   try {
     let message = {};
     let user = await db.User.findOne({
-      where: { id: inputId },
+      where: { id: data.id },
     });
     if (!user) {
       message.statusCode = 404;
       message.message = "Không tìm thấy!!";
     } else {
       await db.User.destroy({
-        where: { id: inputId },
+        where: { id: data.id },
       });
       message.statusCode = 200;
       message.message = "Xóa thành công!";
