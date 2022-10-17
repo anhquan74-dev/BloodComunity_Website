@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 let router = express.Router();
 import userController from "../controllers/userController";
 import specialtyController from "../controllers/specialtyController";
@@ -17,6 +17,7 @@ let initWebRoutes = (app) => {
     "/api/get-total-recipient",
     userController.handleGetTotalRecipient
   );
+  router.get("/api/get-top-donor", userController.handleGetTopDonor);
 
   //User
   router.post("/api/register", userController.handleRegister);

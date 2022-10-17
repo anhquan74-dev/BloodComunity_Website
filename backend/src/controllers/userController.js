@@ -175,6 +175,21 @@ let handleGetUserByType = async (req, res) => {
     });
   }
 };
+let handleGetTopDonor = async (req, res) => {
+  try {
+    let users = await userService.getTopDonorService();
+    res.status(200).json({
+      statusCode: 200,
+      message: "Lấy danh sách top người hiến máu thành công!",
+      content: users,
+    });
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleDeteleUser = async (req, res) => {
   try {
     console.log("req.body", req.body);
@@ -338,6 +353,6 @@ module.exports = {
   handleActiveUser,
   handleInActiveUser,
   handleResetPassword,
-  handlePostVerifyResetPassword
-
+  handlePostVerifyResetPassword,
+  handleGetTopDonor
 };
