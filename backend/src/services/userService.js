@@ -107,6 +107,24 @@ let getAllUsersService = async () => {
     console.log(e);
   }
 };
+let getTopDonorService = async () => {
+  try {
+    let allUsers = await db.User.findAll({
+      where: {
+        roleId: "R3",
+      },
+      attributes: {
+        exclude: ["password"],
+      },
+      order: [
+        ["numberOfDonation", "DESC"],
+      ],
+    });
+    return allUsers;
+  } catch (e) {
+    console.log(e);
+  }
+};
 let getUserByIdService = async (userId) => {
   try {
     let userInfor = {};
@@ -199,6 +217,7 @@ let deleteUserService = async (data) => {
     console.log(e);
   }
 };
+
 let updateUserService = async (data) => {
   try {
     let userUpdated = {};
@@ -474,6 +493,7 @@ let postVerifyResetPassword = async (data) => {
 module.exports = {
   loginService,
   getAllUsersService,
+  getTopDonorService,
   getUserByIdService,
   registerService,
   getAllCodeService,
