@@ -79,7 +79,7 @@ function App() {
                         <Route path="account" element={<Account />} />
                     </Route>
                 </Routes>
-                <ToastContainer />
+                <ToastContainer autoClose={2000} theme="colored" />
             </div>
         </Router>
     );

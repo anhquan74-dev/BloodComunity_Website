@@ -312,7 +312,7 @@ let getTotalDonorService = async () => {
   try {
     let num = await db.User.findAll({
       where: {
-        roleId: "donor",
+        roleId: "R3",
       },
       attributes: [[sequelize.fn("count", sequelize.col("id")), "totalDonors"]],
     });
@@ -325,7 +325,7 @@ let getTotalRecipientService = async () => {
   try {
     let num = await db.User.findAll({
       where: {
-        roleId: "recipient",
+        roleId: "R4",
       },
       attributes: [
         [sequelize.fn("count", sequelize.col("id")), "totalRecipients"],
@@ -350,10 +350,9 @@ let postBookingScheduleService = async (data) => {
       !data.date ||
       !data.fullName ||
       !data.donorId
-
     ) {
       booking.statusCode = 422;
-      booking.message = "Thiếu thông số bắt buộc!"
+      booking.message = "Thiếu thông số bắt buộc!";
     } else {
       let token = uuidv4();
       await emailService.sendSimpleEmail({
@@ -381,7 +380,7 @@ let postBookingScheduleService = async (data) => {
       });
 
       booking.statusCode = 201;
-      booking.message = "Thành công!"
+      booking.message = "Thành công!";
     }
     return booking;
   } catch (e) {
@@ -390,10 +389,10 @@ let postBookingScheduleService = async (data) => {
 };
 let postVerifyBookingSchedule = async (data) => {
   try {
-    let booking = {}
+    let booking = {};
     if (!data.token || !data.hospitalId) {
       booking.statusCode = 422;
-      booking.message = "Thiếu thông số bắt buộc!"
+      booking.message = "Thiếu thông số bắt buộc!";
     } else {
       let appointment = await db.Booking.findOne({
         where: {
@@ -430,7 +429,7 @@ let postResetPasswordService = async (emailReset) => {
     });
     if (!checkUserEmail) {
       dataReset.statusCode = 404;
-      dataReset.message = "Email này không tồn tại trong hệ thống!"
+      dataReset.message = "Email này không tồn tại trong hệ thống!";
     } else {
       await emailService.sendEmailResetPassword({
         receiverEmail: emailReset,
@@ -438,7 +437,7 @@ let postResetPasswordService = async (emailReset) => {
         redirectLink: buildUrlResetPassword(emailReset),
       });
       dataReset.statusCode = 200;
-      dataReset.message = "Email đã được gửi thành công!"
+      dataReset.message = "Email đã được gửi thành công!";
     }
     return dataReset;
   } catch (e) {
@@ -447,10 +446,10 @@ let postResetPasswordService = async (emailReset) => {
 };
 let postVerifyResetPassword = async (data) => {
   try {
-    let dataReset = {}
+    let dataReset = {};
     if (!data.email || !data.password) {
       dataReset.statusCode = 422;
-      dataReset.message = "Thiếu thông số bắt buộc!"
+      dataReset.message = "Thiếu thông số bắt buộc!";
     } else {
       let checkUserEmail = await db.User.findOne({
         where: { email: data.email },
@@ -460,10 +459,11 @@ let postVerifyResetPassword = async (data) => {
         checkUserEmail.password = authController.hashPassword(data.password);
         await checkUserEmail.save();
         dataReset.statusCode = 200;
-        dataReset.message = "Đặt lại mật khẩu thành công!"
+        dataReset.message = "Đặt lại mật khẩu thành công!";
       } else {
         dataReset.statusCode = 404;
-        dataReset.message = "Đặt lại mật khẩu thất bại vì không tìm thấy email!"
+        dataReset.message =
+          "Đặt lại mật khẩu thất bại vì không tìm thấy email!";
       }
     }
     return dataReset;
@@ -488,5 +488,5 @@ module.exports = {
   inActiveUserService,
   activeUserService,
   postResetPasswordService,
-  postVerifyResetPassword
+  postVerifyResetPassword,
 };

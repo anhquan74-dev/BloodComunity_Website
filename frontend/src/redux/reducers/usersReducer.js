@@ -4,9 +4,9 @@ import {
     FETCH_HOSPITAL_REQUEST,
     FETCH_HOSPITAL_SUCCESS,
     FETCH_HOSPITAL_ERROR,
-    CREATE_HOSPITAL_ERROR,
-    CREATE_HOSPITAL_REQUEST,
-    CREATE_HOSPITAL_SUCCESS,
+    CREATE_USER_ERROR,
+    CREATE_USER_REQUEST,
+    CREATE_USER_SUCCESS,
     FETCH_SINGLE_HOSPITAL_SUCCESS,
     FETCH_SINGLE_HOSPITAL_ERROR,
     FETCH_SINGLE_HOSPITAL_REQUEST,
@@ -74,13 +74,13 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isLoading: false,
                 isError: true,
             };
-        case CREATE_HOSPITAL_REQUEST:
+        case CREATE_USER_REQUEST:
             return {
                 ...state,
                 isLoading: true,
                 isError: false,
             };
-        case CREATE_HOSPITAL_SUCCESS:
+        case CREATE_USER_SUCCESS:
             toast.success(action.payload.message);
             return {
                 ...state,
@@ -88,7 +88,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
                 isLoading: false,
                 isError: false,
             };
-        case CREATE_HOSPITAL_ERROR:
+        case CREATE_USER_ERROR:
             const { error } = action.payload;
             toastError(error);
             return {

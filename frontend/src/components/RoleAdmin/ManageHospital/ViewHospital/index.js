@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import styles from './ViewHospital.module.scss';
 import classNames from 'classnames/bind';
@@ -7,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHospitalById, updateUser } from '../../../../redux/actions/hospitalManage';
+import { fetchHospitalById } from '../../../../redux/actions/hospitalManage';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { Buffer } from 'buffer';
@@ -47,7 +46,9 @@ function ViewHospital() {
     let previewImage = '';
     let imageBase64 = '';
     if (image) {
+        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
+        console.log(imageBase64);
     }
     previewImage = imageBase64;
 

@@ -177,7 +177,7 @@ let handleGetUserByType = async (req, res) => {
 };
 let handleDeteleUser = async (req, res) => {
   try {
-    if (!req.body) {
+    if (!req.body.deleteUserService) {
       res.send({
         statusCode: 422,
         message: "Missing user id!",
