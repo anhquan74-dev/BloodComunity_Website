@@ -54,13 +54,13 @@ export const fetchHospitalError = () => {
     };
 };
 
-// create new Hospital account
-export const createUser = (hospital) => {
+// create new user account
+export const createUser = (user) => {
     return async (dispatch, getState) => {
         dispatch(createUserRequest());
         try {
-            const res = await axios.post('http://localhost:8080/api/create-new-user', hospital);
-            console.log(hospital);
+            const res = await axios.post('http://localhost:8080/api/create-new-user', user);
+            console.log(user);
             const data = res && res.data ? res.data : [];
             console.log(data);
             dispatch(createUserSuccess(data));

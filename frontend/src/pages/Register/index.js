@@ -7,15 +7,17 @@ import CustomeSelect from './CustomSelect';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import Modal from './Modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../../redux/actions/hospitalManage';
+import { registerAccount } from '../../redux/actions/authAction';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
     const [openModal, setOpenModal] = useState(false);
     const dispatch = useDispatch();
-
+    const status = useSelector((state) => state.auth.register.status);
+    const message = useSelector((state) => state.auth.register.message);
     // handle from submit
     const {
         values,
@@ -94,7 +96,7 @@ const Register = () => {
                 // wardName: value.email,
                 groupBlood: value.bloodGroup,
             };
-            dispatch(createUser(user));
+            dispatch(registerAccount(user));
             console.log(value, user);
         },
     });
@@ -374,7 +376,7 @@ const Register = () => {
                     </NavLink>
                 </p>
             </div>
-            {openModal && <Modal toggleModal={handleToggleModal} />}
+            {openModal && <Modal toggleModal={handleToggleModal} status={status} message={message} />}
         </div>
     );
 };
