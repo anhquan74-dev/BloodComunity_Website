@@ -43,7 +43,7 @@ export const HomeImg = styled.img`
     width: 100%;
 `;
 export const Button = styled(LinkR)`
-    border-radius: 10px;
+    border-radius: 6px;
     background: linear-gradient(270deg, var(--primary) 0, var(--second) 100%);
 
     color: white;

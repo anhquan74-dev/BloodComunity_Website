@@ -48,7 +48,7 @@
 }
 
 .container {
-    margin: 70px 0 0 20vw;
+    margin: 0px 0 0 20vw;
     background-color: #eff3fd;
     min-height: 1000px;
     padding: 20px;
@@ -58,10 +58,10 @@
 }
 .navbar {
     height: 70px;
-    position: fixed;
+    position: -webkit-sticky;
+    position: sticky;
     z-index: 1;
-    // width: 100vw;
-    left: 20vw;
+    left: 0;
     top: 0;
     right: 0;
     border-bottom: 2px solid rgba(1, 1, 1, 0.03);

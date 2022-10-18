@@ -1,12 +1,41 @@
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAccount } from '../../redux/actions/authAction';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { useRef } from 'react';
 
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    const dispatch = useDispatch();
+    const currentUser = useSelector((state) => state.auth.login.currentUser);
+    const status = useSelector((state) => state.auth.login.status);
+    const message = useSelector((state) => state.auth.login.message);
+
+    const navigate = useNavigate();
+    switch (currentUser?.roleId) {
+        case 'R1':
+            navigate('/admin');
+            break;
+        case 'R2':
+            navigate('/hospital');
+            break;
+        case 'R3':
+            navigate('/donor');
+            break;
+        case 'R4':
+            navigate('/recipient');
+            break;
+        default:
+            break;
+    }
+
+    console.log(currentUser, status, message);
     // xu ly form submit
     const { values, handleBlur, touched, errors, handleChange, handleSubmit } = useFormik({
         initialValues: {
@@ -28,13 +57,13 @@ const Login = () => {
                 ),
         }),
         onSubmit: (value) => {
+            dispatch(loginAccount(value));
+
             console.log(value);
         },
     });
 
     // console.log(touched.email);
-
-
 
     return (
         <div className={cx('login-body')}>
@@ -69,7 +98,14 @@ const Login = () => {
                         </Link>
                     </div>
                     <h2 className={cx('heading')}>Đăng nhập</h2>
-
+                    {message && (
+                        <div className={cx('error-server')}>
+                            <div>
+                                <FontAwesomeIcon icon={faCircleExclamation} />
+                            </div>
+                            <div>{message}</div>
+                        </div>
+                    )}
                     {/* form login */}
                     <form className="flex flex-col " onSubmit={handleSubmit}>
                         {/* Email */}
@@ -114,7 +150,7 @@ const Login = () => {
                         </div>
 
                         {/* login button */}
-                        <button className={cx('btn-login')} type="submit" >
+                        <button className={cx('btn-login')} type="submit">
                             Đăng nhập
                         </button>
                     </form>

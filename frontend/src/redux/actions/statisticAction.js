@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_TOTALDONATION, GET_TOTALDONOR, GET_TOTALRECIPIENT } from './types';
+import { GET_TOTALDONATION, GET_TOTALDONOR, GET_TOTALRECIPIENT, GET_TOPDONORS } from './types';
 
 export const getTotalDonation = () => {
     return async (dispatch, getState) => {
@@ -57,6 +57,26 @@ export const getTotalRecipient = () => {
 export const getTotalRecipientSuccess = (data) => {
     return {
         type: GET_TOTALRECIPIENT,
+        payload: data,
+    };
+};
+
+export const getTopDonors = () => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await axios.get('http://localhost:8080/api/get-top-donor');
+            const data = res && res.data ? res.data : [];
+            console.log(data);
+            dispatch(getTopDonorsSuccess(data));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
+export const getTopDonorsSuccess = (data) => {
+    return {
+        type: GET_TOPDONORS,
         payload: data,
     };
 };

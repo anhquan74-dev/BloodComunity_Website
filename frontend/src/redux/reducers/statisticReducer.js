@@ -1,9 +1,10 @@
-import { GET_TOTALDONATION, GET_TOTALDONOR, GET_TOTALRECIPIENT } from '../actions/types';
+import { GET_TOTALDONATION, GET_TOTALDONOR, GET_TOTALRECIPIENT, GET_TOPDONORS } from '../actions/types';
 
 const INITIAL_STATE = {
     totalDonation: 0,
     totalDonors: 0,
     totalRecipients: 0,
+    topDonors: [],
 };
 
 const statisticReducer = (state = INITIAL_STATE, action) => {
@@ -22,6 +23,11 @@ const statisticReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 totalRecipients: action.payload.content[0].totalRecipients,
+            };
+        case GET_TOPDONORS:
+            return {
+                ...state,
+                topDonors: action.payload.content,
             };
         default:
             return state;

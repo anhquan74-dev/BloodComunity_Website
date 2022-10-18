@@ -10,6 +10,7 @@ import Modal from './Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../../redux/actions/hospitalManage';
 import { registerAccount } from '../../redux/actions/authAction';
+import { getBase64 } from '../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
@@ -73,8 +74,14 @@ const Register = () => {
             wardId: Yup.number().required('Vui lòng chọn Phường/Xã!').nullable(),
             bloodGroup: Yup.string().required('Vui lòng chọn nhóm máu!').nullable(),
         }),
-        onSubmit: (value) => {
+        onSubmit: async (value) => {
             const nameArray = value.fullname.split(' ');
+            let file =
+                value.gender === 'male'
+                    ? require('../../assets/images/default_avatar.png')
+                    : require('../../assets/images/default_avatar_female.png');
+            console.log(file);
+            // let base64 = await getBase64(file);
             const user = {
                 email: value.email,
                 password: value.password,
@@ -90,6 +97,7 @@ const Register = () => {
                 city: value.cityName,
                 district: value.districtName,
                 ward: value.wardName,
+                image: file,
                 // districtId: null,
                 // districtName: value.email,
                 // wardId: null,

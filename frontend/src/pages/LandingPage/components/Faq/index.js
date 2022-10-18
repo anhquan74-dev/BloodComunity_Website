@@ -11,7 +11,7 @@ function Faq() {
             <div className={cx('container')}>
                 <h2>Các câu hỏi thường gặp</h2>
                 {faq.map((item, index) => {
-                    return <CustomFaq {...item} />;
+                    return <CustomFaq {...item} key={index}/>;
                 })}
             </div>
         </div>

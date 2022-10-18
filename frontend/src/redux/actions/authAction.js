@@ -1,4 +1,4 @@
-import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_ERROR } from './types';
+import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR } from './types';
 import axios from 'axios';
 
 export const registerAccount = (user) => {
@@ -33,6 +33,42 @@ export const registerAccountSuccess = (payload) => {
 export const registerAccountError = (error) => {
     return {
         type: REGISTER_ERROR,
+        payload: {
+            error,
+        },
+    };
+};
+
+export const loginAccount = (user) => {
+    return async (dispatch, getState) => {
+        dispatch(loginAccountRequest());
+        try {
+            const res = await axios.post('http://localhost:8080/api/login', user);
+            const data = res && res.data ? res.data : [];
+            dispatch(loginAccountSuccess(data));
+        } catch (error) {
+            console.log(error);
+            dispatch(loginAccountError(error));
+        }
+    };
+};
+
+export const loginAccountRequest = () => {
+    return {
+        type: LOGIN_REQUEST,
+    };
+};
+
+export const loginAccountSuccess = (payload) => {
+    return {
+        type: LOGIN_SUCCESS,
+        payload,
+    };
+};
+
+export const loginAccountError = (error) => {
+    return {
+        type: LOGIN_ERROR,
         payload: {
             error,
         },

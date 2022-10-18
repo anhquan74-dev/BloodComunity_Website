@@ -6,7 +6,8 @@
     padding: 24px;
     font-size: 1.4rem;
     background-color: white;
-    width: 100%;
+    width: 80vw;
+    margin-left: 20vw;
 }
 
 .welcome {
@@ -134,7 +135,7 @@
 }
 
 .item {
-    padding: 10px 4px;
+    padding: 10px 30px 10px 10px;
     border-radius: 6px;
     cursor: pointer;
     &:hover {

@@ -66,6 +66,18 @@
 }
 
 .donor-name {
+    height: 180px;
+    h3 {
+        font-size: 1.4rem;
+        margin: 0px 0 12px 0;
+    }
+    p{
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
 }
 .donor-numOfDonate {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary);
 }
