@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import AdminPage from './pages/AdminPage';
 import HospitalPage from './pages/HospitalPage';
@@ -30,8 +30,11 @@ import ViewDonor from './components/RoleAdmin/ManageDonor/ViewDonor';
 import EditDonor from './components/RoleAdmin/ManageDonor/EditDonor';
 import ViewRecipient from './components/RoleAdmin/ManageRecipient/ViewRecipient';
 import EditRecipient from './components/RoleAdmin/ManageRecipient/EditRecipient';
+import NotFound from './pages/NotFound';
+import { useSelector } from 'react-redux';
 
 function App() {
+    const currentUser = useSelector((state) => state.auth.login.currentUser);
     return (
         <Router>
             <div className="App">
@@ -39,7 +42,12 @@ function App() {
                     <Route path="/" exact element={<LandingPage />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
-                    <Route path="/admin" element={<AdminPage />}>
+                    <Route
+                        path="/admin"
+                        render
+                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <AdminPage />}
+                        element={<AdminPage />}
+                    >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_hospital" element={<ManageHospital />} />
@@ -53,14 +61,22 @@ function App() {
                         <Route path="manage_recipient/viewUser/:id" element={<ViewRecipient />} />
                         <Route path="manage_recipient/editUser/:id" element={<EditRecipient />} />
                     </Route>
-                    <Route path="/hospital" element={<HospitalPage />}>
+                    <Route
+                        path="/hospital"
+                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <HospitalPage />}
+                        element={<HospitalPage />}
+
+                    >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_schedule" element={<ManageSchedule />} />
                         <Route path="manage_events" element={<ManageEvents />} />
                         <Route path="account" element={<Account />} />
                     </Route>
-                    <Route path="/donor" element={<DonorPage />}>
+                    <Route path="/donor"
+                    //  element={currentUser === null ? <Navigate replace to={'/'} /> : <DonorPage />}
+                     element={<DonorPage />}
+                     >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="blood_request" element={<ViewBloodRequest />} />
@@ -70,7 +86,12 @@ function App() {
                         <Route path="reward" element={<DonorRank />} />
                         <Route path="account" element={<Account />} />
                     </Route>
-                    <Route path="/recipient" element={<RecipientPage />}>
+                    <Route
+                        path="/recipient"
+                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <RecipientPage />}
+                     element={<RecipientPage />}
+
+                    >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="blood_request" element={<BloodRequest />} />
@@ -78,6 +99,8 @@ function App() {
                         <Route path="reward" element={<DonorRank />} />
                         <Route path="account" element={<Account />} />
                     </Route>
+                    {/* Catch all */}
+                    <Route path="*" element={<NotFound />}></Route>
                 </Routes>
                 <ToastContainer autoClose={2000} theme="colored" />
             </div>

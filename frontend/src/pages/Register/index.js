@@ -7,15 +7,18 @@ import CustomeSelect from './CustomSelect';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import Modal from './Modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../../redux/actions/hospitalManage';
+import { registerAccount } from '../../redux/actions/authAction';
+import { getBase64 } from '../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
     const [openModal, setOpenModal] = useState(false);
     const dispatch = useDispatch();
-
+    const status = useSelector((state) => state.auth.register.status);
+    const message = useSelector((state) => state.auth.register.message);
     // handle from submit
     const {
         values,
@@ -71,8 +74,14 @@ const Register = () => {
             wardId: Yup.number().required('Vui lòng chọn Phường/Xã!').nullable(),
             bloodGroup: Yup.string().required('Vui lòng chọn nhóm máu!').nullable(),
         }),
-        onSubmit: (value) => {
+        onSubmit: async (value) => {
             const nameArray = value.fullname.split(' ');
+            let file =
+                value.gender === 'male'
+                    ? require('../../assets/images/default_avatar.png')
+                    : require('../../assets/images/default_avatar_female.png');
+            console.log(file);
+            // let base64 = await getBase64(file);
             const user = {
                 email: value.email,
                 password: value.password,
@@ -88,13 +97,14 @@ const Register = () => {
                 city: value.cityName,
                 district: value.districtName,
                 ward: value.wardName,
+                image: file,
                 // districtId: null,
                 // districtName: value.email,
                 // wardId: null,
                 // wardName: value.email,
                 groupBlood: value.bloodGroup,
             };
-            dispatch(createUser(user));
+            dispatch(registerAccount(user));
             console.log(value, user);
         },
     });
@@ -374,7 +384,7 @@ const Register = () => {
                     </NavLink>
                 </p>
             </div>
-            {openModal && <Modal toggleModal={handleToggleModal} />}
+            {openModal && <Modal toggleModal={handleToggleModal} status={status} message={message} />}
         </div>
     );
 };

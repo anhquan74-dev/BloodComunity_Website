@@ -84,7 +84,6 @@ const usersReducer = (state = INITIAL_STATE, action) => {
             toast.success(action.payload.message);
             return {
                 ...state,
-                // listHospitals: action.payload.content,
                 isLoading: false,
                 isError: false,
             };

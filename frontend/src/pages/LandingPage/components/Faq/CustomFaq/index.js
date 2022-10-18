@@ -32,7 +32,7 @@ function CustomFaq({ id, question, answer }) {
                 })}
             >
                 {answer.map((item, index) => {
-                    return <p>{item}</p>;
+                    return <p key={index}>{item}</p>;
                 })}
             </div>
         </div>

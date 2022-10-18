@@ -16,6 +16,7 @@ function DonationEvents() {
                     {events.map((event, index) => {
                         return (
                             <motion.div
+                                key={index}
                                 className={cx('item')}
                                 whileHover={{
                                     translateY: '-6px',

@@ -21,6 +21,20 @@
     background-color: var(--primary);
     color: white;
 }
+// html {
+// -ms-overflow-style: none;
+// scrollbar-width: none;
+// }
+html::-webkit-scrollbar {
+    border-radius: 0;
+    height: 8px;
+    width: 8px;
+}
+
+html::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.15);
+    border-radius: 4px;
+}
 
 * {
     margin: 0;
@@ -33,6 +47,7 @@ html {
 }
 
 body {
+    overflow: unset;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.6rem;
     line-height: 1.5;
