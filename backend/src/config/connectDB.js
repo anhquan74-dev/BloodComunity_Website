@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 // Option 3: Passing parameters separately (other dialects)
+
 const sequelize = new Sequelize(
   "blood_community",
   "root",
@@ -10,6 +11,7 @@ const sequelize = new Sequelize(
     dialect: "mysql",
   }
 );
+
 
 let connectDB = async () => {
   try {
