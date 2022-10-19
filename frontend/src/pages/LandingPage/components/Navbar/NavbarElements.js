@@ -96,7 +96,7 @@ export const NavBtn = styled.nav`
 `;
 
 export const NavBtnLink1 = styled(LinkR)`
-    border-radius: 10px;
+    border-radius: 6px;
     background: linear-gradient(270deg, var(--primary) 0, var(--second) 100%);
     white-space: nowrap;
     padding: 8px 14px;
@@ -119,7 +119,7 @@ export const NavBtnLink1 = styled(LinkR)`
 `;
 
 export const NavBtnLink = styled(LinkR)`
-    border-radius: 10px;
+    border-radius: 6px;
     background: white;
     white-space: nowrap;
     padding: 8px 14px;

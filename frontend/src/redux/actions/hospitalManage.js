@@ -5,15 +5,18 @@ import {
     FETCH_HOSPITAL_ERROR,
     FETCH_HOSPITAL_REQUEST,
     FETCH_HOSPITAL_SUCCESS,
-    CREATE_HOSPITAL_ERROR,
-    CREATE_HOSPITAL_REQUEST,
-    CREATE_HOSPITAL_SUCCESS,
+    CREATE_USER_ERROR,
+    CREATE_USER_REQUEST,
+    CREATE_USER_SUCCESS,
     FETCH_SINGLE_HOSPITAL_SUCCESS,
     FETCH_SINGLE_HOSPITAL_ERROR,
     FETCH_SINGLE_HOSPITAL_REQUEST,
     UPDATE_HOSPITAL_REQUEST,
     UPDATE_HOSPITAL_SUCCESS,
     UPDATE_HOSPITAL_ERROR,
+    DELETE_HOSPITAL_REQUEST,
+    DELETE_HOSPITAL_SUCCESS,
+    DELETE_HOSPITAL_ERROR,
 } from './types';
 
 // fetch all hospital
@@ -51,40 +54,40 @@ export const fetchHospitalError = () => {
     };
 };
 
-// create new Hospital account
-export const createHospital = (hospital) => {
+// create new user account
+export const createUser = (user) => {
     return async (dispatch, getState) => {
-        dispatch(createHospitalRequest());
+        dispatch(createUserRequest());
         try {
-            const res = await axios.post('http://localhost:8080/api/create-new-user', hospital);
-            console.log(hospital);
+            const res = await axios.post('http://localhost:8080/api/create-new-user', user);
+            console.log(user);
             const data = res && res.data ? res.data : [];
             console.log(data);
-            dispatch(createHospitalSuccess(data));
+            dispatch(createUserSuccess(data));
             dispatch(fetchAllHospital());
         } catch (error) {
             console.log(error);
-            dispatch(createHospitalError(error));
+            dispatch(createUserError(error));
         }
     };
 };
 
-export const createHospitalRequest = () => {
+export const createUserRequest = () => {
     return {
-        type: CREATE_HOSPITAL_REQUEST,
+        type: CREATE_USER_REQUEST,
     };
 };
 
-export const createHospitalSuccess = (payload) => {
+export const createUserSuccess = (payload) => {
     return {
-        type: CREATE_HOSPITAL_SUCCESS,
+        type: CREATE_USER_SUCCESS,
         payload,
     };
 };
 
-export const createHospitalError = (error) => {
+export const createUserError = (error) => {
     return {
-        type: CREATE_HOSPITAL_ERROR,
+        type: CREATE_USER_ERROR,
         payload: {
             error,
         },
@@ -158,5 +161,41 @@ export const updateHospitalSuccess = (payload) => {
 export const updateHospitalError = () => {
     return {
         type: UPDATE_HOSPITAL_ERROR,
+    };
+};
+
+export const deleteHospital = (id) => {
+    return async (dispatch, getState) => {
+        dispatch(deleteHospitalRequest());
+        try {
+            console.log('dl', id);
+            const res = await axios.delete('http://localhost:8080/api/delete-user', { data: { id } });
+            const data = res && res.data ? res.data : [];
+            console.log(data);
+            dispatch(deleteHospitalSuccess(data));
+            dispatch(fetchAllHospital());
+        } catch (error) {
+            console.log(error);
+            dispatch(deleteHospitalError());
+        }
+    };
+};
+
+export const deleteHospitalRequest = () => {
+    return {
+        type: DELETE_HOSPITAL_REQUEST,
+    };
+};
+
+export const deleteHospitalSuccess = (payload) => {
+    return {
+        type: DELETE_HOSPITAL_SUCCESS,
+        payload,
+    };
+};
+
+export const deleteHospitalError = () => {
+    return {
+        type: DELETE_HOSPITAL_ERROR,
     };
 };

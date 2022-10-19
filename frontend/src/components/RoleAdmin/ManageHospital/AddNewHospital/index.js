@@ -7,10 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createHospital } from '../../../../redux/actions/hospitalManage';
+import { createUser } from '../../../../redux/actions/hospitalManage';
 import { Fab } from '@mui/material';
 import { GridAddIcon } from '@mui/x-data-grid';
 import { getBase64 } from '../../../../utils/getBase64';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 const cx = classNames.bind(styles);
 
@@ -25,10 +27,7 @@ function AddNewHospital() {
         roleId: 'R2',
     });
 
-    // const [image, setImage] = useState('');
-
     const [previewImage, setPreviewImage] = useState('');
-
     const { hospitalName, email, password, phoneNumber, address, image, roleId } = hospital;
     const [err, setErr] = useState('');
 
@@ -46,7 +45,7 @@ function AddNewHospital() {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
             console.log(hospital);
-            dispatch(createHospital(hospital));
+            dispatch(createUser(hospital));
             history('/admin/manage_hospital/');
             setErr('');
         }
@@ -58,7 +57,7 @@ function AddNewHospital() {
         if (file) {
             setPreviewImage(URL.createObjectURL(file));
             let base64 = await getBase64(file);
-            setHospital({ ...hospitalName, roleId: 'R2', image: base64 });
+            setHospital({ ...hospital, image: base64 });
         }
     };
 

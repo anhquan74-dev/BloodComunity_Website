@@ -7,11 +7,18 @@ import CustomeSelect from './CustomSelect';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import Modal from './Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { createUser } from '../../redux/actions/hospitalManage';
+import { registerAccount } from '../../redux/actions/authAction';
+import { getBase64 } from '../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
     const [openModal, setOpenModal] = useState(false);
+    const dispatch = useDispatch();
+    const status = useSelector((state) => state.auth.register.status);
+    const message = useSelector((state) => state.auth.register.message);
     // handle from submit
     const {
         values,
@@ -28,7 +35,7 @@ const Register = () => {
         initialValues: {
             email: '',
             password: '',
-            roles: '',
+            roleId: '',
             fullname: '',
             birthday: '',
             gender: '',
@@ -54,7 +61,7 @@ const Register = () => {
                     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{8,}$/,
                     'Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt',
                 ),
-            roles: Yup.string().required('Vui lòng chọn loại tài khoản!').nullable(),
+            roleId: Yup.string().required('Vui lòng chọn loại tài khoản!').nullable(),
             fullname: Yup.string().required('Vui lòng nhập Họ và tên!'),
             birthday: Yup.string().required('Vui lòng chọn ngày sinh!').nullable(),
             gender: Yup.string().required('Vui lòng chọn giới tính!').nullable(),
@@ -67,12 +74,42 @@ const Register = () => {
             wardId: Yup.number().required('Vui lòng chọn Phường/Xã!').nullable(),
             bloodGroup: Yup.string().required('Vui lòng chọn nhóm máu!').nullable(),
         }),
-        onSubmit: (value) => {
-            console.log(value);
+        onSubmit: async (value) => {
+            const nameArray = value.fullname.split(' ');
+            let file =
+                value.gender === 'male'
+                    ? require('../../assets/images/default_avatar.png')
+                    : require('../../assets/images/default_avatar_female.png');
+            console.log(file);
+            // let base64 = await getBase64(file);
+            const user = {
+                email: value.email,
+                password: value.password,
+                roleId: value.roleId,
+                firstName: nameArray[nameArray.length - 1],
+                lastName: nameArray[0],
+                birthday: value.birthday,
+                gender: value.gender,
+                phoneNumber: value.phone,
+                // cityId: null,
+                // cityName: value.email,
+                // address: value.address,
+                city: value.cityName,
+                district: value.districtName,
+                ward: value.wardName,
+                image: file,
+                // districtId: null,
+                // districtName: value.email,
+                // wardId: null,
+                // wardName: value.email,
+                groupBlood: value.bloodGroup,
+            };
+            dispatch(registerAccount(user));
+            console.log(value, user);
         },
     });
 
-    console.log(values);
+    // console.log(values);
 
     // chon tinh/thanh pho, quan huyen, phuong xa
     const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm(true);
@@ -135,7 +172,7 @@ const Register = () => {
                         ) : null}
                     </div>
 
-                    {/* Roles */}
+                    {/* roleId */}
                     <div className=" w-full flex-1">
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Bạn là: </div>
                         <div>
@@ -143,16 +180,16 @@ const Register = () => {
                                 className="my-2 rounded border border-gray-200 bg-white pt-4 pb-4 pl-2 block w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.roles}
-                                id="roles"
-                                name="roles"
+                                value={values.roleId}
+                                id="roleId"
+                                name="roleId"
                             >
                                 <option value="">Chọn loại tài khoản</option>
-                                <option value="donor">Người hiến máu</option>
-                                <option value="recipient">Người nhận máu</option>
+                                <option value="R3">Người hiến máu</option>
+                                <option value="R4">Người nhận máu</option>
                             </select>
                         </div>
-                        {errors.roles && touched.roles ? <div className={cx('error')}>{errors.roles}</div> : null}
+                        {errors.roleId && touched.roleId ? <div className={cx('error')}>{errors.roleId}</div> : null}
                     </div>
 
                     {/* Họ và tên */}
@@ -347,7 +384,7 @@ const Register = () => {
                     </NavLink>
                 </p>
             </div>
-            {openModal && <Modal toggleModal={handleToggleModal} />}
+            {openModal && <Modal toggleModal={handleToggleModal} status={status} message={message} />}
         </div>
     );
 };

@@ -72,8 +72,8 @@ function Navbar() {
                         </NavItem>
                     </NavMenu>
                     <NavBtn>
-                        <NavBtnLink to="/register">Hiến máu</NavBtnLink>
-                        <NavBtnLink1 to="/register">Nhận máu</NavBtnLink1>
+                        <NavBtnLink to="/register">Đăng ký</NavBtnLink>
+                        <NavBtnLink1 to="/login">Đăng nhập</NavBtnLink1>
                     </NavBtn>
                 </NavbarContainer>
             </Nav>
