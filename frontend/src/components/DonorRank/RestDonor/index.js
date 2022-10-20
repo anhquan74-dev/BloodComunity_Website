@@ -14,7 +14,7 @@ function RestDonor({ ...props }) {
             <div className={cx('content')}>
                 <div className={cx('info')}>
                     <div className={cx('image')}>
-                    <img src={new Buffer(props.donor.image, 'base64').toString('binary') || ''} alt="donor-image" />
+                        <img src={new Buffer(props.donor.image, 'base64').toString('binary') || ''} alt="donor-image" />
                     </div>
                     <div className={cx('name')}>
                         <div>{`${props.donor.firstName} ${props.donor.lastName}`}</div>
