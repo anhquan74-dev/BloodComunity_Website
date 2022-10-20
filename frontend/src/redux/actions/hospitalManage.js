@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { fetchAllDonor } from './donorManage';
+import { fetchAllRecipient } from './recipientManage';
 // import axios from '../../utils/customizeAxios';
 
 import {
@@ -164,37 +166,39 @@ export const updateHospitalError = () => {
     };
 };
 
-export const deleteHospital = (id) => {
+export const deleteUser = (id) => {
     return async (dispatch, getState) => {
-        dispatch(deleteHospitalRequest());
+        dispatch(deleteUserRequest());
         try {
             console.log('dl', id);
             const res = await axios.delete('http://localhost:8080/api/delete-user', { data: { id } });
             const data = res && res.data ? res.data : [];
             console.log(data);
-            dispatch(deleteHospitalSuccess(data));
+            dispatch(deleteUserSuccess(data));
             dispatch(fetchAllHospital());
+            dispatch(fetchAllDonor());
+            dispatch(fetchAllRecipient());
         } catch (error) {
             console.log(error);
-            dispatch(deleteHospitalError());
+            dispatch(deleteUserError());
         }
     };
 };
 
-export const deleteHospitalRequest = () => {
+export const deleteUserRequest = () => {
     return {
         type: DELETE_HOSPITAL_REQUEST,
     };
 };
 
-export const deleteHospitalSuccess = (payload) => {
+export const deleteUserSuccess = (payload) => {
     return {
         type: DELETE_HOSPITAL_SUCCESS,
         payload,
     };
 };
 
-export const deleteHospitalError = () => {
+export const deleteUserError = () => {
     return {
         type: DELETE_HOSPITAL_ERROR,
     };
