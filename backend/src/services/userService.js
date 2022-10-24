@@ -4,6 +4,56 @@ import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
 
+let getUserSearchService = async (keyWord) => {
+  try {
+    let userSearch = {}
+    const [results, metadata] = await sequelize.query(
+      `SELECT * FROM users WHERE email LIKE '%${keyWord}%' OR firstName LIKE '%${keyWord}%' OR lastName LIKE '%${keyWord}%' OR hospitalName LIKE '%${keyWord}%'`,
+      { tupleFormat: "array" }
+    );
+    if (results.length === 0) {
+      userSearch.statusCode = 404;
+      userSearch.message = "Không tìm thấy người dùng nào!";
+    } else {
+      userSearch.statusCode = 200;
+      userSearch.message = "Tìm kiếm thành công!";
+      userSearch.content = results;
+    }
+    return userSearch;
+  } catch (e) {
+    console.log(e);
+  }
+
+}
+let searchUserPaginationService = async (body) => {
+  try {
+    let userSearch = {}
+    const { keyWord, pageNumber, numOfElement } = body;
+    if (!pageNumber || !numOfElement) {
+      userSearch.statusCode = 422;
+      userSearch.message = "Không thể xác định số trang hay số phần tử trên trang";
+    } else {
+      const page = parseInt(pageNumber);
+      const limit = parseInt(numOfElement);
+      const [results, metadata] = await sequelize.query(
+        `SELECT * FROM users WHERE email LIKE '%${keyWord}%' OR firstName LIKE '%${keyWord}%' OR lastName LIKE '%${keyWord}%' OR hospitalName LIKE '%${keyWord}%' LIMIT ${limit} OFFSET ${(page - 1) * limit
+        }`,
+        { tupleFormat: "array" }
+      );
+      if (results.length === 0) {
+        userSearch.statusCode = 404;
+        userSearch.message = "Không tìm thấy người dùng nào!"
+      } else {
+        userSearch.statusCode = 200;
+        userSearch.message = "Tìm kiếm thành công!"
+        userSearch.content = results
+      }
+    }
+    return userSearch;
+  } catch (error) {
+    console.log(error);
+  }
+}
 let registerService = async (data) => {
   try {
     let userSignup = {};
@@ -509,4 +559,6 @@ module.exports = {
   activeUserService,
   postResetPasswordService,
   postVerifyResetPassword,
+  getUserSearchService,
+  searchUserPaginationService
 };
