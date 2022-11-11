@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllDonor } from '../../redux/actions/donorManage';
 import { fetchAllRecipient } from '../../redux/actions/recipientManage';
-import { deleteHospital, fetchAllHospital, fetchHospitalById } from '../../redux/actions/hospitalManage';
+import { deleteUser, fetchAllHospital, fetchHospitalById } from '../../redux/actions/hospitalManage';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -61,8 +61,9 @@ const DataTable = (props) => {
     console.log(listUsers);
 
     const handleDelete = (id) => {
-        window.confirm(`Bạn có chắc chắn muốn xoá!`);
-        dispatch(deleteHospital(id));
+        if (window.confirm(`Bạn có chắc chắn muốn xoá!`) === true) {
+            dispatch(deleteUser(id));
+        }
     };
 
     const actionColumn = [

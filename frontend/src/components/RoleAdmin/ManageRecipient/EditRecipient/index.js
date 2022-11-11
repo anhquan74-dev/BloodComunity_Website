@@ -11,6 +11,8 @@ import { fetchRecipientById, updateRecipient } from '../../../../redux/actions/r
 import { getBase64 } from '../../../../utils/getBase64';
 import { Fab, MenuItem } from '@mui/material';
 import { GridAddIcon } from '@mui/x-data-grid';
+import { Buffer } from 'buffer';
+Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
 
@@ -86,13 +88,16 @@ function EditRecipient() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!status) {
-            setErr('Vui lòng nhập đầy đủ thông tin');
-        } else {
-            dispatch(updateRecipient(recipient));
-            history('/admin/manage_recipient/');
-            setErr('');
+        // if (!status) {
+        //     setErr('Vui lòng nhập đầy đủ thông tin');
+        // } else {
+        if (image && typeof image === 'object') {
+            recipient.image = new Buffer(image, 'base64').toString('binary');
         }
+        dispatch(updateRecipient(recipient));
+        history('/admin/manage_recipient/');
+        setErr('');
+        // }
     };
 
     const handleUploadImage = async (e) => {
@@ -287,15 +292,10 @@ function EditRecipient() {
                             value={status || 'active'}
                             select
                             name="status"
-                            // onChange={handleSelectChange}
                             onChange={handleInputChange}
                         >
-                            {/* {statusArr.map((item, index) => {
-                                return ( */}
                             <MenuItem value="active">Active</MenuItem>
                             <MenuItem value="inactive">Inactive</MenuItem>
-                            {/* ); */}
-                            {/* })} */}
                         </TextField>
                         <br />
                     </div>

@@ -193,7 +193,7 @@ export const donorColumns = [
     {
         field: 'email',
         headerName: 'email',
-        width: 180,
+        width: 240,
         renderCell: (params) => {
             let url = '';
             if (params.row.image) {
@@ -210,49 +210,13 @@ export const donorColumns = [
     {
         field: 'firstName',
         headerName: 'firstName',
-        width: 100,
+        width: 140,
     },
 
     // {
     //     field: 'lastName',
     //     headerName: 'lastName',
     //     width: 100,
-    // },
-    // {
-    //     field: 'phoneNumber',
-    //     headerName: 'phoneNumber',
-    //     width: 120,
-    // },
-    {
-        field: 'gender',
-        headerName: 'gender',
-        width: 80,
-    },
-    // {
-    //     field: 'birthday',
-    //     headerName: 'birthday',
-    //     width: 160,
-    // },
-    {
-        field: 'address',
-        headerName: 'address',
-        width: 160,
-    },
-    // {
-    //     field: 'ward',
-    //     headerName: 'Phường / Xã',
-    //     width: 120,
-    // },
-    // {
-    //     field: 'district',
-    //     headerName: 'Quận / Huyện',
-    //     width: 120,
-    // },
-
-    // {
-    //     field: 'city',
-    //     headerName: 'Tỉnh / Thành',
-    //     width: 120,
     // },
     {
         field: 'groupBlood',
@@ -264,14 +228,14 @@ export const donorColumns = [
         headerName: 'Số lần hiến máu',
         width: 120,
     },
-    // {
-    //     field: 'status',
-    //     headerName: 'Status',
-    //     width: 160,
-    //     renderCell: (params) => {
-    //         return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
-    //     },
-    // },
+    {
+        field: 'status',
+        headerName: 'Status',
+        width: 80,
+        renderCell: (params) => {
+            return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
+        },
+    },
 ];
 
 export const recipientColumns = [
@@ -279,7 +243,7 @@ export const recipientColumns = [
     {
         field: 'email',
         headerName: 'email',
-        width: 180,
+        width: 240,
         renderCell: (params) => {
             let url = '';
             if (params.row.image) {
@@ -296,68 +260,31 @@ export const recipientColumns = [
     {
         field: 'firstName',
         headerName: 'firstName',
-        width: 100,
+        width: 140,
     },
-
     // {
     //     field: 'lastName',
     //     headerName: 'lastName',
     //     width: 100,
-    // },
-    // {
-    //     field: 'phoneNumber',
-    //     headerName: 'phoneNumber',
-    //     width: 120,
     // },
     {
         field: 'gender',
         headerName: 'gender',
         width: 80,
     },
-    // {
-    //     field: 'birthday',
-    //     headerName: 'birthday',
-    //     width: 160,
-    // },
-    {
-        field: 'address',
-        headerName: 'address',
-        width: 160,
-    },
-    // {
-    //     field: 'ward',
-    //     headerName: 'Phường / Xã',
-    //     width: 120,
-    // },
-    // {
-    //     field: 'district',
-    //     headerName: 'Quận / Huyện',
-    //     width: 120,
-    // },
-
-    // {
-    //     field: 'city',
-    //     headerName: 'Tỉnh / Thành',
-    //     width: 120,
-    // },
     {
         field: 'groupBlood',
         headerName: 'Nhóm máu',
         width: 100,
     },
-    // {
-    //     field: 'numberOfDonation',
-    //     headerName: 'Số lần hiến máu',
-    //     width: 120,
-    // },
-    // {
-    //     field: 'status',
-    //     headerName: 'Status',
-    //     width: 160,
-    //     renderCell: (params) => {
-    //         return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
-    //     },
-    // },
+    {
+        field: 'status',
+        headerName: 'Status',
+        width: 80,
+        renderCell: (params) => {
+            return <div className={`cellWithStatus ${params.row.status}`}>{params.row.status}</div>;
+        },
+    },
 ];
 
 //temporary data

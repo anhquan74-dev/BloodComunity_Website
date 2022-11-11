@@ -12,9 +12,9 @@ function MainLayout({ routes }) {
             <div className={cx('sidebar')}>
                 <div className={cx('logo')}>
                     <div className={cx('logo-side')}>
-                        <Link to={'/'}>
+                        {/* <Link to={'/'}> */}
                             <img src={require('../../assets/images/BC_logo1.png')} alt="BC_LOGO" />
-                        </Link>
+                        {/* </Link> */}
                     </div>
                     <div>
                         <span>Blood</span>

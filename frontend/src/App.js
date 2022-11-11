@@ -45,8 +45,14 @@ function App() {
                     <Route
                         path="/admin"
                         render
-                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <AdminPage />}
-                        element={<AdminPage />}
+                        element={
+                            currentUser === null || currentUser.roleId !== 'R1' ? (
+                                <Navigate replace to={'/'} />
+                            ) : (
+                                <AdminPage />
+                            )
+                        }
+                        // element={<AdminPage />}
                     >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
@@ -63,9 +69,14 @@ function App() {
                     </Route>
                     <Route
                         path="/hospital"
-                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <HospitalPage />}
-                        element={<HospitalPage />}
-
+                        element={
+                            currentUser === null || currentUser.roleId !== 'R2' ? (
+                                <Navigate replace to={'/'} />
+                            ) : (
+                                <HospitalPage />
+                            )
+                        }
+                        // element={<HospitalPage />}
                     >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
@@ -73,10 +84,17 @@ function App() {
                         <Route path="manage_events" element={<ManageEvents />} />
                         <Route path="account" element={<Account />} />
                     </Route>
-                    <Route path="/donor"
-                    //  element={currentUser === null ? <Navigate replace to={'/'} /> : <DonorPage />}
-                     element={<DonorPage />}
-                     >
+                    <Route
+                        path="/donor"
+                        element={
+                            currentUser === null || currentUser.roleId !== 'R3' ? (
+                                <Navigate replace to={'/'} />
+                            ) : (
+                                <DonorPage />
+                            )
+                        }
+                        //  element={<DonorPage />}
+                    >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="blood_request" element={<ViewBloodRequest />} />
@@ -88,9 +106,14 @@ function App() {
                     </Route>
                     <Route
                         path="/recipient"
-                        // element={currentUser === null ? <Navigate replace to={'/'} /> : <RecipientPage />}
-                     element={<RecipientPage />}
-
+                        element={
+                            currentUser === null || currentUser.roleId !== 'R4' ? (
+                                <Navigate replace to={'/'} />
+                            ) : (
+                                <RecipientPage />
+                            )
+                        }
+                        //  element={<RecipientPage />}
                     >
                         <Route index element={<Dashboard />} />
                         <Route path="dashboard" element={<Dashboard />} />

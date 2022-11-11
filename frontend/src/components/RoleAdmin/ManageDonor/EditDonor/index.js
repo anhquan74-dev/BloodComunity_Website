@@ -81,14 +81,17 @@ function EditDonor() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!status) {
-            setErr('Vui lòng nhập đầy đủ thông tin');
-        } else {
-            console.log(donor);
-            dispatch(updateDonor(donor));
-            history('/admin/manage_donor/');
-            setErr('');
+        // if (!status) {
+        //     setErr('Vui lòng nhập đầy đủ thông tin');
+        // } else {
+        if (image && typeof image === 'object') {
+            donor.image = new Buffer(image, 'base64').toString('binary');
         }
+        console.log(donor);
+        dispatch(updateDonor(donor));
+        history('/admin/manage_donor/');
+        setErr('');
+        // }
     };
 
     const handleUploadImage = async (e) => {
@@ -112,10 +115,10 @@ function EditDonor() {
             <form className={cx('content')} onSubmit={handleSubmit}>
                 <div className={cx('content-info')}>
                     <div>
-                        {previewImageDisplay ? (
-                            <img src={previewImageDisplay} alt="preview-avatar" />
-                        ) : previewImageUpload ? (
+                        {previewImageUpload ? (
                             <img src={previewImageUpload} alt="preview-avatar" />
+                        ) : previewImageDisplay ? (
+                            <img src={previewImageDisplay} alt="preview-avatar" />
                         ) : (
                             <span>Preview Image</span>
                         )}
@@ -299,15 +302,10 @@ function EditDonor() {
                             value={status || 'active'}
                             select
                             name="status"
-                            // onChange={handleSelectChange}
                             onChange={handleInputChange}
                         >
-                            {/* {statusArr.map((item, index) => {
-                                return ( */}
                             <MenuItem value="active">Active</MenuItem>
                             <MenuItem value="inactive">Inactive</MenuItem>
-                            {/* ); */}
-                            {/* })} */}
                         </TextField>
                         <br />
                     </div>

@@ -37,7 +37,7 @@ const Login = () => {
 
     console.log(currentUser, status, message);
     // xu ly form submit
-    const { values, handleBlur, touched, errors, handleChange, handleSubmit } = useFormik({
+    const { values, isValid, dirty, handleBlur, touched, errors, handleChange, handleSubmit } = useFormik({
         initialValues: {
             email: '',
             password: '',
@@ -150,7 +150,7 @@ const Login = () => {
                         </div>
 
                         {/* login button */}
-                        <button className={cx('btn-login')} type="submit">
+                        <button className={cx('btn-login')} type="submit" disabled={!(isValid && dirty)}>
                             Đăng nhập
                         </button>
                     </form>

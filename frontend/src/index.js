@@ -5,14 +5,15 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import GlobalStyles from './components/GlobalStyles';
 import { Provider } from 'react-redux';
-import store from './redux/store'; 
+import store, { Persistor } from './redux/store';
+// import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
     <Provider store={store}>
         <GlobalStyles>
-            <App />
+                <App />
         </GlobalStyles>
     </Provider>,
     // </React.StrictMode>

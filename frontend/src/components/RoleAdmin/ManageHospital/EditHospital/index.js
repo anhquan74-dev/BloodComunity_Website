@@ -155,7 +155,7 @@ function EditHospital() {
                             type="email"
                             name="email"
                             onChange={handleInputChange}
-                            disabled
+                            // disabled
                         />
                         <br />
                     </div>

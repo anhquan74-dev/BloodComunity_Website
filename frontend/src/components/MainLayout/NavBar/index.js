@@ -9,26 +9,27 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Buffer } from 'buffer';
+import { logoutSuccess } from '../../../redux/actions/authAction';
+import { useNavigate } from 'react-router-dom';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
 
 function NavBar() {
+    const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth.login.currentUser);
     let previewImage = require('../../../assets/images/default_avatar.png');
+    const navigate = useNavigate();
 
     if (currentUser?.image) {
         previewImage = new Buffer(currentUser.image, 'base64').toString('binary');
     }
+    console.log(currentUser);
 
-    // const [anchorEl, setAnchorEl] = useState(null);
-
-    // const handleClick = (event) => {
-    //     setAnchorEl(anchorEl ? null : event.currentTarget);
-    // };
-
-    // const open = Boolean(anchorEl);
-    // const id = open ? 'simple-popper' : undefined;
+    const handleLogout = () => {
+        dispatch(logoutSuccess());
+        navigate('/');
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -65,7 +66,10 @@ function NavBar() {
                                     // onClick={handleClick}
                                     {...bindTrigger(popupState)}
                                 >
-                                    <img src={previewImage} alt="avatar" />
+                                    <img
+                                        src={previewImage || require('../../../assets/images/default_avatar.png')}
+                                        alt="avatar"
+                                    />
                                     <div className={cx('arrow-button')}>
                                         <KeyboardArrowDownIcon />
                                     </div>
@@ -87,7 +91,12 @@ function NavBar() {
                                 <div className={cx('acc-popper')}>
                                     <div className={cx('myacc')}>
                                         <div>
-                                            <img src={previewImage} alt="avatar" />
+                                            <img
+                                                src={
+                                                    previewImage || require('../../../assets/images/default_avatar.png')
+                                                }
+                                                alt="avatar"
+                                            />
                                         </div>
                                         <div>
                                             {currentUser &&
@@ -100,7 +109,9 @@ function NavBar() {
                                     <div className={cx('another')}>
                                         <div className={cx('item')}>Cài đặt tài khoản</div>
                                         <div className={cx('item')}>Lịch sử</div>
-                                        <div className={cx('item')}>Đăng xuất</div>
+                                        <div className={cx('item')} onClick={handleLogout}>
+                                            Đăng xuất
+                                        </div>
                                     </div>
                                 </div>
                             </Popover>
