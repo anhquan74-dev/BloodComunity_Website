@@ -5,6 +5,7 @@ import {
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
     LOGIN_ERROR,
+    LOGOUT_SUCCESS,
 } from '../actions/types';
 import { toast } from 'react-toastify';
 
@@ -81,6 +82,17 @@ const authReducer = (state = INITIAL_STATE, action) => {
                     isError: true,
                     status: action.payload.error.response.data.statusCode,
                     message: action.payload.error.response.data.message,
+                },
+            };
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                login: {
+                    currentUser: null,
+                    isLoading: false,
+                    isError: false,
+                    status: '',
+                    message: '',
                 },
             };
         default:

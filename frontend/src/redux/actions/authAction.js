@@ -1,4 +1,4 @@
-import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR } from './types';
+import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR,LOGOUT_SUCCESS } from './types';
 import axios from 'axios';
 
 export const registerAccount = (user) => {
@@ -74,3 +74,9 @@ export const loginAccountError = (error) => {
         },
     };
 };
+
+export const logoutSuccess = () => {
+    return {
+        type: LOGOUT_SUCCESS
+    }
+}
