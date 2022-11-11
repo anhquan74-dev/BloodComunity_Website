@@ -186,6 +186,43 @@ let getEventByDateService = async (date) => {
     console.log(e);
   }
 };
+let getEventByHospitalIdService = async (id) => {
+  try {
+    let eventData = {};
+    if (!id) {
+      eventData.statusCode = 422;
+      eventData.message = "Thiếu thông số bắt buộc!";
+    } else {
+      let data = await db.Event.findAll({
+        where: {
+          hospitalId: id,
+        },
+        include: [
+          {
+            model: db.User,
+            as: "hospitalData",
+            // attributes: ["firstName", "lastName"],
+            attributes: ["hospitalName"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      if (!data || data.length === 0) {
+        eventData.statusCode = 404;
+        eventData.message = "Không tìm thấy!";
+        data = [];
+      } else {
+        eventData.statusCode = 200;
+        eventData.message = "Lấy thông tin sự kiện thành công!";
+        eventData.content = data;
+      }
+      return eventData;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 let deleteEventService = async (inputId) => {
   try {
     let message = {};
@@ -316,4 +353,5 @@ module.exports = {
   deleteScheduleService,
   updateScheduleService,
   getScheduleByIdService,
+  getEventByHospitalIdService
 };

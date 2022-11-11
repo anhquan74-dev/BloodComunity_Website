@@ -91,6 +91,25 @@ let handleGetEventByDate = async (req, res) => {
     });
   }
 };
+let handleGetEventByHospitalId = async (req, res) => {
+  try {
+    if (!req.query) {
+      res.status(422).json({
+        statusCode: 422,
+        message: "Thiếu thông số bắt buộc!",
+      });
+    } else {
+      let infor = await hospitalService.getEventByHospitalIdService(req.query);
+      res.status(infor.statusCode).json(infor);
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+};
 let handleDeteleEvent = async (req, res) => {
   try {
     if (!req.body.id) {
@@ -211,4 +230,5 @@ module.exports = {
   handleUpdateSchedule,
   handleDeteleSchedule,
   handleGetScheduleById,
+  handleGetEventByHospitalId
 };
