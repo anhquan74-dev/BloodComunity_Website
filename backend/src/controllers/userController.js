@@ -1,5 +1,41 @@
 import userService from "../services/userService";
+let handleSearchUser = async (req, res) => {
+  try {
+    let keyWord = await req.query.keyWord;
+    console.log("key word: ", keyWord);
+    let content = await userService.getUserSearchService(keyWord);
+    res.status(content.statusCode).json({
+      statusCode: content.statusCode,
+      message: content.message,
+      content: content.content,
+    });
 
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleSearchUserPagination = async (req, res) => {
+  try {
+    if (!req.body) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu thông tin cần thiết!",
+      });
+    } else {
+      let user = await userService.searchUserPaginationService(req.body);
+      res.status(user.statusCode).json(user);
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleRegister = async (req, res) => {
   try {
     const { email, password, roleId } = req.body;
@@ -94,7 +130,7 @@ let handleGetAllCode = async (req, res) => {
     if (!typeInput) {
       res.send({
         statusCode: 422,
-        message: "Missing input type!",
+        message: "Thiếu thông tin đầu vào!",
       });
     } else {
       let content = await userService.getAllCodeService(typeInput);
@@ -117,7 +153,7 @@ let handleGetAllUsers = async (req, res) => {
     let users = await userService.getAllUsersService();
     res.status(200).json({
       statusCode: 200,
-      message: "Get all users successfully!",
+      message: "Lấy danh sách người dùng thành công!",
       content: users,
     });
   } catch (e) {
@@ -133,7 +169,7 @@ let handleGetUserById = async (req, res) => {
     if (!id) {
       res.send({
         statusCode: 422,
-        message: "Missing user id!",
+        message: "Bạn chưa nhập id!",
       });
     } else {
       let user = await userService.getUserByIdService(id);
@@ -352,5 +388,7 @@ module.exports = {
   handleInActiveUser,
   handleResetPassword,
   handlePostVerifyResetPassword,
-  handleGetTopDonor
+  handleGetTopDonor,
+  handleSearchUser,
+  handleSearchUserPagination
 };

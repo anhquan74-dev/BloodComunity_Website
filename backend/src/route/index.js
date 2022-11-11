@@ -25,6 +25,8 @@ let initWebRoutes = (app) => {
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.get("/api/get-user-by-id", userController.handleGetUserById); //admin
   router.get("/api/get-user-by-type", userController.handleGetUserByType); //admin
+  router.get("/api/search-user", userController.handleSearchUser); //admin
+  router.get("/api/search-user-pagination", userController.handleSearchUserPagination); //admin
   router.post("/api/create-new-user", userController.handleRegister); //admin
   router.get("/api/allcode", userController.handleGetAllCode);
   router.delete("/api/delete-user", userController.handleDeteleUser); //admin
@@ -32,7 +34,6 @@ let initWebRoutes = (app) => {
   router.put("/api/update-profile", userController.handleUpdateUser);
   router.put("/api/active-user", userController.handleActiveUser); //admin
   router.put("/api/inactive-user", userController.handleInActiveUser); //admin
-
   // Quên mật khẩu: 
   // B1: click vào nút quên mật khẩu để hiện lên form điền vào email 
   // B2: điền email vào ô input rồi bấm nút gửi
