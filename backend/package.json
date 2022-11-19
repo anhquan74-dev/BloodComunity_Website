@@ -7,6 +7,7 @@
     "start": "nodemon --exec babel-node src/server.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.19.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "1.19.0",
     "cors": "2.8.5",
@@ -23,8 +24,8 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/node": "^7.12.10",
+    "@babel/core": "^7.20.2",
+    "@babel/node": "^7.20.2",
     "@babel/preset-env": "^7.12.10",
     "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0"

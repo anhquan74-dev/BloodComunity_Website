@@ -56,6 +56,10 @@ let initWebRoutes = (app) => {
     "/api/get-event-hospital-by-date",
     hospitalController.handleGetEventByDate
   );
+  router.get(
+    "/api/get-event-by-hospital-id",
+    hospitalController.handleGetEventByHospitalId
+  );
   router.post("/api/create-event", hospitalController.handleCreateEvent); //hospital, admin
   router.put("/api/update-event", hospitalController.handleUpdateEvent); //admin,hospital
   router.delete("/api/delete-event", hospitalController.handleDeteleEvent); //admin,hospital
