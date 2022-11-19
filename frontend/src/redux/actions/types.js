@@ -61,3 +61,8 @@ export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 // logout
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+// manage events
+export const FETCH_EVENTS_SUCCESS = 'FETCH_EVENTS_SUCCESS';
+export const UPDATE_EVENTS_SUCCESS = 'UPDATE_EVENTS_SUCCESS';
+export const DELETE_EVENTS_SUCCESS = 'DELETE_EVENTS_SUCCESS';
