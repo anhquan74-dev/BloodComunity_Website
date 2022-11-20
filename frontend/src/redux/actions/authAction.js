@@ -87,6 +87,17 @@ export const loginAccountError = (error) => {
     };
 };
 
+export const logout = () => {
+    return async (dispatch, getState) => {
+        try {
+            localStorage.removeItem('user');
+            dispatch(logoutSuccess());
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
 export const logoutSuccess = () => {
     return {
         type: LOGOUT_SUCCESS,
