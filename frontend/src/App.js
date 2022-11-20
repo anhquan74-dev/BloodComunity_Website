@@ -32,6 +32,8 @@ import ViewRecipient from './components/RoleAdmin/ManageRecipient/ViewRecipient'
 import EditRecipient from './components/RoleAdmin/ManageRecipient/EditRecipient';
 import NotFound from './pages/NotFound';
 import { useSelector } from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
