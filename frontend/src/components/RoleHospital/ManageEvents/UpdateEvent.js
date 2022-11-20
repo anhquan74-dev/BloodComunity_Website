@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEvent } from '../../../redux/actions/hospitalServices';
+import moment from 'moment';
 
 const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
     const [nameEvent, setNameEvent] = useState('');
@@ -17,7 +18,12 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
     useEffect(() => {
         setNameEvent(eventUpdate.nameEvent);
         setLocation(eventUpdate.location);
-        setDate(eventUpdate.date);
+        if (eventUpdate.date) {
+            console.log(eventUpdate.date);
+            let dateTime = eventUpdate.date.split(' ');
+            const my_date = moment(new Date(dateTime[0].split('/').reverse().join('-'))).format('YYYY-MM-DD');
+            setDate(`${my_date}T${dateTime[1]}`);
+        }
         setDesc(eventUpdate.description);
     }, [show]);
 
@@ -28,15 +34,10 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
             id: eventUpdate.id,
             nameEvent,
             location,
-            date,
+            date: moment(date).format('DD/MM/YYYY hh:mm'),
             description: desc,
         };
-        // console.log(eventUpdate);
         dispatch(updateEvent(data));
-        // setNameEvent('');
-        // setLocation('');
-        // setDate('');
-        // setDesc('');
         handleClose();
     };
 
@@ -80,11 +81,11 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
                             Thời gian
                         </label>
                         <input
-                            type="text"
+                            type="datetime-local"
                             className="form-control py-3"
                             id="date-time"
                             placeholder="Thời gian"
-                            value={date}
+                            value={date || ''}
                             onChange={(e) => setDate(e.target.value)}
                         />
                     </div>

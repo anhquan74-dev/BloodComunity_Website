@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent } from '../../../redux/actions/hospitalServices';
+import moment from 'moment';
 
 const AddEvent = ({ show, handleClose }) => {
     const [nameEvent, setNameEvent] = useState('');
@@ -16,14 +17,15 @@ const AddEvent = ({ show, handleClose }) => {
     console.log(currentHospitalId);
 
     const handleAddNewEvent = () => {
-        console.log(nameEvent, location, date, desc);
+        // console.log(nameEvent, location, date, desc);
         const data = {
             hospitalId: currentHospitalId,
             nameEvent,
             location,
-            date,
+            date: moment(date).format('DD/MM/YYYY hh:mm'),
             description: desc,
         };
+        console.log(data);
         dispatch(createEvent(data));
         setNameEvent('');
         setLocation('');
@@ -70,7 +72,7 @@ const AddEvent = ({ show, handleClose }) => {
                             Thời gian
                         </label>
                         <input
-                            type="text"
+                            type="datetime-local"
                             className="form-control py-3"
                             id="date-time"
                             placeholder="Thời gian"
