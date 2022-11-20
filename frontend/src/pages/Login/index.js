@@ -113,7 +113,7 @@ const Login = () => {
                             <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Email</div>
                             <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                                 <input
-                                    className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                    className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                         errors.email && touched.email ? 'errorFormik' : ''
                                     }`}
                                     onChange={handleChange}
@@ -132,7 +132,7 @@ const Login = () => {
                             <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Mật khẩu</div>
                             <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                                 <input
-                                    className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                    className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                         errors.password && touched.password ? 'errorFormik' : ''
                                     }`}
                                     onChange={handleChange}

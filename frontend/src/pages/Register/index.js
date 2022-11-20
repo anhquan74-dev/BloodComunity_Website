@@ -136,7 +136,7 @@ const Register = () => {
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Email</div>
                         <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                             <input
-                                className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                     errors.email && touched.email ? 'errorFormik' : ''
                                 }`}
                                 onChange={handleChange}
@@ -155,7 +155,7 @@ const Register = () => {
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Mật khẩu</div>
                         <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                             <input
-                                className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                     errors.password && touched.password ? 'errorFormik' : ''
                                 }`}
                                 onChange={handleChange}
@@ -177,7 +177,7 @@ const Register = () => {
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Bạn là: </div>
                         <div>
                             <select
-                                className="my-2 rounded border border-gray-200 bg-white pt-4 pb-4 pl-2 block w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
+                                className="my-2 rounded border border-gray-200 bg-white pt-3 pb-3 pl-2 block w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.roleId}
@@ -197,7 +197,7 @@ const Register = () => {
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Họ và tên</div>
                         <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                             <input
-                                className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                     errors.fullname && touched.fullname ? 'errorFormik' : ''
                                 }`}
                                 onChange={handleChange}
@@ -221,7 +221,7 @@ const Register = () => {
                             </div>
                             <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                                 <input
-                                    className="w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl"
+                                    className="w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.birthday}
@@ -240,7 +240,7 @@ const Register = () => {
                             </div>
                             <div>
                                 <select
-                                    className="my-2 rounded border border-gray-200 bg-white pt-5 pb-5 pl-2 block w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
+                                    className="my-2 rounded border border-gray-200 bg-white pt-3 pb-3 pl-2 block w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.gender}
@@ -266,7 +266,7 @@ const Register = () => {
                         </div>
                         <div className="my-2 flex rounded-full border border-gray-200 bg-white">
                             <input
-                                className={`w-full appearance-none p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
+                                className={`w-full appearance-none p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl ${
                                     errors.phone && touched.phone ? 'errorFormik' : ''
                                 }`}
                                 onChange={handleChange}
@@ -336,14 +336,14 @@ const Register = () => {
                         name="street"
                         id="street"
                         placeholder="Số nhà"
-                        className="w-full appearance-none mt-4 p-5 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl"
+                        className="w-full appearance-none mt-4 p-3 px-5 text-gray-800 outline-none bg-gray-100 rounded-full text-2xl"
                     />
 
                     {/* Nhom mau */}
                     <div className="w-full flex-1">
                         <div className="mt-4 h-6 text-2xl font-semibold leading-8 text-gray-800 mb-4">Nhóm máu</div>
                         <select
-                            className="my-2 rounded border border-gray-200 bg-white pt-5 pb-5 pl-2 block  w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
+                            className="my-2 rounded border border-gray-200 bg-white pt-3 pb-3 pl-2 block  w-full text-2xl text-gray-900  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none "
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.bloodGroup}
