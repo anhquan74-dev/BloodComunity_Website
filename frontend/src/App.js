@@ -33,6 +33,7 @@ import EditRecipient from './components/RoleAdmin/ManageRecipient/EditRecipient'
 import NotFound from './pages/NotFound';
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import DonorProfile from './components/RoleDonor/DonorProfile';
 
 
 function App() {
@@ -104,7 +105,7 @@ function App() {
                         <Route path="manage_schedule" element={<ManageDonateSchedule />} />
                         <Route path="events" element={<DonateEvents />} />
                         <Route path="reward" element={<DonorRank />} />
-                        <Route path="account" element={<Account />} />
+                        <Route path="account" element={<DonorProfile />} />
                     </Route>
                     <Route
                         path="/recipient"
