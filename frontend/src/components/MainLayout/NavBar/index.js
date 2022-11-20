@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Buffer } from 'buffer';
-import { logoutSuccess } from '../../../redux/actions/authAction';
+import { logout, logoutSuccess } from '../../../redux/actions/authAction';
 import { useNavigate } from 'react-router-dom';
 Buffer.from('anything', 'base64');
 
@@ -27,7 +27,7 @@ function NavBar() {
     console.log(currentUser);
 
     const handleLogout = () => {
-        dispatch(logoutSuccess());
+        dispatch(logout());
         navigate('/');
     };
 

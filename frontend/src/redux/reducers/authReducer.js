@@ -106,6 +106,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                     currentUser: null,
                     isLoading: false,
                     isError: false,
+                    isLoggedIn: false,
                     status: '',
                     message: '',
                 },
