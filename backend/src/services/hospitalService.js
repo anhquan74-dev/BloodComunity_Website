@@ -186,16 +186,16 @@ let getEventByDateService = async (date) => {
     console.log(e);
   }
 };
-let getEventByHospitalIdService = async (id) => {
+let getEventByHospitalIdService = async (query) => {
   try {
     let eventData = {};
-    if (!id) {
+    if (!query.id) {
       eventData.statusCode = 422;
       eventData.message = "Thiếu thông số bắt buộc!";
     } else {
       let data = await db.Event.findAll({
         where: {
-          hospitalId: id,
+          hospitalId: query.id,
         },
         include: [
           {
