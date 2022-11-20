@@ -1,5 +1,28 @@
 import axios from 'axios';
-import { CREATE_EVENT_SUCCESS, DELETE_EVENT_SUCCESS, FETCH_EVENTS_SUCCESS, UPDATE_EVENT_SUCCESS } from './types';
+import { CREATE_EVENT_SUCCESS, CREATE_SCHEDULES_FAILED, CREATE_SCHEDULES_SUCCESS, DELETE_EVENT_SUCCESS, FETCH_EVENTS_SUCCESS, UPDATE_EVENT_SUCCESS } from './types';
+
+
+export const createSchedule = (data) => {
+    return async (dispatch) => {
+        try{    
+            const res = await axios.post('http://localhost:8080/api/create-schedule', data)
+            dispatch(createSchedulesSuccess(res.data))
+        }catch(e){
+            dispatch(createSchedulesFail(e.response.data))
+        }
+    }
+}
+export const createSchedulesSuccess = (payload) => {
+    return {
+        type: CREATE_SCHEDULES_SUCCESS,
+        payload,
+    };
+};export const createSchedulesFail = (payload) => {
+    return {
+        type: CREATE_SCHEDULES_FAILED,
+        payload,
+    };
+};
 
 export const fetchAllEvents = () => {
     return async (dispatch, getState) => {

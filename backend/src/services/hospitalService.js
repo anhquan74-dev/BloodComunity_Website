@@ -26,9 +26,10 @@ let bulkCreateScheduleService = async (data) => {
       //     return item;
       //   });
       // }
+      
       // compare different schedules: (+) to convert to int
       let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-        return a.timeType === b.timeType && +a.date === +b.date;
+        return a.timeType === b.timeType && a.date === b.date;
       });
       // create data
       if (toCreate && toCreate.length > 0) {
