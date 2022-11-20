@@ -9,6 +9,8 @@ import {
 } from '../actions/types';
 import { toast } from 'react-toastify';
 
+const user = JSON.parse(localStorage.getItem('user'));
+
 const INITIAL_STATE = {
     register: {
         isLoading: false,
@@ -16,13 +18,23 @@ const INITIAL_STATE = {
         status: '',
         message: '',
     },
-    login: {
-        currentUser: null,
-        isLoading: false,
-        isError: false,
-        status: '',
-        message: '',
-    },
+    login: user
+        ? {
+              currentUser: user,
+              isLoading: false,
+              isError: false,
+              isLoggedIn: true,
+              status: 200,
+              message: '',
+          }
+        : {
+              currentUser: null,
+              isLoading: false,
+              isError: false,
+              isLoggedIn: false,
+              status: '',
+              message: '',
+          },
 };
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -62,6 +74,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                     currentUser: null,
                     isLoading: true,
                     isError: false,
+                    isLoggedIn: false,
                 },
             };
         case LOGIN_SUCCESS:
@@ -71,6 +84,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                     currentUser: action.payload.content,
                     isLoading: false,
                     isError: false,
+                    isLoggedIn: true,
                 },
             };
         case LOGIN_ERROR:
@@ -82,6 +96,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
                     isError: true,
                     status: action.payload.error.response.data.statusCode,
                     message: action.payload.error.response.data.message,
+                    isLoggedIn: false,
                 },
             };
         case LOGOUT_SUCCESS:

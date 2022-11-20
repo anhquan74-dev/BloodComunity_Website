@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Login.module.scss';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate, Navigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 const Login = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth.login.currentUser);
+    const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
     const status = useSelector((state) => state.auth.login.status);
     const message = useSelector((state) => state.auth.login.message);
 
@@ -62,7 +63,23 @@ const Login = () => {
             console.log(value);
         },
     });
-
+    if (isLoggedIn) {
+        let role;
+        switch (currentUser.roleId) {
+            case 'R2':
+                role = 'hospital';
+                break;
+            case 'R3':
+                role = 'donor';
+                break;
+            case 'R4':
+                role = 'recipient';
+                break;
+            default:
+                break;
+        }
+        return currentUser.roleId === 'R1' ? <Navigate to="/admin/dashboard" /> : <Navigate to={`/${role}/account`} />;
+    }
     // console.log(touched.email);
 
     return (

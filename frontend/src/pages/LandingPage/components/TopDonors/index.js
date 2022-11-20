@@ -32,7 +32,7 @@ function TopDonors() {
             <div className={cx('container')}>
                 <h2>Các cá nhân nổi bật</h2>
                 <div className={cx('donors')}>
-                    {topDonors.map((donor, index) => {
+                    {topDonors && topDonors.map((donor, index) => {
                         if (index < 4) {
                             return (
                                 <motion.div key={index} whileHover={{ scale: 1.07 }} className={cx('donor-item')}>

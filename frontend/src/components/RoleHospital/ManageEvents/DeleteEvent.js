@@ -2,9 +2,15 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteEvent } from '../../../redux/actions/hospitalServices';
 
 const DeleteEvent = ({ show, handleClose, eventDelete }) => {
+    const dispatch = useDispatch();
+
     const handleDeleteEvent = () => {
+        console.log(eventDelete.id);
+        dispatch(deleteEvent(eventDelete.id));
         handleClose();
     };
 
