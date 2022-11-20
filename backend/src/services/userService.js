@@ -117,6 +117,7 @@ let loginService = async (email, password) => {
         } else {
           const token = authController.generateToken(checkUserEmail);
           const data = {
+            id: checkUserEmail.id,
             email: checkUserEmail.email,
             roleId: checkUserEmail.roleId,
             firstName: checkUserEmail.firstName,
