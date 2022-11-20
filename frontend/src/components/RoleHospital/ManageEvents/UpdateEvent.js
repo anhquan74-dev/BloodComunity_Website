@@ -2,12 +2,17 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEvent } from '../../../redux/actions/hospitalServices';
 
 const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
     const [nameEvent, setNameEvent] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
     const [desc, setDesc] = useState('');
+
+    const dispatch = useDispatch();
+    const currentHospitalId = useSelector((state) => state.auth.login.currentUser.id);
 
     useEffect(() => {
         setNameEvent(eventUpdate.nameEvent);
@@ -18,6 +23,16 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
 
     const handleUpdateEvent = () => {
         console.log(nameEvent, location, date, desc);
+        const data = {
+            hospitalId: currentHospitalId,
+            id: eventUpdate.id,
+            nameEvent,
+            location,
+            date,
+            description: desc,
+        };
+        // console.log(eventUpdate);
+        dispatch(updateEvent(data));
         // setNameEvent('');
         // setLocation('');
         // setDate('');

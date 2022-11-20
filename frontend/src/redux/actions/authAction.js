@@ -1,4 +1,12 @@
-import { REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_ERROR,LOGOUT_SUCCESS } from './types';
+import {
+    REGISTER_REQUEST,
+    REGISTER_SUCCESS,
+    REGISTER_ERROR,
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
+    LOGOUT_SUCCESS,
+} from './types';
 import axios from 'axios';
 
 export const registerAccount = (user) => {
@@ -45,6 +53,10 @@ export const loginAccount = (user) => {
         try {
             const res = await axios.post('http://localhost:8080/api/login', user);
             const data = res && res.data ? res.data : [];
+            console.log(data);
+            if (data && data.content) {
+                localStorage.setItem('user', JSON.stringify(data.content));
+            }
             dispatch(loginAccountSuccess(data));
         } catch (error) {
             console.log(error);
@@ -77,6 +89,6 @@ export const loginAccountError = (error) => {
 
 export const logoutSuccess = () => {
     return {
-        type: LOGOUT_SUCCESS
-    }
-}
+        type: LOGOUT_SUCCESS,
+    };
+};
