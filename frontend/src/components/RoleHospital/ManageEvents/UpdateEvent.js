@@ -1,33 +1,37 @@
 // import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-const AddEvent = ({ show, handleClose }) => {
+const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
     const [nameEvent, setNameEvent] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
     const [desc, setDesc] = useState('');
 
-    const dispatch = useDispatch();
-    const currentHospitalId = useSelector(state => state.auth.login.currentUser.id)
+    useEffect(() => {
+        setNameEvent(eventUpdate.nameEvent);
+        setLocation(eventUpdate.location);
+        setDate(eventUpdate.date);
+        setDesc(eventUpdate.description);
+    }, [show]);
 
-    const handleAddNewEvent = () => {
+    const handleUpdateEvent = () => {
         console.log(nameEvent, location, date, desc);
-        dispatch()
-        setNameEvent('');
-        setLocation('');
-        setDate('');
-        setDesc('');
+        // setNameEvent('');
+        // setLocation('');
+        // setDate('');
+        // setDesc('');
         handleClose();
     };
 
     return (
         <div>
+            {console.log(eventUpdate)}
+
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Thêm sự kiện</Modal.Title>
+                    <Modal.Title>Cập nhật sự kiện</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="mb-3">
@@ -86,7 +90,7 @@ const AddEvent = ({ show, handleClose }) => {
                     <Button variant="outlined" color="error" onClick={handleClose}>
                         Đóng
                     </Button>
-                    <Button variant="contained" onClick={handleAddNewEvent}>
+                    <Button variant="contained" onClick={handleUpdateEvent}>
                         Thêm
                     </Button>
                 </Modal.Footer>
@@ -95,4 +99,4 @@ const AddEvent = ({ show, handleClose }) => {
     );
 };
 
-export default AddEvent;
+export default UpdateEvent;
