@@ -3,10 +3,15 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
-    border: 1px solid red;
     button {
         padding: 5px 10px;
         border: 1px solid gray;
+    }
+    .btn-schedule{
+        margin-top: 20px;
+        &.active{
+            background-color: #f64a4a;
+        }
     }
 }
 .btn-save{

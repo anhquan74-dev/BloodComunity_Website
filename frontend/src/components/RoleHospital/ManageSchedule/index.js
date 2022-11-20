@@ -7,13 +7,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllTimeTypes } from '../../../redux/actions/allCodeAction';
 import axios from 'axios';
+import {toast} from 'react-toastify'
 
 let rangeTimeS = []
 
 function ManageSchedule() {
     const [startDate, setStartDate] = useState(new Date());
     const [rangeTime, setRangeTime] = useState([]);
-
+    const [maxNumber,setMaxNumber] = useState(20)
     const dispatch = useDispatch();
     const handleChangeDatePicker = (date: Date) => {
         setStartDate(date)
@@ -47,28 +48,37 @@ function ManageSchedule() {
               setRangeTime(rangeTimeClone);
         }
     }
-    const handleCreateSchedule = () => {
-        const rangeTimeClone =  rangeTime.filter(item => {
+    const handleCreateSchedule = async () => {
+        let result = [];
+        const selectedTime =  rangeTime.filter(item => {
             return item.isSelected
         })
-        console.log(rangeTimeClone)
-        const arrSchedule = rangeTimeClone.map((item, index)=>{
-            if(item.isSelected){
-                return {
-                    hospitalId,
-                    date: "1234123413",
-                    timeType: item.keyMap
-                }
-            }
-            
-        })
-        console.log(arrSchedule)
-        const data = {
-            arrSchedule,
-            hospitalId,
-            formatedDate:"1234123413"
+        // let formatedDate = new Date(startDate).getTime()
+        let formatedDate = moment(startDate).format('DD/MM/YYYY')
+        if(selectedTime.length < 1){
+            toast.error("Bạn chưa chọn khung giờ")
+            return;
         }
-        axios.post('http://localhost:8080/api/create-schedule', data)
+        if(!startDate){
+            toast.error("Ngày không hợp lệ!");
+            return;
+        }
+        if(selectedTime && selectedTime.length > 0){
+            selectedTime.map(time =>{
+                let object = {};
+                object.hospitalId = hospitalId;
+                object.date = formatedDate;
+                object.timeType = time.keyMap;
+                object.maxNumber = maxNumber
+                result.push(object)
+            })
+        }
+        const data = {
+            arrSchedule: result,
+            hospitalId,
+            formatedDate: formatedDate
+        }
+        await axios.post('http://localhost:8080/api/create-schedule', data)
     }
     return <div className="manage-schedule-container">
         <div className="m-s-title">Quản lí lịch hiến máu của bệnh viện</div>
@@ -78,11 +88,15 @@ function ManageSchedule() {
                     <label>Chọn ngày</label>
                     <DatePicker selected={startDate} onChange={handleChangeDatePicker} minDate={new Date()} />
                 </div>
+                <div className="col-12">
+                    <label>Số lượng người hiến máu tối đa </label>
+                    <input type="number" id="maxNumber" name="maxNumber" min="1" max="20" value={maxNumber} onChange={e => setMaxNumber(e.target.value)}></input>
+                </div>
                 <div className="col-12 pick-hour-container">
                     {rangeTime && rangeTime.length > 0 &&
                         rangeTime.map((item, index) => {
                             return (
-                                <button className='btn btn-schedule' key={index}
+                                <button className={item.isSelected === true ? "btn btn-schedule active" : "btn btn-schedule"} key={index}
                                     onClick={() => handleClickBtnTime(item)}
                                 >{item.valueVi}</button>
                             )
