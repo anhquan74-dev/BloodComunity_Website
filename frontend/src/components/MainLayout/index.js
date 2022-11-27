@@ -3,17 +3,34 @@ import SideBar from './SideBar';
 import NavBar from './NavBar';
 import classNames from 'classnames/bind';
 import styles from './MainLayout.module.scss';
+import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
+// const ENDPOINT = 'http://localhost:8080';
+// var socket;
+
 function MainLayout({ routes }) {
+    const user = useSelector((state) => state.auth.login.currentUser);
+    const [socketConnected, setSocketConnected] = useState(false);
+    const [socket, setSocket] = useState(null);
+    useEffect(() => {
+        setSocket(io('http://localhost:8080'));
+        // socket.on('connection', () => setSocketConnected(true));
+    }, []);
+
+    useEffect(() => {
+        socket?.emit('join room', user);
+    }, [socket, user]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('sidebar')}>
                 <div className={cx('logo')}>
                     <div className={cx('logo-side')}>
                         {/* <Link to={'/'}> */}
-                            <img src={require('../../assets/images/BC_logo1.png')} alt="BC_LOGO" />
+                        <img src={require('../../assets/images/BC_logo1.png')} alt="BC_LOGO" />
                         {/* </Link> */}
                     </div>
                     <div>
@@ -33,7 +50,7 @@ function MainLayout({ routes }) {
             </div>
             <div className={cx('container')}>
                 <div className={cx('content')}>
-                    <Outlet />
+                    <Outlet context={socket} />
                 </div>
             </div>
         </div>
