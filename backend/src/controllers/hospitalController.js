@@ -56,6 +56,7 @@ let handleGetScheduleByDate = async (req, res) => {
 let handleGetScheduleById = async (req, res) => {
   try {
     if (!req.query.id) {
+      console.log("hos id", req.query.id);
       res.status(422).json({
         statusCode: 422,
         message: "Thiếu thông số bắt buộc!",
