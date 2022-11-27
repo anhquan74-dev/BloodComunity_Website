@@ -2,12 +2,41 @@ import styles from './ViewBloodRequest.module.scss';
 import classNames from 'classnames/bind';
 import StatusButton from '../../StatusButton';
 import { requests } from '../../../services/data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
+import { useOutletContext } from 'react-router-dom';
+
+const ENDPOINT = 'http://localhost:8080';
+var socket;
+socket = io(ENDPOINT);
 
 const cx = classNames.bind(styles);
 
 function ViewBloodRequest() {
     // const [status, setStatus] = useState();
+    const [userRequest, setUserRequest] = useState();
+    const [socketConnected, setSocketConnected] = useState(false);
+    const user = useSelector((state) => state.auth.login.currentUser);
+    console.log(user);
+    const socket = useOutletContext();
+    console.log(socket);
+    // useEffect(() => {
+    //     socket.emit('join room', user);
+    //     // socket.on('receive blood request', (data) => {
+    //     //     setUserRequest(data);
+    //     // });
+    //     socket.on('connection', () => setSocketConnected(true));
+    // }, []);
+    useEffect(() => {
+        socket?.on('recieve blood request', (user) => {
+            setUserRequest(user);
+        });
+    }, [socket]);
+
+    const handleConfirm = () => {
+        socket.emit('donor confirm', user);
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -21,32 +50,34 @@ function ViewBloodRequest() {
                     <p>Hành động</p>
                 </div>
                 <div className={cx('body')}>
-                    {requests.map((request, index) => {
-                        return (
-                            <div className={cx('item')} key={index}>
+                    {/* {requests.map((request, index) => {
+                        return ( */}
+                    {userRequest && (
+                        <div className={cx('item')}>
+                            <div>
                                 <div>
-                                    <div>
-                                        <img src="" alt="" />
-                                    </div>
-                                    <div>{request.name}</div>
+                                    <img src="" alt="" />
                                 </div>
-                                <div>{request.address}</div>
-                                <div>{request.phone}</div>
-                                <div>{request.bloodGroup}</div>
+                                <div>{`${userRequest.firstName} ${userRequest.lastName}`}</div>
+                            </div>
+                            <div>{`${userRequest.ward}, ${userRequest.district}, ${userRequest.city}`}</div>
+                            <div>{userRequest.phoneNumber}</div>
+                            <div>{userRequest.groupBlood}</div>
+                            <div>
                                 <div>
-                                    <div>
-                                        <StatusButton status="confirm" />
-                                    </div>
-                                    <div>
-                                        <StatusButton status="reject" />
-                                    </div>
-                                    {/* <div>
+                                    <StatusButton onClick={handleConfirm} status="confirm" />
+                                </div>
+                                <div>
+                                    <StatusButton status="reject" />
+                                </div>
+                                {/* <div>
                                 <StatusButton status="pending" />
                             </div> */}
-                                </div>
                             </div>
-                        );
-                    })}
+                        </div>
+                    )}
+                    {/* );
+                    })} */}
                 </div>
             </div>
         </div>

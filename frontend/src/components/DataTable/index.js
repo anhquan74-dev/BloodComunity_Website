@@ -3,7 +3,6 @@ import { hospitalColumns, donorColumns, recipientColumns } from '../../services/
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import './DataTable.scss';
-import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllDonor } from '../../redux/actions/donorManage';
 import { fetchAllRecipient } from '../../redux/actions/recipientManage';
@@ -12,6 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import BeatLoader from 'react-spinners/BeatLoader';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import { CsvBuilder } from 'filefy';
 
 const DataTable = (props) => {
     let columns = [];
@@ -104,6 +105,34 @@ const DataTable = (props) => {
         },
     ];
 
+    const [query, setQuery] = useState('');
+    const [status, setStatus] = useState('');
+    console.log(query);
+    console.log(listUsers.filter((user) => user.email.toLowerCase().includes('7')));
+    const search = (data) => {
+        return data.filter(
+            (user) =>
+                user.email.toLowerCase().includes(query) ||
+                user.firstName?.toLowerCase().includes(query) ||
+                user.lastName?.toLowerCase().includes(query) ||
+                user.hospitalName?.toLowerCase().includes(query) ||
+                user.groupBlood?.toLowerCase().includes(query),
+            // user.id.includes(query),
+        );
+    };
+
+    const filter = (data) => {
+        if (status === '') return data;
+        return data.filter((user) => user.status === status);
+    };
+
+    const exportAllRows = () => {
+        var csvBuilder = new CsvBuilder('user_list.csv')
+            .setColumns(columns.map((col) => col.field))
+            .addRows(listUsers.map((row) => columns.map((col) => row[col.field])))
+            .exportFile();
+    };
+
     return (
         <div className="datatable">
             <div className="datatableTitle">
@@ -114,6 +143,34 @@ const DataTable = (props) => {
                     </NavLink>
                 )}
             </div>
+            <div className="admin-search-area">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="search-admin"
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+            </div>
+            <div className="admin-tools">
+                <div className="admin-filter">
+                    <h3>Filter by status</h3>
+                    <button className="filter-active" onClick={() => setStatus('active')}>
+                        Active
+                    </button>
+                    <button className="filter-inactive" onClick={() => setStatus('inactive')}>
+                        Inactive
+                    </button>
+                    <button className="filter-reset" onClick={() => setStatus('')}>
+                        Reset
+                    </button>
+                </div>
+                <div className="admin-export">
+                    <button onClick={exportAllRows}>
+                        <SaveAltIcon />
+                        Export CSV
+                    </button>
+                </div>
+            </div>
             {isLoading ? (
                 <div className="datatable-spinner">
                     <BeatLoader color="#36d7b7" size={10} aria-label="Loading Spinner" data-testid="loader" />
@@ -121,7 +178,7 @@ const DataTable = (props) => {
             ) : (
                 <DataGrid
                     className="datagrid"
-                    rows={listUsers || []}
+                    rows={filter(search(listUsers)) || []}
                     columns={columns.concat(actionColumn)}
                     pageSize={9}
                     rowsPerPageOptions={[9]}
