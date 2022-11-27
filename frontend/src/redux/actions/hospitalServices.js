@@ -1,23 +1,77 @@
 import axios from 'axios';
-import { CREATE_EVENT_SUCCESS, CREATE_SCHEDULES_FAILED, CREATE_SCHEDULES_SUCCESS, DELETE_EVENT_SUCCESS, FETCH_EVENTS_SUCCESS, UPDATE_EVENT_SUCCESS } from './types';
+import {
+    CREATE_EVENT_SUCCESS,
+    CREATE_SCHEDULES_FAILED,
+    CREATE_SCHEDULES_SUCCESS,
+    DELETE_EVENT_SUCCESS,
+    DELETE_SCHEDULE_SUCCESS,
+    FETCH_EVENTS_SUCCESS,
+    FETCH_SCHEDULES_BYID_SUCCESS,
+    UPDATE_EVENT_SUCCESS,
+} from './types';
 
+export const fetchAllSchedulesById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await axios.get('http://localhost:8080/api/get-schedule-hospital-by-id', {
+                params: { id: id },
+            });
+            const data = res && res.data ? res.data : [];
+            console.log(data);
+            dispatch(fetchSchedulesByIdSuccess(data));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
+export const fetchSchedulesByIdSuccess = (payload) => {
+    return {
+        type: FETCH_SCHEDULES_BYID_SUCCESS,
+        payload,
+    };
+};
+
+export const deleteSchedule = (item) => {
+    return async (dispatch, getState) => {
+        console.log(item.hospitalId);
+        try {
+            const res = await axios.delete('http://localhost:8080/api/delete-schedule', { data: { id: item.id } });
+            const data = res && res.data ? res.data : [];
+            console.log(data);
+            dispatch(deleteScheduleSuccess(data));
+            dispatch(fetchAllSchedulesById(item.hospitalId));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
+export const deleteScheduleSuccess = (payload) => {
+    return {
+        type: DELETE_SCHEDULE_SUCCESS,
+        payload,
+    };
+};
 
 export const createSchedule = (data) => {
     return async (dispatch) => {
-        try{    
-            const res = await axios.post('http://localhost:8080/api/create-schedule', data)
-            dispatch(createSchedulesSuccess(res.data))
-        }catch(e){
-            dispatch(createSchedulesFail(e.response.data))
+        try {
+            const res = await axios.post('http://localhost:8080/api/create-schedule', data);
+            dispatch(createSchedulesSuccess(res.data));
+            dispatch(fetchAllSchedulesById(data.hospitalId));
+        } catch (e) {
+            dispatch(createSchedulesFail(e.response.data));
         }
-    }
-}
+    };
+};
 export const createSchedulesSuccess = (payload) => {
     return {
         type: CREATE_SCHEDULES_SUCCESS,
         payload,
     };
-};export const createSchedulesFail = (payload) => {
+};
+export const createSchedulesFail = (payload) => {
     return {
         type: CREATE_SCHEDULES_FAILED,
         payload,

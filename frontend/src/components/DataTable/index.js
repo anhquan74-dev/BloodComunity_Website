@@ -108,9 +108,9 @@ const DataTable = (props) => {
     const [query, setQuery] = useState('');
     const [status, setStatus] = useState('');
     console.log(query);
-    console.log(listUsers.filter((user) => user.email.toLowerCase().includes('7')));
+    // console.log(listUsers.filter((user) => user.email.toLowerCase().includes('7')));
     const search = (data) => {
-        return data.filter(
+        return data?.filter(
             (user) =>
                 user.email.toLowerCase().includes(query) ||
                 user.firstName?.toLowerCase().includes(query) ||
