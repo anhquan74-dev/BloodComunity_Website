@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db, { sequelize } from "../models/index";
 import _ from "lodash";
 import emailService from "../services/emailService";
 require("dotenv").config();
@@ -104,6 +104,7 @@ let getScheduleByIdService = async (inputId) => {
         where: {
           hospitalId: inputId,
         },
+        order: sequelize.col('date'),
         include: [
           {
             model: db.Allcode,
