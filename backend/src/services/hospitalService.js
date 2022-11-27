@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db, { sequelize } from "../models/index";
 import _ from "lodash";
 import emailService from "../services/emailService";
 require("dotenv").config();
@@ -26,7 +26,7 @@ let bulkCreateScheduleService = async (data) => {
       //     return item;
       //   });
       // }
-      
+
       // compare different schedules: (+) to convert to int
       let toCreate = _.differenceWith(schedule, existing, (a, b) => {
         return a.timeType === b.timeType && a.date === b.date;
@@ -101,8 +101,9 @@ let getScheduleByIdService = async (inputId) => {
     } else {
       let data = await db.Schedule.findAll({
         where: {
-          id: inputId,
+          hospitalId: inputId,
         },
+        order: sequelize.col("date"),
         include: [
           {
             model: db.Allcode,
@@ -354,5 +355,5 @@ module.exports = {
   deleteScheduleService,
   updateScheduleService,
   getScheduleByIdService,
-  getEventByHospitalIdService
+  getEventByHospitalIdService,
 };
