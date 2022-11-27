@@ -29,7 +29,7 @@ let bulkCreateScheduleService = async (data) => {
 
       // compare different schedules: (+) to convert to int
       let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-        return a.timeType === b.timeType && a.date === b.date;
+        return a.timeType === b.timeType && +a.date === +b.date;
       });
       // create data
       if (toCreate && toCreate.length > 0) {
@@ -104,7 +104,10 @@ let getScheduleByIdService = async (inputId) => {
         where: {
           hospitalId: inputId,
         },
-        order: sequelize.col("date"),
+        order: [
+          ['date', 'asc'],
+          ['timeType', 'asc']
+       ],
         include: [
           {
             model: db.Allcode,

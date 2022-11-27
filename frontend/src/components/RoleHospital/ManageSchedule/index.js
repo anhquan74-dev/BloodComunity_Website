@@ -1,4 +1,3 @@
-import './ManageSchedule.scss';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useState } from 'react';
@@ -6,48 +5,53 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllTimeTypes } from '../../../redux/actions/allCodeAction';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { createSchedule } from '../../../redux/actions/hospitalServices';
+import { createSchedule, fetchAllSchedulesById } from '../../../redux/actions/hospitalServices';
 import Table from 'react-bootstrap/esm/Table';
 import { Button } from '@mui/material';
-import { formatDate } from '../../../utils/formatDay';
+import { formatDate } from '../../../utils/formatDate';
+import DeleteSchedule from './DeleteSchedule';
+import styles from './ManageSchedule.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 function ManageSchedule() {
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
     const [rangeTime, setRangeTime] = useState([]);
     const [maxNumber, setMaxNumber] = useState(20);
     const [listSchedules, setListSchedules] = useState([]);
+    const [showModalDelete, setShowModalDelete] = useState();
+    const [scheduleDelete, setScheduleDelete] = useState();
 
     const dispatch = useDispatch();
-
     const listTimeTypesRedux = useSelector((state) => state.allCode.listTimeTypes);
     const hospitalId = useSelector((state) => state.auth.login.currentUser.id);
+    const listSingleSchedules = useSelector((state) => state.hospital.listSingleSchedules);
+
     useEffect(() => {
         dispatch(fetchAllTimeTypes());
-        axios
-            .get('http://localhost:8080/api/get-schedule-hospital-by-id', { params: { id: hospitalId } })
-            .then((res) => {
-                // convert today -> timestamp to compare
-                const date = new Date(formatDate());
-                var timestamp = date.getTime();
-                console.log(date, timestamp);
-                const listSchedulesClone = res.data.content
-                    .filter((item) => +item.date >= timestamp)
-                    .map((item, index) => {
-                        const date = new Date(+item.date);
-                        console.log(date);
-                        const day = new Date(+item.date).getDate();
-                        const month = new Date(+item.date).getMonth() + 1;
-                        const year = new Date(+item.date).getFullYear();
-                        return {...item, date: `${day}/${month}/${year}`};
-                    });
-                console.log(listSchedulesClone);
-                setListSchedules(listSchedulesClone);
-            })
-            .catch((e) => console.log(e));
+        dispatch(fetchAllSchedulesById(hospitalId));
     }, []);
-    console.log(listSchedules);
+
+    useEffect(() => {
+        // convert today -> timestamp to compare
+        const date = new Date(formatDate());
+        const timestamp = date.getTime();
+
+        const listSchedulesClone = listSingleSchedules
+            ?.filter((item) => +item.date >= timestamp)
+            .map((item, index) => {
+                const date = new Date(+item.date);
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                return { ...item, date: `${day}/${month}/${year}` };
+            });
+            
+        setListSchedules(listSchedulesClone);
+    }, [listSingleSchedules]);
+
     useEffect(() => {
         let data = listTimeTypesRedux;
         if (data && data.length > 0) {
@@ -56,6 +60,7 @@ function ManageSchedule() {
         setRangeTime(data);
     }, [listTimeTypesRedux]);
 
+    // bat su kien khi click chon khung gio
     const handleClickBtnTime = (time) => {
         let rangeTimeClone = rangeTime;
         if (rangeTimeClone && rangeTimeClone.length > 0) {
@@ -68,7 +73,9 @@ function ManageSchedule() {
             setRangeTime(rangeTimeClone);
         }
     };
-    const handleCreateSchedule = async () => {
+
+    // bat su kien khi nhan nut tao lich (bulkCreate) khi nhan nut Luu thong tin
+    const handleCreateSchedule = () => {
         let result = [];
         const selectedTime = rangeTime.filter((item) => {
             return item.isSelected;
@@ -99,37 +106,43 @@ function ManageSchedule() {
             hospitalId,
             formatedDate: formatedDate,
         };
-        // await axios.post('http://localhost:8080/api/create-schedule', data)
-        await dispatch(createSchedule(data));
+        dispatch(createSchedule(data));
     };
 
+    // bat su kien onChange khi search
     const [queryDay, setQueryDay] = useState('');
     const search = (data) => {
         return data.filter((item) => item.date.includes(queryDay));
     };
+
+    // modal
+    const handleClose = () => {
+        setShowModalDelete(false);
+    };
+
+    const handleShowModalDelete = (item) => {
+        setShowModalDelete(true);
+        setScheduleDelete(item);
+    };
+
     return (
-        <div className="manage-schedule-container">
-            <div className="m-s-title">Quản lí lịch hiến máu của bệnh viện</div>
-            <div className="container">
-                <div className="row">
-                    <div className="col-12">
+        <>
+            <DeleteSchedule show={showModalDelete} handleClose={handleClose} scheduleDelete={scheduleDelete} />
+            <div className={cx('wrapper')}>
+                <h1>Quản lí lịch hiến máu của bệnh viện</h1>
+                <div className={cx('pick-schedule')}>
+                    <div>
                         <label>Chọn ngày</label>
                         <input
                             type="date"
                             name="date"
                             id="date"
-                            min={new Date()}
+                            min={formatDate()}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
-                        {/* <DatePicker
-                            dateFormat="dd/MM/yyyy"
-                            selected={startDate}
-                            onChange={handleChangeDatePicker}
-                            
-                        /> */}
                     </div>
-                    <div className="col-12">
-                        <label>Số lượng người hiến máu tối đa </label>
+                    <div>
+                        <label>Số lượng người hiến máu tối đa cho từng khung giờ</label>
                         <input
                             type="number"
                             id="maxNumber"
@@ -140,15 +153,15 @@ function ManageSchedule() {
                             onChange={(e) => setMaxNumber(e.target.value)}
                         ></input>
                     </div>
-                    <div className="col-12 pick-hour-container">
+                    <div>
                         {rangeTime &&
                             rangeTime.length > 0 &&
                             rangeTime.map((item, index) => {
                                 return (
                                     <button
-                                        className={
-                                            item.isSelected === true ? 'btn btn-schedule active' : 'btn btn-schedule'
-                                        }
+                                        className={cx('btn-pick', {
+                                            'btn-active': item.isSelected,
+                                        })}
                                         key={index}
                                         onClick={() => handleClickBtnTime(item)}
                                     >
@@ -157,9 +170,10 @@ function ManageSchedule() {
                                 );
                             })}
                     </div>
-                    <button className="btn btn-save col-1" onClick={handleCreateSchedule}>
-                        Lưu thông tin
-                    </button>
+                    <button onClick={handleCreateSchedule} disabled={!startDate}>Lưu thông tin</button>
+                </div>
+                <div className={cx('list-schedule')}>
+                    <h2>Danh sách lịch hẹn</h2>
                     <div>
                         <input
                             type="text"
@@ -167,10 +181,11 @@ function ManageSchedule() {
                             onChange={(e) => setQueryDay(e.target.value)}
                         />
                     </div>
-                    <div className="col-12 mt-4">
+                    <div className="">
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
+                                    <th>Id</th>
                                     <th>Ngày</th>
                                     <th>Khoảng thời gian</th>
                                     <th>Số lượng tối đa</th>
@@ -183,6 +198,7 @@ function ManageSchedule() {
                                     search(listSchedules).map((item, index) => {
                                         return (
                                             <tr key={`event ${index}`}>
+                                                <td>{item.id}</td>
                                                 <td>{item.date}</td>
                                                 <td>{item.timeTypeData.valueVi}</td>
                                                 <td>{item.maxNumber}</td>
@@ -191,7 +207,7 @@ function ManageSchedule() {
                                                     <Button
                                                         variant="outlined"
                                                         color="error"
-                                                        // onClick={() => handleShowModalDelete(event)}
+                                                        onClick={() => handleShowModalDelete(item)}
                                                     >
                                                         Xoá
                                                     </Button>
@@ -204,7 +220,7 @@ function ManageSchedule() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
