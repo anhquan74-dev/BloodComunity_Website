@@ -310,10 +310,11 @@ let handleGetTotalRecipient = async (req, res) => {
 };
 let handlePostBookingSchedule = async (req, res) => {
   try {
+    console.log("req body khiem", req.body);
     let infor = await userService.postBookingScheduleService(req.body);
-    return res.status(infor.statusCode).json(infor);
+    return res.status(201).json(infor);
   } catch (e) {
-    console.log(e);
+    console.log("Loi post booking",e);
     return res.status(500).json({
       statusCode: 500,
       message: "Lỗi từ Server",
