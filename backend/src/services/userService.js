@@ -433,7 +433,6 @@ let postBookingScheduleService = async (data) => {
         // language: data.language,
         redirectLink: buildUrlEmail(data.hospitalId, token),
       });
-
       await db.Booking.findOrCreate({
         where: {
           date: data.date,
@@ -448,7 +447,6 @@ let postBookingScheduleService = async (data) => {
           token: token,
         },
       });
-
       booking.statusCode = 201;
       booking.message = "Thành công!";
     }

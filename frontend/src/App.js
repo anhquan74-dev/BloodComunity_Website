@@ -34,6 +34,7 @@ import NotFound from './pages/NotFound';
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DonorProfile from './components/RoleDonor/DonorProfile';
+import VerifyBooking from './pages/VerifyBooking';
 
 
 function App() {
@@ -127,6 +128,8 @@ function App() {
                     </Route>
                     {/* Catch all */}
                     <Route path="*" element={<NotFound />}></Route>
+                    {/* veryfy booking schedule */}
+                    <Route path="/verify-booking/" element={<VerifyBooking />}></Route>
                 </Routes>
                 <ToastContainer autoClose={2000} theme="colored" />
             </div>

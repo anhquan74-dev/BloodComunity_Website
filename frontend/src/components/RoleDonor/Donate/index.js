@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllHospital, fetchHospitalById } from '../../../redux/actions/hospitalManage';
 import axios from 'axios';
 import { Buffer } from 'buffer';
+import {toast} from 'react-toastify';
+// import { info } from 'console';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
@@ -22,6 +24,7 @@ function Donate() {
     const dispatch = useDispatch();
     const hospitals = useSelector((state) => state.users.listHospitals);
     const hospital = useSelector((state) => state.users.hospital);
+    const user = useSelector((state) => state.auth.login.currentUser);
     const [date, setDate] = useState('choose');
     const [hospitalId, setHospitalId] = useState('');
     const [listScheduleByDate, setListScheduleByDate] = useState([]);
@@ -31,7 +34,6 @@ function Donate() {
     const capitalFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
-
     useEffect(() => {
         let arrDate = [
             {
@@ -48,18 +50,13 @@ function Donate() {
         }
         setAllDays(arrDate);
     }, []);
-    console.log(hospitals);
-
     const handleChangeHospital = (event) => {
         setHospitalId(event.target.value);
     };
-
     const handleChangeDate = (event) => {
         setDate(event.target.value);
     };
-
     const handleSearchSchedule = () => {
-        console.log(hospitalId, date);
         setHospitalId('');
         setDate('');
         axios
@@ -69,16 +66,34 @@ function Donate() {
         dispatch(fetchHospitalById(hospitalId));
     };
 
-    console.log(listScheduleByDate);
-    console.log('dayyy', allDays);
-    console.log(hospital);
-
     let previewImage = '';
     let imageBase64 = '';
     if (hospital?.image) {
         imageBase64 = new Buffer(hospital.image, 'base64').toString('binary');
     }
     previewImage = imageBase64;
+
+    const handleBookingSchedule = async (schedule) => {
+      // hiện lên modal confirm thông tin đặt lịch -> người dùng bấm confirm thì gọi api 
+      const dataSend = {
+        email: user.email,
+        hospitalId: hospital.id,
+        date: schedule.date,
+        fullName: user.firstName + ' ' + user.lastName,
+        hospitalName: hospital.hospitalName,
+        timeString: schedule.timeTypeData.valueVi + ' ngày ' + schedule.date,
+        timeType: schedule.timeType,
+        donorId: user.id,
+      }
+      const res  = await axios.post('http://localhost:8080/api/donor-booking-schedule',dataSend)
+      // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
+      if(res.data.statusCode === 201){
+        toast.success("Đặt lịch thành công, hãy check mail")
+      }else{
+        toast.error("Đặt lịch thaart bại vì:", res.data.mesage)
+      }
+
+    }
     return (
         <div className={cx('wrapper')}>
             <h2>Đặt lịch hiến máu</h2>
@@ -156,7 +171,7 @@ function Donate() {
                                         <p>
                                             {item.currentNumber}/{item.maxNumber} Người
                                         </p>
-                                        <span>Đặt lịch</span>
+                                        <span onClick={() => handleBookingSchedule(item)}>Đặt lịch</span>
                                     </div>
                                 </div>
                             );
