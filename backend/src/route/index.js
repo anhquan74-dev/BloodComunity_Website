@@ -101,7 +101,7 @@ let initWebRoutes = (app) => {
     "/api/verify-book-appointment",
     userController.handlePostVerifyBookingSchedule
   );
-  router.get('/api/get-newest-booking-of-user',userController.handleGetNewestBooking)
+  router.post('/api/get-newest-booking-of-user',userController.handleGetNewestBooking)
   // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
   // router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
