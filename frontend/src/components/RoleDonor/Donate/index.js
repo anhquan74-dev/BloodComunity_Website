@@ -28,6 +28,7 @@ function Donate() {
     const [isNotFoundSchedule, setIsNotFoundSchedule] = useState(null);
     const [showModalCheckMail, setShowModalCheckMail] = useState(false);
     const [statusCode, setStatusCode] = useState(null);
+    const [isLoadingSendEmail, setIsLoadingSendEmail] = useState(false);
 
     const dispatch = useDispatch();
     const hospitals = useSelector((state) => state.users.listHospitals);
@@ -36,6 +37,10 @@ function Donate() {
 
     const handleClose = () => {
         setShowModalCheckMail(false);
+        setHospitalId('');
+        setDate('');
+        setIsNotFoundSchedule(null);
+        setListScheduleByDate([]);
     };
 
     const capitalFirstLetter = (string) => {
@@ -93,115 +98,135 @@ function Donate() {
 
     const handleBookingSchedule = async (schedule) => {
         // hiện lên modal confirm thông tin đặt lịch -> người dùng bấm confirm thì gọi api
+        const date = new Date(Number(schedule.date));
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
         const dataSend = {
             email: user.email,
             hospitalId: hospital.id,
             date: schedule.date,
             fullName: user.firstName + ' ' + user.lastName,
             hospitalName: hospital.hospitalName,
-            timeString: schedule.timeTypeData.valueVi + ' ngày ' + schedule.date,
+            timeString: schedule.timeTypeData.valueVi + ' ngày ' + `${day}/${month}/${year}`,
             timeType: schedule.timeType,
             donorId: user.id,
         };
-        // const res = await axios.post('http://localhost:8080/api/donor-booking-schedule', dataSend);
-        // // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
-        // if (res.data.statusCode === 201) {
-        //     setStatusCode(201);
-        // } else {
-        //     setStatusCode(null);
-        // }
+        console.log(dataSend);
+        setIsLoadingSendEmail(true);
+        const res = await axios.post('http://localhost:8080/api/donor-booking-schedule', dataSend);
+        // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
+        setIsLoadingSendEmail(false);
+        if (res.data.statusCode === 201) {
+            setStatusCode(201);
+        } else {
+            setStatusCode(null);
+        }
         console.log(dataSend);
         setShowModalCheckMail(true);
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <ModalCheckMail show={showModalCheckMail} handleClose={handleClose} statusCode={statusCode} />
-            <h2>Đặt lịch hiến máu</h2>
-            <div className={cx('content')}>
-                <div className={cx('place')}>
-                    <p>Đơn vị tổ chức:</p>
-                    <FormControl style={{ fontSize: '1.4rem' }} fullWidth>
-                        <InputLabel id="demo-simple-select-label" style={{ fontSize: '1.4rem' }}>
-                            Đơn vị tổ chức
-                        </InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={hospitalId}
-                            label="hospital"
-                            onChange={handleChangeHospital}
-                        >
-                            {hospitals.map((hospital, index) => (
-                                <MenuItem key={index} value={hospital.id} style={{ fontSize: '1.4rem' }}>
-                                    {hospital.hospitalName}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+        <>
+            {isLoadingSendEmail && (
+                <div className="loader-container">
+                    <div className="spinner"></div>
                 </div>
-                <div className={cx('search')}>
-                    <h3>Ban cần đặt lịch vào thời gian nào?</h3>
-                    <div className={cx('datepicker')}>
-                        <div className="all-schedule">
-                            <select onChange={handleChangeDate} value={date}>
-                                {allDays &&
-                                    allDays.length > 0 &&
-                                    allDays.map((item, index) => {
-                                        return (
-                                            <option value={item.value} key={index}>
-                                                {item.label}
-                                            </option>
-                                        );
-                                    })}
-                            </select>
+            )}
+            <div className={cx('wrapper')}>
+                <ModalCheckMail show={showModalCheckMail} handleClose={handleClose} statusCode={statusCode} />
+                <h2>Đặt lịch hiến máu</h2>
+                <div className={cx('content')}>
+                    <div className={cx('place')}>
+                        <p>Đơn vị tổ chức:</p>
+                        <FormControl style={{ fontSize: '1.4rem' }} fullWidth>
+                            <InputLabel id="demo-simple-select-label" style={{ fontSize: '1.4rem' }}>
+                                Đơn vị tổ chức
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={hospitalId}
+                                label="hospital"
+                                onChange={handleChangeHospital}
+                            >
+                                {hospitals.map((hospital, index) => (
+                                    <MenuItem key={index} value={hospital.id} style={{ fontSize: '1.4rem' }}>
+                                        {hospital.hospitalName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className={cx('search')}>
+                        <h3>Ban cần đặt lịch vào thời gian nào?</h3>
+                        <div className={cx('datepicker')}>
+                            <div className="all-schedule">
+                                <select onChange={handleChangeDate} value={date}>
+                                    {allDays &&
+                                        allDays.length > 0 &&
+                                        allDays.map((item, index) => {
+                                            return (
+                                                <option value={item.value} key={index}>
+                                                    {item.label}
+                                                </option>
+                                            );
+                                        })}
+                                </select>
+                            </div>
+                            <button
+                                className={cx('searchBtn')}
+                                onClick={handleSearchSchedule}
+                                disabled={date === 'choose' || !hospitalId}
+                            >
+                                Tìm kiếm
+                            </button>
                         </div>
-                        <button
-                            className={cx('searchBtn')}
-                            onClick={handleSearchSchedule}
-                            disabled={date === 'choose' || !hospitalId}
-                        >
-                            Tìm kiếm
-                        </button>
+                    </div>
+
+                    <div className={cx('result')}>
+                        <h3>Kết quả</h3>
+                        {isNotFoundSchedule && isNotFoundSchedule}
+                        {!isNotFoundSchedule &&
+                            listScheduleByDate &&
+                            listScheduleByDate.map((item, index) => {
+                                return (
+                                    <div className={cx('schedule')} key={index}>
+                                        <div className={cx('info')}>
+                                            <div className={cx('image')}>
+                                                {/* <img src={require('../../../assets/images/bg_3.jpg')} alt="hospital" /> */}
+                                                {previewImage ? (
+                                                    <img src={previewImage} alt="hospital-image" />
+                                                ) : (
+                                                    <span>Preview Image</span>
+                                                )}
+                                            </div>
+                                            <div className={cx('detail')}>
+                                                <h3>{hospital.hospitalName}</h3>
+                                                <p>{hospital.address}</p>
+                                                <p className={cx('timeType')}>{item.timeTypeData.valueVi}</p>
+                                            </div>
+                                        </div>
+                                        <div className={cx('booking')}>
+                                            <p>Đã đăng ký</p>
+                                            <p>
+                                                {item.currentNumber}/{item.maxNumber} Người
+                                            </p>
+                                            <button
+                                                onClick={() => handleBookingSchedule(item)}
+                                                disabled={item.currentNumber === item.maxNumber}
+                                            >
+                                                Đặt lịch
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                     </div>
                 </div>
-
-                <div className={cx('result')}>
-                    <h3>Kết quả</h3>
-                    {isNotFoundSchedule && isNotFoundSchedule}
-                    {!isNotFoundSchedule &&
-                        listScheduleByDate &&
-                        listScheduleByDate.map((item, index) => {
-                            return (
-                                <div className={cx('schedule')} key={index}>
-                                    <div className={cx('info')}>
-                                        <div className={cx('image')}>
-                                            {/* <img src={require('../../../assets/images/bg_3.jpg')} alt="hospital" /> */}
-                                            {previewImage ? (
-                                                <img src={previewImage} alt="hospital-image" />
-                                            ) : (
-                                                <span>Preview Image</span>
-                                            )}
-                                        </div>
-                                        <div className={cx('detail')}>
-                                            <h3>{hospital.hospitalName}</h3>
-                                            <p>{hospital.address}</p>
-                                            <p className={cx('timeType')}>{item.timeTypeData.valueVi}</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx('booking')}>
-                                        <p>Đã đăng ký</p>
-                                        <p>
-                                            {item.currentNumber}/{item.maxNumber} Người
-                                        </p>
-                                        <span onClick={() => handleBookingSchedule(item)}>Đặt lịch</span>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                </div>
             </div>
-        </div>
+        </>
     );
 }
 

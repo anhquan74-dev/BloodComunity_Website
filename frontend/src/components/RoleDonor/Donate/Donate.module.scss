@@ -9,6 +9,7 @@
 
 .search {
     padding: 0 40px;
+
     h3 {
         margin     : 2px 0;
         font-weight: 600;
@@ -54,10 +55,11 @@
 }
 
 .place {
-    padding: 40px;
-    display: flex;
+    padding        : 40px;
+    display        : flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items    : center;
+
     p {
         width      : 160px;
         font-weight: 600;
@@ -118,7 +120,8 @@
     justify-content: flex-start;
     gap            : 6px;
     margin         : 16px 0 0 16px;
-    align-items: flex-start;
+    align-items    : flex-start;
+
     h3 {
         font-size  : 16px;
         font-weight: 800;
@@ -152,7 +155,7 @@
         }
     }
 
-    span {
+    button {
         padding         : 10px 16px;
         background-color: var(--second);
         color           : white;
@@ -164,15 +167,20 @@
         &:hover {
             background-color: #881919;
         }
+
+        &:disabled {
+            pointer-events: none;
+            opacity       : 0.5;
+        }
     }
 }
 
 .timeType {
     // border       : 2px solid var(--primary);
     border-radius: 4px;
-    display: inline;
-    background: #344D67;
-    padding: 6px 12px;
-    font-weight: 500;
-    color: #FFFBC1;
+    display      : inline;
+    background   : #344D67;
+    padding      : 6px 12px;
+    font-weight  : 500;
+    color        : #FFFBC1;
 }
