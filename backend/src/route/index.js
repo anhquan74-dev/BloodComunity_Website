@@ -48,6 +48,10 @@ let initWebRoutes = (app) => {
     "/api/verify-reset-password",
     userController.handlePostVerifyResetPassword
   );
+  router.post(
+    "/api/increase-current-number",
+    hospitalController.handleIncreaseCurrentNumber
+  )
   // B7: Dựa vào message từ api để hiển thị ra giao diện rồi set Time out khoảng 3 giây để redirect lại trang đăng nhập
 
   //Event
