@@ -3,7 +3,28 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+let getNewestBookingService = async (data) => {
+  console.log("data user id khiem",data.id);
+  try{
+    let bookingSearch = {}
+    const [results, metadata] = await sequelize.query(
+      `SELECT * FROM bookings where bookings.donorId = ${data.id} and status='S2' ORDER BY id DESC LIMIT 1`,
+      { tupleFormat: "array" }
+    );
+    if (results.length === 0) {
+      bookingSearch.statusCode = 404;
+      bookingSearch.message = "Không tìm thấy lịch hẹn nào!";
+    } else {
+      bookingSearch.statusCode = 200;
+      bookingSearch.message = "Tìm kiếm thành công!";
+      bookingSearch.content = results;
+    }
+    return bookingSearch;
+  }catch(e){
+    console.log(e);
+  }
 
+}
 let getUserSearchService = async (keyWord) => {
   try {
     let userSearch = {}
@@ -95,7 +116,11 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
-
+    console.log("user info login", checkUserEmail)
+    const infoToGenerateToken = {
+      roleId: checkUserEmail.roleId,
+      email: checkUserEmail.email
+    }
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";
@@ -115,7 +140,7 @@ let loginService = async (email, password) => {
           userData.message = "Mật khẩu của bạn không khớp!";
           userData.content = {};
         } else {
-          const token = authController.generateToken(checkUserEmail);
+          const token = authController.generateToken(infoToGenerateToken);
           const data = {
             id: checkUserEmail.id,
             email: checkUserEmail.email,
@@ -559,5 +584,6 @@ module.exports = {
   postResetPasswordService,
   postVerifyResetPassword,
   getUserSearchService,
-  searchUserPaginationService
+  searchUserPaginationService,
+  getNewestBookingService
 };

@@ -1,4 +1,23 @@
 import userService from "../services/userService";
+let handleGetNewestBooking = async (req, res) => {
+  try{  
+    if (!req.body) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu thông tin cần thiết!",
+      });
+    } else {
+      let booking = await userService.getNewestBookingService(req.body);
+      res.status(booking.statusCode).json(booking);
+    }
+  }catch(e){
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleSearchUser = async (req, res) => {
   try {
     let keyWord = await req.query.keyWord;
@@ -391,5 +410,6 @@ module.exports = {
   handlePostVerifyResetPassword,
   handleGetTopDonor,
   handleSearchUser,
-  handleSearchUserPagination
+  handleSearchUserPagination,
+  handleGetNewestBooking
 };

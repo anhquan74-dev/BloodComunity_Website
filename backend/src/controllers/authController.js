@@ -23,9 +23,67 @@ const decodeToken = (token) => {
 const verifyTokenAdmin = (req, res, next) => {
   const token = req.headers.authorization;
   const checkToken = decodeToken(token);
+  console.log("check admin",checkToken.data.roleId);
   if (checkToken) {
-    // check role
-    if (checkToken.data.maLoaiNguoiDung === "QuanTri") {
+    if (checkToken.data.roleId === "R1") {
+      next();
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Bạn không có quyền truy cập",
+      });
+    }
+  } else {
+    res.send({
+      statusCode: 400,
+      message: "Token không tồn tại",
+    });
+  }
+};
+const verifyTokenHospital = (req, res, next) => {
+  const token = req.headers.authorization;
+  const checkToken = decodeToken(token);
+  if (checkToken) {
+    if (checkToken.data.roleId === "R2") {
+      next();
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Bạn không có quyền truy cập",
+      });
+    }
+  } else {
+    res.send({
+      statusCode: 400,
+      message: "Token không tồn tại",
+    });
+  }
+};
+const verifyTokenDonor = (req, res, next) => {
+  const token = req.headers.authorization;
+  const checkToken = decodeToken(token);
+  console.log("check donor khiem", checkToken.data.roleId)
+  if (checkToken) {
+    if (checkToken.data.roleId === "R3") {
+      next();
+    } else {
+      res.send({
+        statusCode: 401,
+        message: "Bạn không có quyền truy cập",
+      });
+    }
+  } else {
+    res.send({
+      statusCode: 400,
+      message: "Token không tồn tại",
+    });
+  }
+};
+const verifyTokenRecipient = (req, res, next) => {
+  const token = req.headers.authorization;
+  const checkToken = decodeToken(token);
+  if (checkToken) {
+    if (checkToken.data.roleId === "R4") {
       next();
     } else {
       res.send({
@@ -70,5 +128,8 @@ module.exports = {
   generateToken,
   decodeToken,
   verifyTokenAdmin,
+  verifyTokenHospital,
+  verifyTokenDonor,
+  verifyTokenRecipient,
   verifyToken,
 };
