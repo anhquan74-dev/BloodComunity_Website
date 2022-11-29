@@ -27,7 +27,7 @@
 }
 
 .active {
-    color: var(--second);
+    color: var(--second) !important;
     &::before {
         width: 5px;
     }

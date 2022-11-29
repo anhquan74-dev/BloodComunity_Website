@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllHospital, fetchHospitalById } from '../../../redux/actions/hospitalManage';
 import axios from 'axios';
 import { Buffer } from 'buffer';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
+import ModalCheckMail from './ModalCheckMail/ModalCheckMail';
 // import { info } from 'console';
 Buffer.from('anything', 'base64');
 
@@ -21,19 +22,30 @@ const cx = classNames.bind(styles);
 
 function Donate() {
     const [allDays, setAllDays] = useState([]);
+    const [date, setDate] = useState('choose');
+    const [hospitalId, setHospitalId] = useState('');
+    const [listScheduleByDate, setListScheduleByDate] = useState([]);
+    const [isNotFoundSchedule, setIsNotFoundSchedule] = useState(null);
+    const [showModalCheckMail, setShowModalCheckMail] = useState(false);
+    const [statusCode, setStatusCode] = useState(null);
+
     const dispatch = useDispatch();
     const hospitals = useSelector((state) => state.users.listHospitals);
     const hospital = useSelector((state) => state.users.hospital);
     const user = useSelector((state) => state.auth.login.currentUser);
-    const [date, setDate] = useState('choose');
-    const [hospitalId, setHospitalId] = useState('');
-    const [listScheduleByDate, setListScheduleByDate] = useState([]);
-    useEffect(() => {
-        dispatch(fetchAllHospital());
-    }, []);
+
+    const handleClose = () => {
+        setShowModalCheckMail(false);
+    };
+
     const capitalFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
+
+    useEffect(() => {
+        dispatch(fetchAllHospital());
+    }, []);
+
     useEffect(() => {
         let arrDate = [
             {
@@ -50,19 +62,25 @@ function Donate() {
         }
         setAllDays(arrDate);
     }, []);
+
     const handleChangeHospital = (event) => {
         setHospitalId(event.target.value);
     };
+
     const handleChangeDate = (event) => {
         setDate(event.target.value);
     };
+
     const handleSearchSchedule = () => {
-        setHospitalId('');
-        setDate('');
+        // setHospitalId('');
+        // setDate('');
         axios
             .get('http://localhost:8080/api/get-schedule-hospital-by-date', { params: { hospitalId, date } })
-            .then((res) => setListScheduleByDate(res.data.content))
-            .catch((e) => console.log(e));
+            .then((res) => {
+                setListScheduleByDate(res.data.content);
+                setIsNotFoundSchedule(null);
+            })
+            .catch((e) => setIsNotFoundSchedule(e.response.data.message));
         dispatch(fetchHospitalById(hospitalId));
     };
 
@@ -74,28 +92,31 @@ function Donate() {
     previewImage = imageBase64;
 
     const handleBookingSchedule = async (schedule) => {
-      // hiện lên modal confirm thông tin đặt lịch -> người dùng bấm confirm thì gọi api 
-      const dataSend = {
-        email: user.email,
-        hospitalId: hospital.id,
-        date: schedule.date,
-        fullName: user.firstName + ' ' + user.lastName,
-        hospitalName: hospital.hospitalName,
-        timeString: schedule.timeTypeData.valueVi + ' ngày ' + schedule.date,
-        timeType: schedule.timeType,
-        donorId: user.id,
-      }
-      const res  = await axios.post('http://localhost:8080/api/donor-booking-schedule',dataSend)
-      // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
-      if(res.data.statusCode === 201){
-        toast.success("Đặt lịch thành công, hãy check mail")
-      }else{
-        toast.error("Đặt lịch thaart bại vì:", res.data.mesage)
-      }
+        // hiện lên modal confirm thông tin đặt lịch -> người dùng bấm confirm thì gọi api
+        const dataSend = {
+            email: user.email,
+            hospitalId: hospital.id,
+            date: schedule.date,
+            fullName: user.firstName + ' ' + user.lastName,
+            hospitalName: hospital.hospitalName,
+            timeString: schedule.timeTypeData.valueVi + ' ngày ' + schedule.date,
+            timeType: schedule.timeType,
+            donorId: user.id,
+        };
+        // const res = await axios.post('http://localhost:8080/api/donor-booking-schedule', dataSend);
+        // // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
+        // if (res.data.statusCode === 201) {
+        //     setStatusCode(201);
+        // } else {
+        //     setStatusCode(null);
+        // }
+        console.log(dataSend);
+        setShowModalCheckMail(true);
+    };
 
-    }
     return (
         <div className={cx('wrapper')}>
+            <ModalCheckMail show={showModalCheckMail} handleClose={handleClose} statusCode={statusCode} />
             <h2>Đặt lịch hiến máu</h2>
             <div className={cx('content')}>
                 <div className={cx('place')}>
@@ -147,7 +168,9 @@ function Donate() {
 
                 <div className={cx('result')}>
                     <h3>Kết quả</h3>
-                    {listScheduleByDate &&
+                    {isNotFoundSchedule && isNotFoundSchedule}
+                    {!isNotFoundSchedule &&
+                        listScheduleByDate &&
                         listScheduleByDate.map((item, index) => {
                             return (
                                 <div className={cx('schedule')} key={index}>
