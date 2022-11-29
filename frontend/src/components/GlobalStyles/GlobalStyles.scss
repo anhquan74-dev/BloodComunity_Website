@@ -5,40 +5,41 @@
 // @tailwind utilities;
 
 :root {
-    --primary: #e64848;
-    --second: #c21010;
-    --third: #fffde3;
-    --fourth: #cfe8a9;
-    --hover: rgb(207, 33, 33);
-    --text-primary: #393939;
+    --primary      : #e64848;
+    --second       : #c21010;
+    --third        : #fffde3;
+    --fourth       : #cfe8a9;
+    --hover        : rgb(207, 33, 33);
+    --text-primary : #393939;
     --error-message: #ed4337;
-    --error-bg: #ed43371c;
-    --success: #4bb543;
-    --wanted: #ffc107;
+    --error-bg     : #ed43371c;
+    --success      : #4bb543;
+    --wanted       : #ffc107;
 }
 
 ::selection {
     background-color: var(--primary);
-    color: white;
+    color           : white;
 }
+
 // html {
 // -ms-overflow-style: none;
 // scrollbar-width: none;
 // }
 html::-webkit-scrollbar {
     border-radius: 0;
-    height: 8px;
-    width: 8px;
+    height       : 8px;
+    width        : 8px;
 }
 
 html::-webkit-scrollbar-thumb {
-    background-color: rgba(0,0,0,.15);
-    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .15);
+    border-radius   : 4px;
 }
 
 * {
-    margin: 0;
-    padding: 0;
+    margin    : 0;
+    padding   : 0;
     box-sizing: border-box;
 }
 
@@ -47,15 +48,15 @@ html {
 }
 
 body {
-    overflow: unset;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.6rem;
-    line-height: 1.5;
+    overflow      : unset;
+    font-family   : 'Montserrat', sans-serif;
+    font-size     : 1.6rem;
+    line-height   : 1.5;
     text-rendering: optimizeSpeed;
 }
 
 .errorFormik {
-    border: 1px solid var(--error-message);
+    border          : 1px solid var(--error-message);
     background-color: var(--error-bg);
 }
 
