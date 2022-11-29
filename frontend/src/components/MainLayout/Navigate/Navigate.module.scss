@@ -4,7 +4,7 @@
     position: relative;
     display: block;
     font-weight: 500;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     > div {
         padding: 8px 12px;
         margin: 0 6px 0 10px;

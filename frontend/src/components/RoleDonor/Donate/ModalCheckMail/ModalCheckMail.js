@@ -20,7 +20,7 @@ const ModalCheckMail = ({ show, handleClose, statusCode }) => {
                 ) : (
                     <>
                         <h2>Đặt lịch hẹn thất bại!</h2>
-                        <p>Bạn không thể đặt lịch hẹn trong một thời điểm nhất định! (ít nhất 3 tháng)</p>
+                        <p>Bạn chỉ có thể đăng ký 1 đơn hiến máu tại 1 thời điểm! (ít nhất 3 tháng)</p>
                     </>
                 )}
             </Modal.Body>

@@ -15,6 +15,8 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import { toast } from 'react-toastify';
 import ModalCheckMail from './ModalCheckMail/ModalCheckMail';
+import { fecthNewestDonorBooking } from '../../../redux/actions/hospitalServices';
+import { monthDiff } from '../../../utils/monthDiff';
 // import { info } from 'console';
 Buffer.from('anything', 'base64');
 
@@ -34,6 +36,7 @@ function Donate() {
     const hospitals = useSelector((state) => state.users.listHospitals);
     const hospital = useSelector((state) => state.users.hospital);
     const user = useSelector((state) => state.auth.login.currentUser);
+    const newestDonorBooking = useSelector((state) => state.hospital.newestDonorBooking);
 
     const handleClose = () => {
         setShowModalCheckMail(false);
@@ -50,6 +53,11 @@ function Donate() {
     useEffect(() => {
         dispatch(fetchAllHospital());
     }, []);
+
+    useEffect(() => {
+        dispatch(fecthNewestDonorBooking(user));
+    }, []);
+    console.log(newestDonorBooking);
 
     useEffect(() => {
         let arrDate = [
@@ -96,7 +104,17 @@ function Donate() {
     }
     previewImage = imageBase64;
 
+    const checkDonorBooking = () => {
+        const newestDateBooking = Number(newestDonorBooking?.date);
+        return monthDiff(new Date(newestDateBooking), new Date());
+    };
+
     const handleBookingSchedule = async (schedule) => {
+        if (checkDonorBooking() <= 3) {
+            setStatusCode(null);
+            setShowModalCheckMail(true);
+            return;
+        }
         // hiện lên modal confirm thông tin đặt lịch -> người dùng bấm confirm thì gọi api
         const date = new Date(Number(schedule.date));
         const day = date.getDate();
