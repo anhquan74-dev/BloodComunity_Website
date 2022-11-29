@@ -2,7 +2,43 @@ import db, { sequelize } from "../models/index";
 import _ from "lodash";
 import emailService from "../services/emailService";
 require("dotenv").config();
-
+const increaseCurrentNumberService = async(data) => {
+  try{
+    let object = {}
+    if(!data.token){
+      object.statusCode = 422;
+      object.message = "Thiếu token"
+    }else{
+      let booking = await db.Booking.findOne({
+        where: { token: data.token },
+      }) 
+      let schedule = await db.Schedule.findOne({
+        where: {
+          date: booking.date,
+          timeType: booking.timeType
+        }
+      })
+      if(schedule.currentNumber < schedule.maxNumber){
+        // update current number
+        await db.Schedule.update(
+          { currentNumber: sequelize.literal('currentNumber + 1') },
+          { where: { 
+            date: booking.date,
+            timeType: booking.timeType 
+          }}
+        )
+        object.statusCode = 200;
+        object.message = "Cập nhật thành công"
+      }else{
+        object.statusCode = 400;
+        object.message = "Số người hiến máu đã đạt giới hạn"
+      }
+    }
+    return object;
+  }catch(e){
+    console.log(e);
+  }
+}
 let bulkCreateScheduleService = async (data) => {
   try {
     let scheduleCreate = {};
@@ -360,4 +396,5 @@ module.exports = {
   updateScheduleService,
   getScheduleByIdService,
   getEventByHospitalIdService,
+  increaseCurrentNumberService
 };

@@ -312,7 +312,7 @@ let handlePostBookingSchedule = async (req, res) => {
   try {
     console.log("req body khiem", req.body);
     let infor = await userService.postBookingScheduleService(req.body);
-    return res.status(201).json(infor);
+    return res.status(infor.statusCode).json(infor);
   } catch (e) {
     console.log("Loi post booking",e);
     return res.status(500).json({

@@ -8,27 +8,45 @@ export default function VerifyBooking() {
   const urlParams = new URLSearchParams(location.search)
   const token = urlParams.get('token')
   const hospitalId = urlParams.get('hospitalId')
-  const [statusVerify,setStatusVerify] = useState(false)
+  const [statusVerify,setStatusVerify] = useState(0)
+  // 0: thông tin verify không đúng với thông tin trong db
+  // 1: thông tin đúng nhưng curentNumber >= maxNumber
+  // 2: đặt lịch thành công
   const dataVerify = {
     hospitalId,token
   }
   useEffect( ()=>{
     axios.post('http://localhost:8080/api/verify-book-appointment',dataVerify).then((res)=> {
-      console.log('res status: ' , res.data.statusCode);
       if(res.data.statusCode === 200){
-        setStatusVerify(true)
+        axios.post('http://localhost:8080/api/increase-current-number',dataVerify).then((res)=> {
+          if(res.data.statusCode === 200){
+            setStatusVerify(2)
+          }else{
+            setStatusVerify(1)
+          }
+        })
+      }else{
+        setStatusVerify(0)
       }
     })
   },[])
-  const handleNavigate = () => {
-    navigate('/donor/manage_schedule')
-  }
+
   return (
     <>
-    {statusVerify === true ? 
-    <div><p>Đặt lịch hiến máu thành công, mọi thông tin liên hệ .....</p>
-      <div onClick={handleNavigate}>Quay lại trang quản lý lịch hẹn</div>
-    </div> : <div>Đặt lịch hiến máu thất bại</div>}
+    {statusVerify === 2 ? 
+    <div>
+      <p>Đặt lịch hiến máu thành công, mọi thông tin liên hệ .....</p>
+      <div onClick={() => {navigate('/donor/manage_schedule')}}>Quay lại trang quản lý lịch hẹn</div>
+    </div> 
+    : 
+      statusVerify === 1 ? <div>
+        <p>Số người hiến máu trong khung giờ này đã đạt tối đa, bạn hãy chọn khung giờ khác</p>
+        <div onClick={() => {navigate('/donor/donate')}}>Quay lại trang đặt lịch hẹn</div>
+      </div> : <div>
+        <p>Đặt lịch thất bại, bạn đã đặt lịch hẹn này từ trước</p>
+        <div onClick={() => {navigate('/donor/donate')}}>Quay lại trang đặt lịch hẹn</div>
+      </div>
+    }
     </>
   )
 }
