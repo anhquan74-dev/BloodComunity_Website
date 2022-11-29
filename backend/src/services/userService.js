@@ -432,7 +432,7 @@ let getTotalRecipientService = async () => {
   }
 };
 let buildUrlEmail = (hospitalId, token) => {
-  let result = `${process.env.URL_REACT}/verify-booking?token=${token}&hospitalId=${hospitalId}`;
+  let result = `${process.env.URL_REACT}/donor/verify-booking?token=${token}&hospitalId=${hospitalId}`;
   return result;
 };
 let postBookingScheduleService = async (data) => {
