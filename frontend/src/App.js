@@ -36,7 +36,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import DonorProfile from './components/RoleDonor/DonorProfile';
 import VerifyBooking from './pages/VerifyBooking';
 
-
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
     return (
@@ -107,6 +106,8 @@ function App() {
                         <Route path="events" element={<DonateEvents />} />
                         <Route path="reward" element={<DonorRank />} />
                         <Route path="account" element={<DonorProfile />} />
+                        {/* veryfy booking schedule */}
+                        <Route path="verify-booking" element={<VerifyBooking />}></Route>
                     </Route>
                     <Route
                         path="/recipient"
@@ -128,8 +129,6 @@ function App() {
                     </Route>
                     {/* Catch all */}
                     <Route path="*" element={<NotFound />}></Route>
-                    {/* veryfy booking schedule */}
-                    <Route path="/verify-booking/" element={<VerifyBooking />}></Route>
                 </Routes>
                 <ToastContainer autoClose={2000} theme="colored" />
             </div>
