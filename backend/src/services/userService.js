@@ -116,11 +116,6 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
-    console.log("user info login", checkUserEmail)
-    const infoToGenerateToken = {
-      roleId: checkUserEmail.roleId,
-      email: checkUserEmail.email
-    }
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";
@@ -140,6 +135,10 @@ let loginService = async (email, password) => {
           userData.message = "Mật khẩu của bạn không khớp!";
           userData.content = {};
         } else {
+          const infoToGenerateToken = {
+            roleId: checkUserEmail.roleId,
+            email: checkUserEmail.email
+          }
           const token = authController.generateToken(infoToGenerateToken);
           const data = {
             id: checkUserEmail.id,
