@@ -1,4 +1,23 @@
 import userService from "../services/userService";
+let handleDeleteBookingById = async (req, res) => {
+  try{  
+    if (!req.body) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu thông tin cần thiết!",
+      });
+    } else {
+      let booking = await userService.deleteBookingByIdService(req.body);
+      res.status(booking.statusCode).json(booking);
+    }
+  }catch(e){
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleGetNewestBooking = async (req, res) => {
   try{  
     if (!req.body) {
@@ -411,5 +430,6 @@ module.exports = {
   handleGetTopDonor,
   handleSearchUser,
   handleSearchUserPagination,
-  handleGetNewestBooking
+  handleGetNewestBooking,
+  handleDeleteBookingById
 };

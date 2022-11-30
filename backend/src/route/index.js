@@ -101,40 +101,13 @@ let initWebRoutes = (app) => {
     "/api/verify-book-appointment",
     userController.handlePostVerifyBookingSchedule
   );
-  router.post('/api/get-newest-booking-of-user',userController.handleGetNewestBooking)
-  // router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
-  // router.get("/api/get-all-doctors", doctorController.getAllDoctors);
-  // router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
-  // router.get(
-  //   "/api/get-extra-infor-doctor-by-id",
-  //   doctorController.getExtraInforDoctorById
-  // );
-  // router.get(
-  //   "/api/get-profile-doctor-by-id",
-  //   doctorController.getProfileDoctorById
-  // );
-  // router.get(
-  //   "/api/get-list-patient-for-doctor",
-  //   doctorController.getListPatientForDoctor
-  // );
-  // router.post("/api/send-remedy", doctorController.sendRemedy);
-  //Patient
+  router.post('/api/get-newest-booking-of-user', userController.handleGetNewestBooking)
 
-  //Specialty
-  router.post("/api/create-new-specialty", specialtyController.createSpecialty);
-  router.get("/api/get-specialty", specialtyController.getAllSpecialty);
-  router.get(
-    "/api/get-detail-specialty-by-id",
-    specialtyController.getDetailSpecialtyById
-  );
-  //Clinic
-  router.post("/api/create-new-clinic", clinicController.createClinic);
-  router.get("/api/get-clinic", clinicController.getAllClinic);
-  router.get(
-    "/api/get-detail-clinic-by-id",
-    clinicController.getDetailClinicById
-  );
 
+  // booking
+  router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById)
+  router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)
+  router.get('/api/get-all-booking-by-donor-id',hospitalController.handleGetBookingsByDonorId)
   //Home
   return app.use("/", router);
 };

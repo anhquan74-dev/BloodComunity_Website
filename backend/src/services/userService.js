@@ -275,6 +275,27 @@ let getAllCodeService = async (typeInput) => {
     console.log(e);
   }
 };
+let deleteBookingByIdService = async (data) => {
+  try {
+    let message = {};
+    let booking = await db.Booking.findOne({
+      where: { id: data.id },
+    });
+    if (!booking) {
+      message.statusCode = 404;
+      message.message = "Không tìm thấy!!";
+    } else {
+      await db.Booking.destroy({
+        where: { id: data.id },
+      });
+      message.statusCode = 200;
+      message.message = "Xóa thành công!";
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
+}
 let deleteUserService = async (data) => {
   try {
     let message = {};
@@ -588,5 +609,6 @@ module.exports = {
   postVerifyResetPassword,
   getUserSearchService,
   searchUserPaginationService,
-  getNewestBookingService
+  getNewestBookingService,
+  deleteBookingByIdService
 };
