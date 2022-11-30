@@ -49,7 +49,7 @@ function App() {
                         path="/admin"
                         render
                         element={
-                            currentUser === null || currentUser.roleId !== 'R1' ? (
+                            currentUser === null || currentUser?.roleId !== 'R1' ? (
                                 <Navigate replace to={'/'} />
                             ) : (
                                 <AdminPage />
@@ -73,7 +73,7 @@ function App() {
                     <Route
                         path="/hospital"
                         element={
-                            currentUser === null || currentUser.roleId !== 'R2' ? (
+                            currentUser === null || currentUser?.roleId !== 'R2' ? (
                                 <Navigate replace to={'/'} />
                             ) : (
                                 <HospitalPage />
@@ -90,7 +90,7 @@ function App() {
                     <Route
                         path="/donor"
                         element={
-                            currentUser === null || currentUser.roleId !== 'R3' ? (
+                            currentUser === null || currentUser?.roleId !== 'R3' ? (
                                 <Navigate replace to={'/'} />
                             ) : (
                                 <DonorPage />
@@ -112,7 +112,7 @@ function App() {
                     <Route
                         path="/recipient"
                         element={
-                            currentUser === null || currentUser.roleId !== 'R4' ? (
+                            currentUser === null || currentUser?.roleId !== 'R4' ? (
                                 <Navigate replace to={'/'} />
                             ) : (
                                 <RecipientPage />
