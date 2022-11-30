@@ -1,5 +1,23 @@
 import hospitalService from "../services/hospitalService";
-
+const handleConfirmBookingByHospital =  async (req,res) => {
+  try {
+    if (!req.body) {
+      res.status(422).json({
+        statusCode: 422,
+        message: "Thiếu thông số bắt buộc!",
+      });
+    } else {
+      let status = await hospitalService.confirmBookingByHospitalService(req.body);
+      res.status(status.statusCode).json(status);
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(200).json({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 const handleIncreaseCurrentNumber = async (req, res) => {
   try {
     if (!req.body) {
@@ -251,5 +269,6 @@ module.exports = {
   handleDeteleSchedule,
   handleGetScheduleById,
   handleGetEventByHospitalId,
-  handleIncreaseCurrentNumber
+  handleIncreaseCurrentNumber,
+  handleConfirmBookingByHospital
 };

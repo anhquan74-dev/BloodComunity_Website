@@ -101,12 +101,12 @@ let initWebRoutes = (app) => {
     "/api/verify-book-appointment",
     userController.handlePostVerifyBookingSchedule
   );
-  router.post('/api/get-newest-booking-of-user',userController.handleGetNewestBooking)
- 
+  router.post('/api/get-newest-booking-of-user', userController.handleGetNewestBooking)
 
- // booking
- router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById)
 
+  // booking
+  router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById)
+  router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)
   //Home
   return app.use("/", router);
 };

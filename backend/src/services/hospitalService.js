@@ -1,41 +1,79 @@
 import db, { sequelize } from "../models/index";
 import _ from "lodash";
-import emailService from "../services/emailService";
 require("dotenv").config();
-const increaseCurrentNumberService = async(data) => {
-  try{
+const confirmBookingByHospitalService = async (data) => {
+  try {
+    let bookingConfirmed = {};
+    let checkBookingId = await db.Booking.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkBookingId) {
+      
+      checkBookingId.status = "S3";
+      await checkBookingId.save();
+      let getBookingInforAgain = await db.Booking.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+   
+      await db.User.update(
+        { numberOfDonation: sequelize.literal('numberOfDonation + 1') },
+        {
+          where: {
+            id: checkBookingId.donorId,
+          }
+        }
+      )
+
+      bookingConfirmed.content = getBookingInforAgain;
+      bookingConfirmed.statusCode = 200;
+      bookingConfirmed.message = "Cập nhật thành công!";
+    } else {
+      bookingConfirmed.statusCode = 404;
+      bookingConfirmed.message = "Không tìm thấy!";
+    }
+    return bookingConfirmed;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+}
+const increaseCurrentNumberService = async (data) => {
+  try {
     let object = {}
-    if(!data.token){
+    if (!data.token) {
       object.statusCode = 422;
       object.message = "Thiếu token"
-    }else{
+    } else {
       let booking = await db.Booking.findOne({
         where: { token: data.token },
-      }) 
+      })
       let schedule = await db.Schedule.findOne({
         where: {
           date: booking.date,
           timeType: booking.timeType
         }
       })
-      if(schedule.currentNumber < schedule.maxNumber){
+      if (schedule.currentNumber < schedule.maxNumber) {
         // update current number
         await db.Schedule.update(
           { currentNumber: sequelize.literal('currentNumber + 1') },
-          { where: { 
-            date: booking.date,
-            timeType: booking.timeType 
-          }}
+          {
+            where: {
+              date: booking.date,
+              timeType: booking.timeType
+            }
+          }
         )
         object.statusCode = 200;
         object.message = "Cập nhật thành công"
-      }else{
+      } else {
         object.statusCode = 400;
         object.message = "Số người hiến máu đã đạt giới hạn"
       }
     }
     return object;
-  }catch(e){
+  } catch (e) {
     console.log(e);
   }
 }
@@ -143,7 +181,7 @@ let getScheduleByIdService = async (inputId) => {
         order: [
           ['date', 'asc'],
           ['timeType', 'asc']
-       ],
+        ],
         include: [
           {
             model: db.Allcode,
@@ -396,5 +434,6 @@ module.exports = {
   updateScheduleService,
   getScheduleByIdService,
   getEventByHospitalIdService,
-  increaseCurrentNumberService
+  increaseCurrentNumberService,
+  confirmBookingByHospitalService
 };
