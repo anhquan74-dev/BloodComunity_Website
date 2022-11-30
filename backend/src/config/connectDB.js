@@ -5,7 +5,7 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(
   "blood_community",
   "root",
-  "trananhQuan_899147",
+  "1234",
   {
     host: "localhost",
     dialect: "mysql",
