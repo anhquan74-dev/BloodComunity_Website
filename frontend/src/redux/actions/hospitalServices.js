@@ -6,6 +6,7 @@ import {
     DELETE_EVENT_SUCCESS,
     DELETE_SCHEDULE_SUCCESS,
     FETCH_EVENTS_SUCCESS,
+    FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
     FETCH_SCHEDULES_BYID_SUCCESS,
     UPDATE_EVENT_SUCCESS,
 } from './types';
@@ -158,6 +159,27 @@ export const deleteEvent = (id) => {
 export const deleteEventSuccess = (payload) => {
     return {
         type: DELETE_EVENT_SUCCESS,
+        payload,
+    };
+};
+
+// booking
+export const fecthNewestDonorBooking = (donor) => {
+    return async (dispatch, getState) => {
+        try {
+            console.log(donor.id);
+            const res = await axios.post('http://localhost:8080/api/get-newest-booking-of-user', { id: donor.id });
+            const data = res && res.data ? res.data : [];
+            dispatch(fecthNewestDonorBookingSuccess(data.content[0]));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+};
+
+export const fecthNewestDonorBookingSuccess = (payload) => {
+    return {
+        type: FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
         payload,
     };
 };
