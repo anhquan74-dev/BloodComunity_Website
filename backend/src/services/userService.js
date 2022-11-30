@@ -116,6 +116,10 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
+
+    console.log("user info login", checkUserEmail)
+
+
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";
