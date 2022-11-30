@@ -41,9 +41,9 @@ function MainLayout({ routes }) {
                 <div className={cx('navlink')}>
                     <SideBar routes={routes} />
                 </div>
-                <div className={cx('image')}>
+                {/* <div className={cx('image')}>
                     <img src={require('../../assets/images/Quan_png_0.png')} alt="" />
-                </div>
+                </div> */}
             </div>
             <div className={cx('navbar')}>
                 <NavBar />

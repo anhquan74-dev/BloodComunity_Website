@@ -52,6 +52,9 @@ function Navigate({ to, content }) {
         case '/hospital/manage_schedule':
             icon = <FontAwesomeIcon icon={faCalendarDays} />;
             break;
+        case '/donor/booking_history':
+            icon = <FontAwesomeIcon icon={faCalendarDays} />;
+            break;
         case '/donor/events':
         case '/hospital/manage_events':
             icon = <EventSeatIcon />;

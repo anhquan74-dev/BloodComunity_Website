@@ -15,6 +15,16 @@
     }
 }
 
+.wrapper-donor {
+    padding: 0;
+    > div > h2 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        text-align: center;
+        margin: 20px;
+    }
+}
+
 .events {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -32,7 +42,7 @@
     &:hover {
         transition: all 0.3s ease-in-out;
         box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
-            transform: translateY(-6px);
+        transform: translateY(-6px);
     }
 }
 

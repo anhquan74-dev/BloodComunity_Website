@@ -35,6 +35,7 @@ import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DonorProfile from './components/RoleDonor/DonorProfile';
 import VerifyBooking from './pages/VerifyBooking';
+import BookingHistory from './components/RoleDonor/BookingHistory';
 
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
@@ -103,6 +104,7 @@ function App() {
                         <Route path="blood_request" element={<ViewBloodRequest />} />
                         <Route path="donate" element={<Donate />} />
                         <Route path="manage_schedule" element={<ManageDonateSchedule />} />
+                        <Route path="booking_history" element={<BookingHistory />} />
                         <Route path="events" element={<DonateEvents />} />
                         <Route path="reward" element={<DonorRank />} />
                         <Route path="account" element={<DonorProfile />} />

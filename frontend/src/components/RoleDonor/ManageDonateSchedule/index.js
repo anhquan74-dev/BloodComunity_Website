@@ -1,17 +1,20 @@
 import styles from './ManageDonateSchedule.module.scss';
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fecthNewestDonorBooking } from '../../../redux/actions/hospitalServices';
 import { fetchHospitalById } from '../../../redux/actions/hospitalManage';
 import QRCode from 'react-qr-code';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
+import ModalDeleteBooking from './ModalDeleleBooking';
 
 const cx = classNames.bind(styles);
 
 function ManageDonateSchedule() {
+    const [isShowModalDeleteBooking, setShowModalDeleteBooking] = useState(false);
+    const [donorBooking, setDonorBooking] = useState();
     const newestDonorBooking = useSelector((state) => state.hospital.newestDonorBooking);
     const user = useSelector((state) => state.auth.login.currentUser);
     const hospital = useSelector((state) => state.users.hospital);
@@ -84,10 +87,18 @@ function ManageDonateSchedule() {
         };
         img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
     };
-    const handleDeleteBooking = () => {};
+    const handleClose = () => {
+        setShowModalDeleteBooking(false);
+    };
+    const handleDeleteBooking = () => {
+        console.log('alo',newestDonorBooking);
+        setDonorBooking(newestDonorBooking);
+        setShowModalDeleteBooking(true);
+    };
     return (
         <div className={cx('wrapper')}>
-            <h1>Thông tin đăng ký hiến máu</h1>
+            <ModalDeleteBooking show={isShowModalDeleteBooking} handleClose={handleClose} donorBooking={donorBooking} />
+            <h2>Thông tin đăng ký hiến máu</h2>
             <div
                 className={cx('booking-info', {
                     'qr-d-none': newestDonorBooking === null,
@@ -189,13 +200,11 @@ function ManageDonateSchedule() {
             </div>
             <div className={cx('action-btn')}>
                 {newestDonorBooking ? (
-                    <NavLink to={''} onclick={handleDeleteBooking}>
+                    <NavLink onClick={handleDeleteBooking}>
                         Xoá đơn đăng ký
                     </NavLink>
                 ) : (
-                    <NavLink to={'/donor/donate'} onclick={handleDeleteBooking}>
-                        Đăng ký hiến máu
-                    </NavLink>
+                    <NavLink to={'/donor/donate'}>Đăng ký hiến máu</NavLink>
                 )}
             </div>
         </div>
