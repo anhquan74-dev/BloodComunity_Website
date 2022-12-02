@@ -2,35 +2,37 @@ import styles from './ManageDonateSchedule.module.scss';
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { fecthNewestDonorBooking } from '../../../redux/actions/hospitalServices';
+import { fetchNewestDonorBooking } from '../../../redux/actions/hospitalServices';
 import { fetchHospitalById } from '../../../redux/actions/hospitalManage';
 import QRCode from 'react-qr-code';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 import ModalDeleteBooking from './ModalDeleleBooking';
+import { formatDate } from '../../../utils/formatDate';
 
 const cx = classNames.bind(styles);
 
 function ManageDonateSchedule() {
     const [isShowModalDeleteBooking, setShowModalDeleteBooking] = useState(false);
     const [donorBooking, setDonorBooking] = useState();
-    const newestDonorBooking = useSelector((state) => state.hospital.newestDonorBooking);
+    let newestDonorBooking = useSelector((state) => state.hospital.newestDonorBooking);
     const user = useSelector((state) => state.auth.login.currentUser);
     const hospital = useSelector((state) => state.users.hospital);
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fecthNewestDonorBooking(user));
+        dispatch(fetchNewestDonorBooking(user));
     }, []);
     useEffect(() => {
         dispatch(fetchHospitalById(newestDonorBooking?.hospitalId));
     }, [newestDonorBooking]);
-
-    const date = new Date(Number(newestDonorBooking?.date));
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+    console.log(newestDonorBooking);
+    const timestampToday = new Date(formatDate()).getTime();
+    const timestampNewestDonorBooking = Number(newestDonorBooking?.date);
+    if (timestampNewestDonorBooking < timestampToday || newestDonorBooking?.status === 'S1') {
+        newestDonorBooking = null;
+    }
 
     let time = '';
     switch (newestDonorBooking?.timeType) {
@@ -62,6 +64,11 @@ function ManageDonateSchedule() {
             break;
     }
 
+    const date = new Date(Number(newestDonorBooking?.date));
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
     const value = `${user?.firstName} ${user?.lastName} | ${user?.phoneNumber} | ${user?.email} | ${hospital?.hospitalName} | ${time} | ${day}/${month}/${year}`;
     console.log(value);
 
@@ -91,7 +98,7 @@ function ManageDonateSchedule() {
         setShowModalDeleteBooking(false);
     };
     const handleDeleteBooking = () => {
-        console.log('alo',newestDonorBooking);
+        console.log('alo', newestDonorBooking);
         setDonorBooking(newestDonorBooking);
         setShowModalDeleteBooking(true);
     };
@@ -200,9 +207,7 @@ function ManageDonateSchedule() {
             </div>
             <div className={cx('action-btn')}>
                 {newestDonorBooking ? (
-                    <NavLink onClick={handleDeleteBooking}>
-                        Xoá đơn đăng ký
-                    </NavLink>
+                    <NavLink onClick={handleDeleteBooking}>Xoá đơn đăng ký</NavLink>
                 ) : (
                     <NavLink to={'/donor/donate'}>Đăng ký hiến máu</NavLink>
                 )}

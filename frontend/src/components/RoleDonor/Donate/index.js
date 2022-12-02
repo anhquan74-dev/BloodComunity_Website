@@ -15,7 +15,7 @@ import axios from 'axios';
 import { Buffer } from 'buffer';
 import { toast } from 'react-toastify';
 import ModalCheckMail from './ModalCheckMail/ModalCheckMail';
-import { fecthNewestDonorBooking } from '../../../redux/actions/hospitalServices';
+import { fetchNewestDonorBooking } from '../../../redux/actions/hospitalServices';
 import { monthDiff } from '../../../utils/monthDiff';
 // import { info } from 'console';
 Buffer.from('anything', 'base64');
@@ -55,7 +55,7 @@ function Donate() {
     }, []);
 
     useEffect(() => {
-        dispatch(fecthNewestDonorBooking(user));
+        dispatch(fetchNewestDonorBooking(user));
     }, []);
     console.log(newestDonorBooking);
 
@@ -87,6 +87,7 @@ function Donate() {
     const handleSearchSchedule = () => {
         // setHospitalId('');
         // setDate('');
+        dispatch(fetchHospitalById(hospitalId));
         axios
             .get('http://localhost:8080/api/get-schedule-hospital-by-date', { params: { hospitalId, date } })
             .then((res) => {
@@ -94,7 +95,6 @@ function Donate() {
                 setIsNotFoundSchedule(null);
             })
             .catch((e) => setIsNotFoundSchedule(e.response.data.message));
-        dispatch(fetchHospitalById(hospitalId));
     };
 
     let previewImage = '';
@@ -221,8 +221,8 @@ function Donate() {
                                                 )}
                                             </div>
                                             <div className={cx('detail')}>
-                                                <h3>{hospital.hospitalName}</h3>
-                                                <p>{hospital.address}</p>
+                                                <h3>{hospital?.hospitalName}</h3>
+                                                <p>{hospital?.address}</p>
                                                 <p className={cx('timeType')}>{item.timeTypeData.valueVi}</p>
                                             </div>
                                         </div>

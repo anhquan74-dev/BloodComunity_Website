@@ -2,14 +2,22 @@ import styles from './ManageDonateSchedule.module.scss';
 import classNames from 'classnames/bind';
 import { Modal } from 'react-bootstrap';
 import { Button } from '@mui/material';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
 const ModalDeleteBooking = ({ show, handleClose, donorBooking }) => {
     console.log(donorBooking);
-    const handleDeleleBooking  = () => {
-        
-    }
+    const handleDeleleBooking = () => {
+        axios
+            .delete('http://localhost:8080/api/delete-booking-by-id', {
+                data: {
+                    id: 16,
+                },
+            })
+            .then((res) => console.log(res))
+            .catch((e) => console.log(e));
+    };
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

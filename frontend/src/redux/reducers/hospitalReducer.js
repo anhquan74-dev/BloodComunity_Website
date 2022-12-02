@@ -4,7 +4,9 @@ import {
     CREATE_SCHEDULES_SUCCESS,
     DELETE_EVENT_SUCCESS,
     DELETE_SCHEDULE_SUCCESS,
+    FETCH_ALL_BOOKING_BY_DONORID_SUCCESS,
     FETCH_EVENTS_SUCCESS,
+    FETCH_NEWEST_DONOR_BOOKING_ERROR,
     FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
     FETCH_SCHEDULES_BYID_SUCCESS,
     UPDATE_EVENT_SUCCESS,
@@ -15,6 +17,7 @@ const INITIAL_STATE = {
     listEvents: [],
     listSingleSchedules: [],
     newestDonorBooking: null,
+    listBookingsByDonorId: [],
 };
 
 const hospitalReducer = (state = INITIAL_STATE, action) => {
@@ -53,10 +56,23 @@ const hospitalReducer = (state = INITIAL_STATE, action) => {
         case DELETE_SCHEDULE_SUCCESS:
             toast.success(action.payload.message);
             return state;
+        case FETCH_NEWEST_DONOR_BOOKING_ERROR:
+            console.log(action.payload);
+            console.log('error', state.newestDonorBooking);
+            return {
+                ...state,
+                newestDonorBooking: null,
+            };
         case FETCH_NEWEST_DONOR_BOOKING_SUCCESS:
+            console.log('success');
             return {
                 ...state,
                 newestDonorBooking: action.payload,
+            };
+        case FETCH_ALL_BOOKING_BY_DONORID_SUCCESS:
+            return {
+                ...state,
+                listBookingsByDonorId: action.payload.content,
             };
         default:
             return state;
