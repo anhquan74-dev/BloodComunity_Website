@@ -108,6 +108,7 @@ let initWebRoutes = (app) => {
   router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById)
   router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)
   router.get('/api/get-all-booking-by-donor-id',hospitalController.handleGetBookingsByDonorId)
+  router.get('/api/get-all-booking-by-hospital-id', hospitalController.getAllBookingByHospitalId) 
   //Home
   return app.use("/", router);
 };

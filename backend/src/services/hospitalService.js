@@ -1,6 +1,33 @@
 import db, { sequelize } from "../models/index";
 import _ from "lodash";
 require("dotenv").config();
+const getAllBookingByHospitalIdService = async (inputId) => {
+  try {
+    let bookingData = {};
+    if (!inputId) {
+      bookingData.statusCode = 422;
+      bookingData.message = "Thiếu thông số bắt buộc!";
+    } else {
+      let data = await db.Booking.findAll({
+        where: {
+          hospitalId: inputId.hospitalId,
+        },
+      });
+      if (!data || data.length === 0) {
+        bookingData.statusCode = 404;
+        bookingData.message = "Không tìm thấy thông tin!";
+        data = [];
+      } else {
+        bookingData.statusCode = 200;
+        bookingData.message = "Lấy dữ liệu thành công!";
+        bookingData.content = data;
+      }
+      return bookingData;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
 const getBookingsByDonorIdService = async (inputId) => {
   try {
     let bookingData = {};
@@ -463,5 +490,6 @@ module.exports = {
   getEventByHospitalIdService,
   increaseCurrentNumberService,
   confirmBookingByHospitalService,
-  getBookingsByDonorIdService
+  getBookingsByDonorIdService,
+  getAllBookingByHospitalIdService
 };
