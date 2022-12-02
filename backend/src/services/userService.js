@@ -8,7 +8,7 @@ let getNewestBookingService = async (data) => {
   try{
     let bookingSearch = {}
     const [results, metadata] = await sequelize.query(
-      `SELECT * FROM bookings where bookings.donorId = ${data.id} and status='S2' ORDER BY id DESC LIMIT 1`,
+      `SELECT * FROM bookings where bookings.donorId = ${data.id} ORDER BY id DESC LIMIT 1`,
       { tupleFormat: "array" }
     );
     if (results.length === 0) {

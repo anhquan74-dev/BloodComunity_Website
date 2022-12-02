@@ -5,7 +5,9 @@ import {
     CREATE_SCHEDULES_SUCCESS,
     DELETE_EVENT_SUCCESS,
     DELETE_SCHEDULE_SUCCESS,
+    FETCH_ALL_BOOKING_BY_DONORID_SUCCESS,
     FETCH_EVENTS_SUCCESS,
+    FETCH_NEWEST_DONOR_BOOKING_ERROR,
     FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
     FETCH_SCHEDULES_BYID_SUCCESS,
     UPDATE_EVENT_SUCCESS,
@@ -164,22 +166,52 @@ export const deleteEventSuccess = (payload) => {
 };
 
 // booking
-export const fecthNewestDonorBooking = (donor) => {
+export const fetchNewestDonorBooking = (donor) => {
     return async (dispatch, getState) => {
         try {
             console.log(donor.id);
             const res = await axios.post('http://localhost:8080/api/get-newest-booking-of-user', { id: donor.id });
             const data = res && res.data ? res.data : [];
-            dispatch(fecthNewestDonorBookingSuccess(data.content[0]));
+            console.log('hhh', res);
+            dispatch(fetchNewestDonorBookingSuccess(data.content[0]));
+        } catch (error) {
+            dispatch(fetchNewestDonorBookingError(error));
+        }
+    };
+};
+
+export const fetchNewestDonorBookingSuccess = (payload) => {
+    return {
+        type: FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
+        payload,
+    };
+};
+
+export const fetchNewestDonorBookingError = (payload) => {
+    return {
+        type: FETCH_NEWEST_DONOR_BOOKING_ERROR,
+        payload,
+    };
+};
+
+export const fetchAllBookingByDonorId = (donorId) => {
+    return async (dispatch, getState) => {
+        try {
+            console.log(donorId);
+            const res = await axios.get('http://localhost:8080/api/get-all-booking-by-donor-id', {
+                params: { donorId: donorId },
+            });
+            const data = res && res.data ? res.data : [];
+            dispatch(fetchAllBookingByDonorIdSuccess(data));
         } catch (error) {
             console.log(error);
         }
     };
 };
 
-export const fecthNewestDonorBookingSuccess = (payload) => {
+export const fetchAllBookingByDonorIdSuccess = (payload) => {
     return {
-        type: FETCH_NEWEST_DONOR_BOOKING_SUCCESS,
+        type: FETCH_ALL_BOOKING_BY_DONORID_SUCCESS,
         payload,
     };
 };
