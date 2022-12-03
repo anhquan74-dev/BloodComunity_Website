@@ -36,6 +36,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import DonorProfile from './components/RoleDonor/DonorProfile';
 import VerifyBooking from './pages/VerifyBooking';
 import BookingHistory from './components/RoleDonor/BookingHistory';
+import ManageDonorBooking from './components/RoleHospital/ManageDonorBooking';
 
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
@@ -86,6 +87,7 @@ function App() {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="manage_schedule" element={<ManageSchedule />} />
                         <Route path="manage_events" element={<ManageEvents />} />
+                        <Route path="donor_booking" element={<ManageDonorBooking />} />
                         <Route path="account" element={<Account />} />
                     </Route>
                     <Route

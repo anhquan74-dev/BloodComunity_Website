@@ -25,6 +25,9 @@ function ManageDonateSchedule() {
         dispatch(fetchNewestDonorBooking(user));
     }, []);
     useEffect(() => {
+        dispatch(fetchNewestDonorBooking(user));
+    }, [isShowModalDeleteBooking]);
+    useEffect(() => {
         dispatch(fetchHospitalById(newestDonorBooking?.hospitalId));
     }, [newestDonorBooking]);
     console.log(newestDonorBooking);

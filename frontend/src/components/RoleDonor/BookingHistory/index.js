@@ -22,11 +22,12 @@ const BookingHistory = () => {
 
     console.log(listBookings);
     return (
-        <div>
+        <div className={cx('wrapper')}>
             <h2>Lịch sử đặt hẹn</h2>
+            {listBookings.length === 0 && <center><b>Bạn chưa có lịch hẹn nào!</b></center>}
             {listBookings &&
                 listBookings.reverse().map((item, index) => {
-                    return <BookingHistoryItem donorBooking={item} />;
+                        return <BookingHistoryItem donorBooking={item} />;
                 })}
         </div>
     );
