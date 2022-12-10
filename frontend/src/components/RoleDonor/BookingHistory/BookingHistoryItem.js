@@ -50,8 +50,6 @@ const BookingHistoryItem = ({ donorBooking }) => {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    console.log(hospital.hospitalName, hospital.address);
-
     return (
         <div>
             <div className={cx('schedule')}>
@@ -76,17 +74,20 @@ const BookingHistoryItem = ({ donorBooking }) => {
                     <div className={cx('detail')}>
                         <h3>{hospital?.hospitalName}</h3>
                         <p>{hospital?.address}</p>
-                        <p className={cx('timeType')}>{time} - {`${day}/${month}/${year}`}</p>
+                        <p className={cx('timeType')}>
+                            {time} - {`${day}/${month}/${year}`}
+                        </p>
                     </div>
                 </div>
                 <div className={cx('booking')}>
                     <p
                         className={cx('status', {
                             done: donorBooking.status === 'S3',
-                            inprogress:  donorBooking.status === 'S2',
+                            inprogress: donorBooking.status === 'S2',
+                            'confirm-email': donorBooking.status === 'S1'
                         })}
                     >
-                        {donorBooking.status === 'S3' ? 'Đã hiến máu' : 'Đã hẹn lịch'}
+                        {donorBooking.status === 'S3' ? 'Đã hiến máu': (donorBooking.status === 'S2' ? 'Đã hẹn lịch' : 'Chưa xác nhận email')}
                     </p>
                     <a href="#">Xem chi tiết</a>
                 </div>

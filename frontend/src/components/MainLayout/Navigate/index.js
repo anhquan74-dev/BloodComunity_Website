@@ -46,6 +46,7 @@ function Navigate({ to, content }) {
             icon = <BloodtypeIcon />;
             break;
         case '/donor/donate':
+        case '/hospital/donor_booking':
             icon = <FontAwesomeIcon icon={faHandHoldingMedical} />;
             break;
         case '/donor/manage_schedule':

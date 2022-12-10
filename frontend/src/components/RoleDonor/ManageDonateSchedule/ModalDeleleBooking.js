@@ -3,20 +3,23 @@ import classNames from 'classnames/bind';
 import { Modal } from 'react-bootstrap';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const ModalDeleteBooking = ({ show, handleClose, donorBooking }) => {
     console.log(donorBooking);
+    const navigate = useNavigate();
     const handleDeleleBooking = () => {
         axios
             .delete('http://localhost:8080/api/delete-booking-by-id', {
                 data: {
-                    id: 16,
+                    id: donorBooking.id,
                 },
             })
             .then((res) => console.log(res))
             .catch((e) => console.log(e));
+        handleClose();
     };
     return (
         <Modal show={show} onHide={handleClose}>

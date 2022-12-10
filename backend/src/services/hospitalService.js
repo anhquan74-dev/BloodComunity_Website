@@ -1,17 +1,43 @@
 import db, { sequelize } from "../models/index";
 import _ from "lodash";
 require("dotenv").config();
-const getAllBookingByHospitalIdService = async (inputId) => {
+const getAllBookingByHospitalIdService = async (hospitalId, date) => {
   try {
     let bookingData = {};
-    if (!inputId) {
+    if (!hospitalId || !date) {
       bookingData.statusCode = 422;
       bookingData.message = "Thiếu thông số bắt buộc!";
     } else {
       let data = await db.Booking.findAll({
         where: {
-          hospitalId: inputId.hospitalId,
+          hospitalId: hospitalId,
+          date: date,
         },
+        include: [
+          {
+            model: db.User,
+            as: "donorData",
+            attributes: [
+              "email",
+              "firstName",
+              "lastName",
+              "phoneNumber",
+              "gender",
+              "address",
+              "ward",
+              "district",
+              "city",
+              "groupBlood",
+            ],
+          },
+          {
+            model: db.Allcode,
+            as: "timeTypeDataDonor",
+            attributes: ["valueEn", "valueVi"],
+          },
+        ],
+        raw: false,
+        nest: true,
       });
       if (!data || data.length === 0) {
         bookingData.statusCode = 404;
@@ -27,7 +53,7 @@ const getAllBookingByHospitalIdService = async (inputId) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 const getBookingsByDonorIdService = async (inputId) => {
   try {
     let bookingData = {};
@@ -54,7 +80,7 @@ const getBookingsByDonorIdService = async (inputId) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 const confirmBookingByHospitalService = async (data) => {
   try {
     let bookingConfirmed = {};
@@ -63,22 +89,21 @@ const confirmBookingByHospitalService = async (data) => {
       raw: false,
     });
     if (checkBookingId) {
-      
       checkBookingId.status = "S3";
       await checkBookingId.save();
       let getBookingInforAgain = await db.Booking.findOne({
         where: { id: data.id },
         raw: true,
       });
-   
+
       await db.User.update(
-        { numberOfDonation: sequelize.literal('numberOfDonation + 1') },
+        { numberOfDonation: sequelize.literal("numberOfDonation + 1") },
         {
           where: {
             id: checkBookingId.donorId,
-          }
+          },
         }
-      )
+      );
 
       bookingConfirmed.content = getBookingInforAgain;
       bookingConfirmed.statusCode = 200;
@@ -91,46 +116,46 @@ const confirmBookingByHospitalService = async (data) => {
   } catch (e) {
     console.log("err update: ", e);
   }
-}
+};
 const increaseCurrentNumberService = async (data) => {
   try {
-    let object = {}
+    let object = {};
     if (!data.token) {
       object.statusCode = 422;
-      object.message = "Thiếu token"
+      object.message = "Thiếu token";
     } else {
       let booking = await db.Booking.findOne({
         where: { token: data.token },
-      })
+      });
       let schedule = await db.Schedule.findOne({
         where: {
           date: booking.date,
-          timeType: booking.timeType
-        }
-      })
+          timeType: booking.timeType,
+        },
+      });
       if (schedule.currentNumber < schedule.maxNumber) {
         // update current number
         await db.Schedule.update(
-          { currentNumber: sequelize.literal('currentNumber + 1') },
+          { currentNumber: sequelize.literal("currentNumber + 1") },
           {
             where: {
               date: booking.date,
-              timeType: booking.timeType
-            }
+              timeType: booking.timeType,
+            },
           }
-        )
+        );
         object.statusCode = 200;
-        object.message = "Cập nhật thành công"
+        object.message = "Cập nhật thành công";
       } else {
         object.statusCode = 400;
-        object.message = "Số người hiến máu đã đạt giới hạn"
+        object.message = "Số người hiến máu đã đạt giới hạn";
       }
     }
     return object;
   } catch (e) {
     console.log(e);
   }
-}
+};
 let bulkCreateScheduleService = async (data) => {
   try {
     let scheduleCreate = {};
@@ -227,14 +252,14 @@ let getScheduleByIdService = async (inputId) => {
       scheduleData.statusCode = 422;
       scheduleData.message = "Thiếu thông số bắt buộc!";
     } else {
-      console.log("input id", inputId)
+      console.log("input id", inputId);
       let data = await db.Schedule.findAll({
         where: {
           hospitalId: inputId,
         },
         order: [
-          ['date', 'asc'],
-          ['timeType', 'asc']
+          ["date", "asc"],
+          ["timeType", "asc"],
         ],
         include: [
           {
@@ -491,5 +516,5 @@ module.exports = {
   increaseCurrentNumberService,
   confirmBookingByHospitalService,
   getBookingsByDonorIdService,
-  getAllBookingByHospitalIdService
+  getAllBookingByHospitalIdService,
 };
