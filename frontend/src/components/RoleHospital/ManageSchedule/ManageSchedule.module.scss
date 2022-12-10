@@ -19,8 +19,10 @@
 // }
 .wrapper {
     h1 {
-        text-align: center;
+        font-size: 2.4rem;
         font-weight: 700;
+        text-align: center;
+        margin: 20px;
     }
 }
 
@@ -33,27 +35,27 @@
     label {
         font-weight: 600;
     }
-    div{ 
-        &:first-child{
+    div {
+        &:first-child {
             input {
                 margin-left: 10px;
                 padding: 4px;
             }
         }
-        &:nth-child(2){
+        &:nth-child(2) {
             input {
                 margin-left: 10px;
                 padding: 4px;
             }
         }
-        &:nth-child(3){
+        &:nth-child(3) {
             width: 70%;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 12px;
         }
     }
-    > button{
+    > button {
         align-self: center;
         background-color: var(--primary);
         color: white;
@@ -69,26 +71,26 @@
     }
 }
 
-.btn-pick{
+.btn-pick {
     padding: 8px 0px;
-    border: 1px solid #344D67;
+    border: 1px solid #344d67;
     border-radius: 4px;
     font-weight: 500;
 
-    &:hover{
-        background-color: #344D67;
-        color: #FFFBC1;
+    &:hover {
+        background-color: #344d67;
+        color: #fffbc1;
     }
 }
 
 .btn-active {
-    background-color: #344D67;
-    color: #FFFBC1;
+    background-color: #344d67;
+    color: #fffbc1;
 }
 
-.list-schedule{
+.list-schedule {
     padding: 20px;
-    h2{
+    h2 {
         text-align: center;
         font-weight: 600;
         font-size: 2rem;
@@ -103,4 +105,3 @@
         }
     }
 }
-
