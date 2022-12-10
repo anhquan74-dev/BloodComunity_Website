@@ -1,13 +1,16 @@
 import hospitalService from "../services/hospitalService";
-const getAllBookingByHospitalId =  async (req, res) => {
+const getAllBookingByHospitalId = async (req, res) => {
   try {
-    if (!req.query) {
+    if (!req.query.hospitalId || !req.query.date) {
       res.status(422).json({
         statusCode: 422,
         message: "Thiếu thông số bắt buộc!",
       });
     } else {
-      let resp = await hospitalService.getAllBookingByHospitalIdService(req.query);
+      let resp = await hospitalService.getAllBookingByHospitalIdService(
+        req.query.hospitalId,
+        req.query.date
+      );
       res.status(resp.statusCode).json(resp);
     }
   } catch (e) {
@@ -17,8 +20,8 @@ const getAllBookingByHospitalId =  async (req, res) => {
       message: "Lỗi từ Server!",
     });
   }
-}
-const handleGetBookingsByDonorId =  async (req, res) => {
+};
+const handleGetBookingsByDonorId = async (req, res) => {
   try {
     if (!req.query) {
       res.status(422).json({
@@ -36,8 +39,8 @@ const handleGetBookingsByDonorId =  async (req, res) => {
       message: "Lỗi từ Server!",
     });
   }
-}
-const handleConfirmBookingByHospital =  async (req,res) => {
+};
+const handleConfirmBookingByHospital = async (req, res) => {
   try {
     if (!req.body) {
       res.status(422).json({
@@ -45,7 +48,9 @@ const handleConfirmBookingByHospital =  async (req,res) => {
         message: "Thiếu thông số bắt buộc!",
       });
     } else {
-      let status = await hospitalService.confirmBookingByHospitalService(req.body);
+      let status = await hospitalService.confirmBookingByHospitalService(
+        req.body
+      );
       res.status(status.statusCode).json(status);
     }
   } catch (e) {
@@ -55,7 +60,7 @@ const handleConfirmBookingByHospital =  async (req,res) => {
       message: "Lỗi từ Server!",
     });
   }
-}
+};
 const handleIncreaseCurrentNumber = async (req, res) => {
   try {
     if (!req.body) {
@@ -74,7 +79,7 @@ const handleIncreaseCurrentNumber = async (req, res) => {
       message: "Lỗi từ Server!",
     });
   }
-}
+};
 let handleBulkCreateSchedule = async (req, res) => {
   try {
     if (!req.body) {
@@ -310,5 +315,5 @@ module.exports = {
   handleIncreaseCurrentNumber,
   handleConfirmBookingByHospital,
   handleGetBookingsByDonorId,
-  getAllBookingByHospitalId
+  getAllBookingByHospitalId,
 };
