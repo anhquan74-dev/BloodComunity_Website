@@ -1,1 +1,0 @@
-export const rankBg = require('./rank.svg').default;
