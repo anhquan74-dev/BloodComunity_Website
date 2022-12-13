@@ -34,6 +34,8 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.STRING,
       timeType: DataTypes.STRING,
       token: DataTypes.STRING, // to confirm by email
+      formalityDonate: DataTypes.STRING,
+      bloodAmount: DataTypes.INTEGER,
     },
     {
       sequelize,
