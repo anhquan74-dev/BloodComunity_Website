@@ -24,6 +24,9 @@ module.exports = {
       nameEvent: {
         type: Sequelize.STRING,
       },
+      eventImage: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

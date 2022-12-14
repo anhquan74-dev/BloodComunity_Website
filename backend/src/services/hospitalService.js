@@ -90,6 +90,8 @@ const confirmBookingByHospitalService = async (data) => {
     });
     if (checkBookingId) {
       checkBookingId.status = "S3";
+      checkBookingId.formalityDonate = data.formalityDonate
+      checkBookingId.bloodAmount = data.bloodAmount
       await checkBookingId.save();
       let getBookingInforAgain = await db.Booking.findOne({
         where: { id: data.id },
