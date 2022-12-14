@@ -85,14 +85,12 @@ let initWebRoutes = (app) => {
   router.post(
     "/api/create-schedule",
     hospitalController.handleBulkCreateSchedule
-  ); //hospital, admin
+  );
   router.put("/api/update-schedule", hospitalController.handleUpdateSchedule); //admin,hospital
   router.delete(
     "/api/delete-schedule",
     hospitalController.handleDeteleSchedule
-  ); //admin,hospital
-
-  // trước khi ấn submit form, gọi api: get-schedule-by-id lấy currentNumber so sánh với maxNumber để tiếp tục
+  ); 
   router.post(
     "/api/donor-booking-schedule",
     userController.handlePostBookingSchedule
@@ -102,8 +100,6 @@ let initWebRoutes = (app) => {
     userController.handlePostVerifyBookingSchedule
   );
   router.post('/api/get-newest-booking-of-user', userController.handleGetNewestBooking)
-
-
   // booking
   router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById)
   router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)

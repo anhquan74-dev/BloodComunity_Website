@@ -20,6 +20,7 @@ import DonorRank from './components/DonorRank';
 import BloodRequest from './components/RoleRecipient/BloodRequest';
 import ManageBloodRequest from './components/RoleRecipient/ManageBloodRequest';
 import Register from './pages/Register';
+import Event from './pages/Event';
 import Login from './pages/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -47,6 +48,7 @@ function App() {
                     <Route path="/" exact element={<LandingPage />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
+                    <Route path="/event/:id" element={<Event />}></Route>
                     <Route
                         path="/admin"
                         render
