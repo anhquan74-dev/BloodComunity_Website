@@ -15,15 +15,10 @@ const cx = classNames.bind(styles);
 
 function DonationEvents({ text }) {
   const dispatch = useDispatch();
-  // const navigate = useNavigate(); 
   const listEvents = useSelector((state) => state.hospital.listEvents);
-
   useEffect(() => {
     dispatch(fetchAllEvents());
   }, []);
-  // const handleChangePage = (event) => {
-  //   navigate(`/event/${event.id}`)
-  // }
   return (
     <div
       id="events"
@@ -44,7 +39,6 @@ function DonationEvents({ text }) {
                     translateY: '-6px',
                     transition: { duration: 0.1 },
                   }}
-                // onClick={() => handleChangePage(event)}
                 >
                   <div className={cx('image')}>
                     <img
@@ -61,9 +55,8 @@ function DonationEvents({ text }) {
                     </div>
                     <div>
                       <div id="fb-root"></div>
-                      {/* <div class="fb-like" data-href={`${DOMAIN_FRONTEND}/event/${event.id}`} data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div> */}
-                      {/* <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" data-width="" data-numposts="5"></div> */}
-                      <div class="fb-like" data-href="https://www.youtube.com/results?search_query=tich+hop+like+and+share+fb" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
+                      <div class="fb-like" data-href={`${DOMAIN_FRONTEND}/event/${event.id}`} data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
+                      {/* <div class="fb-like" data-href="https://www.youtube.com/results?search_query=tich+hop+like+and+share+fb" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div> */}
                     </div>
                   </div>
                   <div className={cx('date')}>{event.date}</div>

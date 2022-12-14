@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import classNames from 'classnames/bind';
 import styles from '../LandingPage/components/DonationEvents/DonationEvents.module.scss';
 import { useSelector } from 'react-redux';
@@ -9,14 +9,28 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import { DOMAIN_FRONTEND } from '../../config/settingSystem';
+import axios from 'axios';
+const cx = classNames.bind(styles);
 export default function Event() {
-  const listEvents = useSelector((state) => state.hospital.listEvents);
-  const cx = classNames.bind(styles);
+  const [listEvents, setListEvents] = useState([])
+  const [result,setResult] = useState([])
   const location = useLocation();
   const string = location.pathname
   let id = string.slice(7)
-  const resultFind = listEvents.find(event => event.id = parseInt(id));
-  console.log("resultFind", resultFind)
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/get-all-events').then((res) => {
+      setListEvents(res.data.content)
+      const resultFind = res.data.content.find(item => item.id = parseInt(id));
+      setResult(resultFind)
+    })
+  }, [])
+  // useEffect(() => {
+  //   setResult(listEvents)
+  // },[listEvents])
+  // const resultFind = listEvents.find(item => item.id = parseInt(id));
+  console.log("result find",result)
+  // console.log("result",result)
+  console.log("result res",listEvents)
   return (
     <>
       <div>Event pages</div>
@@ -35,20 +49,20 @@ export default function Event() {
             />
           </div>
           <div className={cx('content')}>
-            <h2>{resultFind.nameEvent}</h2>
-            <p>{resultFind.description}</p>
+            <h2>{result.nameEvent}</h2>
+            <p>{result.description}</p>
             <div className={cx('location')}>
               <FontAwesomeIcon icon={faLocationDot} />
-              <span>{resultFind.location}</span>
+              <span>{result.location}</span>
             </div>
+            <div> Like and share</div>
             <div>
               <div id="fb-root"></div>
-              <div class="fb-like" data-href={`${DOMAIN_FRONTEND}/event/${resultFind.id}`} data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
-              {/* <div class="fb-like" data-href="https://www.youtube.com/results?search_query=tich+hop+like+and+share+fb" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div> */}
-              {/* <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" data-width="" data-numposts="5"></div> */}
+              <div className="fb-like" data-href={`${DOMAIN_FRONTEND}/event/${result.id}`} data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>
+              {/* <div className="fb-like" data-href="https://www.youtube.com/results?search_query=tich+hop+like+and+share+fb" data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div> */}
             </div>
           </div>
-          <div className={cx('date')}>{resultFind.date}</div>
+          <div className={cx('date')}>{result.date}</div>
         </motion.div>
       </div>
       <div>
