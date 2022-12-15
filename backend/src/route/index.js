@@ -1,13 +1,11 @@
 import express, { Router } from "express";
 let router = express.Router();
 import userController from "../controllers/userController";
-import specialtyController from "../controllers/specialtyController";
-import clinicController from "../controllers/clinicController";
 import hospitalController from "../controllers/hospitalController";
 import authController from "../controllers/authController";
 
 let initWebRoutes = (app) => {
-  //login with socials
+  //login with socials  
   //realtime api
   // add like and share
 
@@ -105,6 +103,12 @@ let initWebRoutes = (app) => {
   router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)
   router.get('/api/get-all-booking-by-donor-id',hospitalController.handleGetBookingsByDonorId)
   router.get('/api/get-all-booking-by-hospital-id', hospitalController.getAllBookingByHospitalId) 
+  // request
+  router.post('/api/create-request', userController.handleCreateRequest)
+  router.put('/api/update-request', userController.handleUpdateRequest)
+  router.delete('/api/delete-request', userController.handleDeleteRequest)
+  router.put('/api/donor-confirm-request', userController.handleDonorConfirmRequest)
+  router.put('/api/recipient-confirm-request', userController.handleRecipientConfirmRequest)
   //Home
   return app.use("/", router);
 };
