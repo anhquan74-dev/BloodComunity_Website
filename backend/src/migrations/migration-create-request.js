@@ -12,24 +12,33 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      donorId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       groupBlood: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       unitRequire: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: true,
       },
       offerBenefit: {
         type: Sequelize.STRING,
+        allowNull: true,
       },
       status: {
         type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

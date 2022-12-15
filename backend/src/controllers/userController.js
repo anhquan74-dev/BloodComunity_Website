@@ -1,4 +1,101 @@
 import userService from "../services/userService";
+let handleRecipientConfirmRequest = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu request Id!",
+      });
+    } else {
+      let requestUpdated = await userService.recipientConfirmRequestService(req.body);
+      res.status(200).json(requestUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleDonorConfirmRequest = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu request Id!",
+      });
+    } else {
+      let requestUpdated = await userService.donorConfirmRequestService(req.body);
+      res.status(200).json(requestUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleUpdateRequest = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu request Id!",
+      });
+    } else {
+      let requestUpdated = await userService.updateRequestService(req.body);
+      res.status(200).json(requestUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleDeleteRequest = async (req, res) =>{
+  try{  
+    if (!req.body) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu thông tin cần thiết!",
+      });
+    } else {
+      let request = await userService.deleteRequestByIdService(req.body);
+      res.status(request.statusCode).json(request);
+    }
+  }catch(e){
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleCreateRequest = async (req, res) => {
+  try {
+    if (! req.body) {
+      res.send({
+        statusCode: 422,
+        message: "Missing require parameters!",
+      });
+    } else {
+      let createRequest = await userService.createRequestService(req.body);
+      res.status(createRequest.statusCode).json({
+        statusCode: createRequest.statusCode,
+        message: createRequest.message,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+};
 let handleDeleteBookingById = async (req, res) => {
   try{  
     if (!req.body) {
@@ -431,5 +528,10 @@ module.exports = {
   handleSearchUser,
   handleSearchUserPagination,
   handleGetNewestBooking,
-  handleDeleteBookingById
+  handleDeleteBookingById,
+  handleCreateRequest,
+  handleUpdateRequest,
+  handleDeleteRequest,
+  handleDonorConfirmRequest,
+  handleRecipientConfirmRequest
 };
