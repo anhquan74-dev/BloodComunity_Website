@@ -3,8 +3,133 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+let recipientConfirmRequestService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.status = "S3";
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Người nhận máu đã xác nhận thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err donor confirm: ", e);
+  }
+}
+let donorConfirmRequestService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.status = "S2";
+      checkRequestId.donorId = data.donorId;
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Người hiến máu đã xác nhận thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err donor confirm: ", e);
+  }
+}
+let updateRequestService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.groupBlood = data.groupBlood;
+      checkRequestId.unitRequire = data.unitRequire;
+      checkRequestId.offerBenefit = data.offerBenefit;
+      checkRequestId.status = data.status;
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Cập nhật thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err update: ", e);
+  }
+}
+let deleteRequestByIdService = async (data) => {
+  try {
+    let message = {};
+    let request = await db.Request.findOne({
+      where: { id: data.id },
+    });
+    if (!request) {
+      message.statusCode = 404;
+      message.message = "Không tìm thấy!!";
+    } else {
+      await db.Request.destroy({
+        where: { id: data.id },
+      });
+      message.statusCode = 200;
+      message.message = "Xóa thành công!";
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+let createRequestService = async (data) => {
+  try {
+    let requestCreated = {};
+    if(!data.recipientId || !data.groupBlood){
+      requestCreated.statusCode = 422;
+      requestCreated.message = "Thiếu thông số bắt buộc!";
+    }else{
+      await db.Request.create({
+        recipientId: data.recipientId,
+        groupBlood: data.groupBlood,
+        unitRequire: data.unitRequire,
+        offerBenefit: data.offerBenefit,
+        status: "S1"
+      });
+      requestCreated.statusCode = 201;
+      requestCreated.message = "Tạo yêu cầu thành công!";
+    }
+    return requestCreated;
+  } catch (e) {
+    console.log(e);
+  }
+}
 let getNewestBookingService = async (data) => {
-  console.log("data user id khiem",data.id);
   try{
     let bookingSearch = {}
     const [results, metadata] = await sequelize.query(
@@ -610,5 +735,10 @@ module.exports = {
   getUserSearchService,
   searchUserPaginationService,
   getNewestBookingService,
-  deleteBookingByIdService
+  deleteBookingByIdService,
+  createRequestService,
+  deleteRequestByIdService,
+  updateRequestService,
+  donorConfirmRequestService,
+  recipientConfirmRequestService
 };
