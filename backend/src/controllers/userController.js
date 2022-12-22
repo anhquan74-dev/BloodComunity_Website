@@ -1,4 +1,27 @@
 import userService from "../services/userService";
+let handleGetAllRequestByGroupBlood = async (req,res) => {
+  try {
+    let groupBlood = req.query.groupBlood;
+    if (!groupBlood) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu groupBlood!",
+      });
+    } else {
+      let requests = await userService.getAllRequestByGroupBloodService(groupBlood);
+      res.status(requests.statusCode).json({
+        statusCode: requests.statusCode,
+        message: requests.message,
+        content: requests.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleRecipientConfirmRequest = async (req, res) => {
   try {
     if (!req.body.id) {
@@ -80,13 +103,14 @@ let handleCreateRequest = async (req, res) => {
     if (! req.body) {
       res.send({
         statusCode: 422,
-        message: "Missing require parameters!",
+        message: "Thiếu thông tin cần thiết!",
       });
     } else {
       let createRequest = await userService.createRequestService(req.body);
       res.status(createRequest.statusCode).json({
         statusCode: createRequest.statusCode,
         message: createRequest.message,
+        content: createRequest.content
       });
     }
   } catch (e) {
@@ -533,5 +557,6 @@ module.exports = {
   handleUpdateRequest,
   handleDeleteRequest,
   handleDonorConfirmRequest,
-  handleRecipientConfirmRequest
+  handleRecipientConfirmRequest,
+  handleGetAllRequestByGroupBlood
 };

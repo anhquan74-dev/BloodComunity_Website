@@ -109,6 +109,7 @@ let initWebRoutes = (app) => {
   router.delete('/api/delete-request', userController.handleDeleteRequest)
   router.put('/api/donor-confirm-request', userController.handleDonorConfirmRequest)
   router.put('/api/recipient-confirm-request', userController.handleRecipientConfirmRequest)
+  router.get('/api/get-all-request-by-group-blood', userController.handleGetAllRequestByGroupBlood)
   //Home
   return app.use("/", router);
 };

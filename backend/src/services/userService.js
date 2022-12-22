@@ -3,6 +3,28 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+let getAllRequestByGroupBloodService = async (groupBlood) => {
+  try {
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        groupBlood
+      },
+    });
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
 let recipientConfirmRequestService = async (data) => {
   try {
     let requestUpdated = {};
@@ -114,15 +136,17 @@ let createRequestService = async (data) => {
       requestCreated.statusCode = 422;
       requestCreated.message = "Thiếu thông số bắt buộc!";
     }else{
-      await db.Request.create({
+      const request = await db.Request.create({
         recipientId: data.recipientId,
         groupBlood: data.groupBlood,
         unitRequire: data.unitRequire,
         offerBenefit: data.offerBenefit,
         status: "S1"
       });
+      
       requestCreated.statusCode = 201;
       requestCreated.message = "Tạo yêu cầu thành công!";
+      requestCreated.content = request;
     }
     return requestCreated;
   } catch (e) {
@@ -740,5 +764,6 @@ module.exports = {
   deleteRequestByIdService,
   updateRequestService,
   donorConfirmRequestService,
-  recipientConfirmRequestService
+  recipientConfirmRequestService,
+  getAllRequestByGroupBloodService
 };
