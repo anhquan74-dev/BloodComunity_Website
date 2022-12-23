@@ -34,12 +34,16 @@ function ViewBloodRequest() {
       dispatch(fetchRequest(groupBlood))
     })
   }, [socket])
+  const handleConfirm = async (item) => {
+    await axios.put('http://localhost:8080/api/donor-confirm-request')
+    socket.emit('donor_confirm_request');
+  }
   return (
     <div className={cx('wrapper')}>
       <h2>Yêu cầu nhận máu từ người cần máu</h2>
       <div className={cx('content')}>
         <div className={cx('header')}>
-          <p>Id </p>
+          <p>Thông tin người cần máu</p>
           <p>unitRequire</p>
           <p>offerBenefit</p>
           <p>Nhóm máu</p>
@@ -49,21 +53,22 @@ function ViewBloodRequest() {
           {requests && requests.map((item,index) => {
             return (
               <div className={cx('item')}>
-                <div>{item.id}</div>
+                <div>{item.recipientData.lastName}</div>
                 <div>{item.unitRequire}</div>
                 <div>{item.offerBenefit}</div>
                 <div>{item.groupBlood}</div>
                 <div>
                   <div>
-                    <StatusButton status="confirm" />
-                    {/* <StatusButton onClick={handleConfirm} status="confirm" /> */}
+                    {/* <StatusButton status="confirm" /> */}
+                    <button type='button' style={{backgroundColor:'pink'}} onClick={() => handleConfirm(item)}>Đồng ý yêu cầu</button>
+                    {/* <StatusButton onClick={(item) => handleConfirm(item)} status="confirm"/> */}
                   </div>
-                  <div>
+                  {/* <div>
                     <StatusButton status="reject" />
                   </div>
                   <div>
                     <StatusButton status="pending" />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             )

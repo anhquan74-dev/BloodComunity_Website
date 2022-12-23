@@ -10,7 +10,17 @@ let getAllRequestByGroupBloodService = async (groupBlood) => {
       where: {
         groupBlood
       },
+      include: [{
+        model: db.User,
+        as: 'recipientData'
+      }],
+      raw: true,
+        nest: true,
     });
+    // const recipientInfo = await db.User.findOne({
+    //   where: {id: requests.recipientId}
+    // })
+    
     if (!requests) {
       requestsInfor.statusCode = 404;
       requestsInfor.message = "Không tìm thấy!";
@@ -143,10 +153,15 @@ let createRequestService = async (data) => {
         offerBenefit: data.offerBenefit,
         status: "S1"
       });
-      
+      const recipientInfo = await db.User.findOne({
+        where: { id: data.recipientId}
+      })
+      const content = {
+        request, recipientInfo
+      }
       requestCreated.statusCode = 201;
       requestCreated.message = "Tạo yêu cầu thành công!";
-      requestCreated.content = request;
+      requestCreated.content = content;
     }
     return requestCreated;
   } catch (e) {

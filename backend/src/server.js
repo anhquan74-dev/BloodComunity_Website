@@ -51,9 +51,7 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id)  // 4 room
   socket.on("join_group_blood", (user) => {
-    console.log("nhom mau",user.groupBlood);
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);
@@ -79,7 +77,6 @@ io.on("connection", (socket) => {
     })
     socket.phong = user.groupBlood;
 
-    console.log("tat ca rooms after join", socket.adapter.rooms);
     socket.on("send blood request", (user) => {
       io.sockets.in(socket.phong).emit("recieve blood request", user);
     });
