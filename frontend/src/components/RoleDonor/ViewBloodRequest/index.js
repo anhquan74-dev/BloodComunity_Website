@@ -21,6 +21,7 @@ function ViewBloodRequest() {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const groupBlood = useSelector((state) => state.auth.login.currentUser.groupBlood);
   const requests = useSelector((state) => state.request.listRequests)
+  const [notification , setNotification] = useState([])
   useEffect(() => {
     dispatch(fetchRequest(groupBlood))
   }, [])
@@ -32,9 +33,18 @@ function ViewBloodRequest() {
   useEffect(() => {
     socket.on('request_received', (newRequestReceived) => {
       // notification 
+      if(!notification.includes(newRequestReceived)){
+        setNotification([newRequestReceived, ...notification])
+      }
       dispatch(fetchRequest(groupBlood))
     })
     socket.on('recieved_recipient_confirm' , (requestConfirmedByRecipient) => {
+      dispatch(fetchRequest(groupBlood))
+    })
+    socket.on('recieved_recipient_delete' , (requestDeleted) => {
+      dispatch(fetchRequest(groupBlood))
+    })
+    socket.on('recieved_recipient_update' , (requestUpdated) => {
       dispatch(fetchRequest(groupBlood))
     })
   }, [socket])

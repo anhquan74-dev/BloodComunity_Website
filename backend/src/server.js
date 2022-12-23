@@ -82,6 +82,12 @@ io.on("connection", (socket) => {
     socket.on("recipient_confirm_request", (requestConfirmedByRecipient) => {
       socket.in(user.groupBlood).emit("recieved_recipient_confirm", requestConfirmedByRecipient);
     })
+    socket.on("recipient_delete_request", (requestDeleted) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_delete", requestDeleted);
+    })
+    socket.on("recipient_update_request", (requestUpdated) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_update", requestUpdated);
+    })
   });
 
   // ngat ket noi
