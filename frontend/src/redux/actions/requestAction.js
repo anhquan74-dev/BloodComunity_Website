@@ -7,6 +7,7 @@ import {
   LOGIN_ERROR,
   LOGOUT_SUCCESS,
   FETCH_REQUEST_SUCCESS,
+  FETCH_REQUEST_EACH_RECIPIENT_SUCCESS,
 } from './types';
 import axios from 'axios';
 
@@ -60,11 +61,29 @@ export const fetchRequest = (groupBlood) => {
       }
   };
 };
-
-
 export const fetchRequestSuccess = (payload) => {
   return {
       type: FETCH_REQUEST_SUCCESS,
+      payload,
+  };
+};
+
+export const fetchRecipientRequest = (id) => {
+  return async (dispatch) => {
+      try {
+          const res = await axios.get(`http://localhost:8080/api/get-all-request-by-recipient-id?id=${id}`);
+          const data = res && res.data ? res.data : [];
+          console.log("data fetch 2", data.content);
+          dispatch(fetchRequestOfEachRecipientSuccess(data.content));
+      } catch (error) {
+          console.log(error);
+      }
+  };
+};
+
+export const fetchRequestOfEachRecipientSuccess = (payload) => {
+  return {
+      type: FETCH_REQUEST_EACH_RECIPIENT_SUCCESS,
       payload,
   };
 };

@@ -1,4 +1,27 @@
 import userService from "../services/userService";
+let handleGetAllRequestByRecipientId = async (req, res) =>{
+  try {
+    let id = req.query.id;
+    if (!id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu id!",
+      });
+    } else {
+      let requests = await userService.getAllRequestByRecipientIdService(id);
+      res.status(requests.statusCode).json({
+        statusCode: requests.statusCode,
+        message: requests.message,
+        content: requests.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
 let handleGetAllRequestByGroupBlood = async (req,res) => {
   try {
     let groupBlood = req.query.groupBlood;
@@ -22,7 +45,7 @@ let handleGetAllRequestByGroupBlood = async (req,res) => {
     });
   }
 }
-let handleRecipientConfirmRequest = async (req, res) => {
+let handleRecipientConfirmRequestSuccess = async (req, res) => {
   try {
     if (!req.body.id) {
       res.send({
@@ -30,7 +53,26 @@ let handleRecipientConfirmRequest = async (req, res) => {
         message: "Thiếu request Id!",
       });
     } else {
-      let requestUpdated = await userService.recipientConfirmRequestService(req.body);
+      let requestUpdated = await userService.recipientConfirmRequestSuccessService(req.body);
+      res.status(200).json(requestUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleRecipientConfirmRequestFailed = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu request Id!",
+      });
+    } else {
+      let requestUpdated = await userService.recipientConfirmRequestFailedService(req.body);
       res.status(200).json(requestUpdated);
     }
   } catch (e) {
@@ -557,6 +599,8 @@ module.exports = {
   handleUpdateRequest,
   handleDeleteRequest,
   handleDonorConfirmRequest,
-  handleRecipientConfirmRequest,
-  handleGetAllRequestByGroupBlood
+  handleRecipientConfirmRequestSuccess,
+  handleRecipientConfirmRequestFailed,
+  handleGetAllRequestByGroupBlood,
+  handleGetAllRequestByRecipientId
 };

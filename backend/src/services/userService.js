@@ -3,6 +3,29 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+let getAllRequestByRecipientIdService = async (id) => {
+  try {
+    console.log("id::::::" , id);
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        recipientId: id
+      },
+    });
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
 let getAllRequestByGroupBloodService = async (groupBlood) => {
   try {
     let requestsInfor = {};
@@ -35,7 +58,7 @@ let getAllRequestByGroupBloodService = async (groupBlood) => {
     console.log(e);
   }
 }
-let recipientConfirmRequestService = async (data) => {
+let recipientConfirmRequestSuccessService = async (data) => {
   try {
     let requestUpdated = {};
     let checkRequestId = await db.Request.findOne({
@@ -52,6 +75,32 @@ let recipientConfirmRequestService = async (data) => {
       requestUpdated.content = getRequestInforAgain;
       requestUpdated.statusCode = 200;
       requestUpdated.message = "Người nhận máu đã xác nhận thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err donor confirm: ", e);
+  }
+}
+let recipientConfirmRequestFailedService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.status = "S1";
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Người nhận máu đã xác nhận nhận máu không thành công!";
     } else {
       requestUpdated.statusCode = 404;
       requestUpdated.message = "Không tìm thấy!";
@@ -779,6 +828,8 @@ module.exports = {
   deleteRequestByIdService,
   updateRequestService,
   donorConfirmRequestService,
-  recipientConfirmRequestService,
-  getAllRequestByGroupBloodService
+  recipientConfirmRequestSuccessService,
+  recipientConfirmRequestFailedService,
+  getAllRequestByGroupBloodService,
+  getAllRequestByRecipientIdService
 };

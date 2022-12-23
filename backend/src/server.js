@@ -75,15 +75,13 @@ io.on("connection", (socket) => {
     socket.on('new_request_from_recipient', (newRequestReceived) => {
       socket.in(user.groupBlood).emit('request_received' , newRequestReceived)
     })
-    socket.phong = user.groupBlood;
-
-    socket.on("send blood request", (user) => {
-      io.sockets.in(socket.phong).emit("recieve blood request", user);
+    socket.room = user.groupBlood;
+    socket.on("donor_confirm_request", (requestConfirmed) => {
+      socket.in(user.groupBlood).emit("recieved_donor_confirm", requestConfirmed);
     });
-
-    socket.on("donor confirm", (user) => {
-      io.sockets.in(socket.phong).emit("recieve donor confirm", user);
-    });
+    socket.on("recipient_confirm_request", (requestConfirmedByRecipient) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_confirm", requestConfirmedByRecipient);
+    })
   });
 
   // ngat ket noi
@@ -109,7 +107,6 @@ io.on("connection", (socket) => {
     }
     socket.phong = user.groupBlood;
 
-    console.log("tat ca rooms after join", socket.adapter.rooms);
     socket.on("send blood request", (user) => {
       io.sockets.in(socket.phong).emit("recieve blood request", user);
     });
