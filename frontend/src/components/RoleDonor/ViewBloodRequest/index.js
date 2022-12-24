@@ -1,13 +1,10 @@
 import styles from './ViewBloodRequest.module.scss';
 import classNames from 'classnames/bind';
-import StatusButton from '../../StatusButton';
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { useOutletContext } from 'react-router-dom';
 import axios from 'axios';
-// import styles from '../../StatusButton/StatusButton.module.scss';
-import { fetchRequest, fetchRequestSuccess } from '../../../redux/actions/requestAction';
+import { fetchRequest } from '../../../redux/actions/requestAction';
 
 const ENDPOINT = 'http://localhost:8080';
 var socket;
@@ -51,7 +48,6 @@ function ViewBloodRequest() {
   const handleConfirm = async (item) => {
     const data = { id: item.id, donorId:  currentUser.id}
     const res = await axios.put('http://localhost:8080/api/donor-confirm-request', data)
-    console.log("res donor confirm", res.data)
     dispatch(fetchRequest(groupBlood))
     socket.emit('donor_confirm_request',(item));
   }
