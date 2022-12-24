@@ -53,6 +53,7 @@ function NavBar() {
                 <Tooltip title={<p className={cx('tooltip')}>Thông báo</p>} placement="bottom">
                     <div className={cx('notification')}>
                         <FontAwesomeIcon icon={faBell} />
+                        {/* <div className={cx('counter')}>2</div> */}
                     </div>
                 </Tooltip>
 

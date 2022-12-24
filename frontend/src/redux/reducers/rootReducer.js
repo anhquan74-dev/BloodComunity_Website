@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import allCodeReducer from './allCodeReducer';
 import authReducer from './authReducer';
 import hospitalReducer from './hospitalReducer';
+import requestReducer from './requestReducer';
 import statisticReducer from './statisticReducer';
 import usersReducer from './usersReducer';
 
@@ -10,7 +11,8 @@ const rootReducer = combineReducers({
     statistic: statisticReducer,
     auth: authReducer,
     hospital: hospitalReducer,
-    allCode: allCodeReducer
+    allCode: allCodeReducer,
+    request: requestReducer
 });
 
 export default rootReducer;
