@@ -51,6 +51,7 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
+
   socket.on("join_group_blood", (user) => {
     switch (user.groupBlood) {
       case "o":
@@ -92,7 +93,6 @@ io.on("connection", (socket) => {
 
   // ngat ket noi
   socket.on("setup", (userData) => {
-    console.log("user ket noi: ", user.roleId, user.id);
     console.log(user.roleId);
     console.log(user.groupBlood);
     switch (user.groupBlood) {
@@ -111,19 +111,10 @@ io.on("connection", (socket) => {
       default:
         break;
     }
-    socket.phong = user.groupBlood;
-
-    socket.on("send blood request", (user) => {
-      io.sockets.in(socket.phong).emit("recieve blood request", user);
-    });
-
-    socket.on("donor confirm", (user) => {
-      io.sockets.in(socket.phong).emit("recieve donor confirm", user);
-    });
   });
   
   socket.on("disconnect", function () {
-    console.log(socket.id, " ngat ket noi");
+    
   });
 });
 

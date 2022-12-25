@@ -20,6 +20,7 @@ function ViewBloodRequest() {
   const requests = useSelector((state) => state.request.listRequests)
   const [notification , setNotification] = useState([])
   useEffect(() => {
+    
     dispatch(fetchRequest(groupBlood))
   }, [])
   useEffect(() => {
@@ -50,32 +51,35 @@ function ViewBloodRequest() {
     const res = await axios.put('http://localhost:8080/api/donor-confirm-request', data)
     dispatch(fetchRequest(groupBlood))
     socket.emit('donor_confirm_request',(item));
+    
   }
   return (
     <div className={cx('wrapper')}>
       <h2>Yêu cầu nhận máu từ người cần máu</h2>
       <div className={cx('content')}>
         <div className={cx('header')}>
-          <p>Thông tin người cần máu</p>
-          <p>unitRequire</p>
-          <p>offerBenefit</p>
-          <p>Nhóm máu</p>
-          <p>Hành động</p>
+          <p>Người cần máu</p>
+          <p>Điện thoại</p>
+          <p>Địa chỉ</p>
+          <p>Hỗ trợ từ người nhận</p>
+          <p>Số lượng máu</p>
+          <p>Trạng thái</p>
         </div>
         <div className={cx('body')}>
           {requests && requests.map((item, index) => {
             return (
               <div className={cx('item')}>
-                <div>{item.recipientData.lastName}</div>
-                <div>{item.unitRequire}</div>
+                <div>{item.recipientData.firstName + ' ' + item.recipientData.lastName}</div>
+                <div>{item.recipientData.phoneNumber}</div>
+                <div>{item.recipientData.address}</div>
                 <div>{item.offerBenefit}</div>
-                <div>{item.groupBlood}</div>
+                <div>{item.unitRequire}</div>
                 <div>
                   {item.status === "S1" ? 
                   <div>
-                    <div className={cx(`button-confirm`, 'button')} onClick={() => handleConfirm(item)}>Đồng ý yêu cầu</div>
-                  </div> : <>{item.status === "S3" ?  <div className={cx(`button-confirm`, 'button')} >Hoàn thành</div> : <><div>
-                    <div className={cx(`button-pending`, 'button')}>Đang chờ xác nhận từ người nhận</div>
+                    <div style={{width: "120px"}} className={cx(`button-confirm`, 'button')} onClick={() => handleConfirm(item)}>Đồng ý yêu cầu</div>
+                  </div> : <>{item.status === "S3" ?  <div style={{width: "120px"}} className={cx(`button-confirm`, 'button')} >Hoàn thành</div> : <><div>
+                    <div style={{width: "120px"}} className={cx(`button-pending`, 'button')}>Đang chờ xác nhận từ người nhận</div>
                   </div></>}</>
                   }
                 </div>

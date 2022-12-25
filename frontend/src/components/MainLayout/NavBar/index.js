@@ -5,22 +5,26 @@ import { faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Tooltip from '@mui/material/Tooltip';
 import Popover from '@mui/material/Popover';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Buffer } from 'buffer';
 import { logout, logoutSuccess } from '../../../redux/actions/authAction';
 import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
+const ENDPOINT = 'http://localhost:8080';
+var socket;
+socket = io(ENDPOINT);
 
 function NavBar() {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth.login.currentUser);
     let previewImage = require('../../../assets/images/default_avatar.png');
     const navigate = useNavigate();
-
+    const [ notifications , setNotifications ] = useState([])
     if (currentUser?.image) {
         previewImage = new Buffer(currentUser.image, 'base64').toString('binary');
     }
@@ -30,7 +34,7 @@ function NavBar() {
         dispatch(logout());
         navigate('/');
     };
-
+    
     return (
         <div className={cx('wrapper')}>
             <div className={cx('welcome')}>
@@ -53,10 +57,10 @@ function NavBar() {
                 <Tooltip title={<p className={cx('tooltip')}>Thông báo</p>} placement="bottom">
                     <div className={cx('notification')}>
                         <FontAwesomeIcon icon={faBell} />
-                        {/* <div className={cx('counter')}>2</div> */}
+                        <div className={cx('counter')}>2</div>
                     </div>
                 </Tooltip>
-
+                <div className={cx('notifications')}></div>
                 {/* style={{ zIndex: '999' }} */}
                 <PopupState variant="popover" popupId="demo-popup-popover">
                     {(popupState) => (
