@@ -5,7 +5,6 @@ import initWebRoutes from "./route/index";
 import connectDB from "./config/connectDB";
 // import cors from "cors";
 require("dotenv").config();
-console.log("hello world!");
 let app = express();
 // app.use(cors({ origin: true }));
 app.use(function (req, res, next) {
@@ -51,23 +50,20 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
+
   socket.on("join_group_blood", (user) => {
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);
-        console.log("user join room o");
         break;
       case "a":
         socket.join(user.groupBlood);
-        console.log("user join room a");
         break;
       case "b":
         socket.join(user.groupBlood);
-        console.log("user join room b");
         break;
       case "ab":
         socket.join(user.groupBlood);
-        console.log("user join room ab");
         break;
       default:  
         break;
@@ -92,9 +88,6 @@ io.on("connection", (socket) => {
 
   // ngat ket noi
   socket.on("setup", (userData) => {
-    console.log("user ket noi: ", user.roleId, user.id);
-    console.log(user.roleId);
-    console.log(user.groupBlood);
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);
@@ -111,19 +104,10 @@ io.on("connection", (socket) => {
       default:
         break;
     }
-    socket.phong = user.groupBlood;
-
-    socket.on("send blood request", (user) => {
-      io.sockets.in(socket.phong).emit("recieve blood request", user);
-    });
-
-    socket.on("donor confirm", (user) => {
-      io.sockets.in(socket.phong).emit("recieve donor confirm", user);
-    });
   });
   
   socket.on("disconnect", function () {
-    console.log(socket.id, " ngat ket noi");
+    
   });
 });
 

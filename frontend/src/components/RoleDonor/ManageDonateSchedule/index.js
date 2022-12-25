@@ -30,7 +30,6 @@ function ManageDonateSchedule() {
     useEffect(() => {
         dispatch(fetchHospitalById(newestDonorBooking?.hospitalId));
     }, [newestDonorBooking]);
-    console.log(newestDonorBooking);
     const timestampToday = new Date(formatDate()).getTime();
     const timestampNewestDonorBooking = Number(newestDonorBooking?.date);
     if (timestampNewestDonorBooking < timestampToday || newestDonorBooking?.status === 'S1') {
@@ -73,7 +72,6 @@ function ManageDonateSchedule() {
     const year = date.getFullYear();
 
     const value = `${user?.firstName} ${user?.lastName} | ${user?.phoneNumber} | ${user?.email} | ${hospital?.hospitalName} | ${time} | ${day}/${month}/${year}`;
-    console.log(value);
 
     let address =
         (user.address === null ? '' : user.address) + ', ' + user.ward + ', ' + user.district + ', ' + user.city;
@@ -101,7 +99,6 @@ function ManageDonateSchedule() {
         setShowModalDeleteBooking(false);
     };
     const handleDeleteBooking = () => {
-        console.log('alo', newestDonorBooking);
         setDonorBooking(newestDonorBooking);
         setShowModalDeleteBooking(true);
     };

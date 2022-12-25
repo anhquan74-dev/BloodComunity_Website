@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import * as Yup from 'yup';
-import { useOutletContext } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
-const ENDPOINT = 'http://localhost:8080';
-var socket, a;
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
+const ENDPOINT = DOMAIN_BACKEND;
+var socket
 
 function BloodRequest() {
   const [socketConnected, setSocketConnected] = useState(false)
@@ -35,8 +35,7 @@ function BloodRequest() {
         unitRequire: values.unitRequire,
         offerBenefit: values.offerBenefit,
       }
-      const res = await axios.post(`http://localhost:8080/api/create-request`, dataSubmit)
-      console.log("res Send", res.data.content)
+      const res = await axios.post(`${DOMAIN_BACKEND}/api/create-request`, dataSubmit)
       socket.emit('new_request_from_recipient', (res.data.content))
     },
   });

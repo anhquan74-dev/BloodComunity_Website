@@ -8,9 +8,7 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import Modal from './Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from '../../redux/actions/hospitalManage';
 import { registerAccount } from '../../redux/actions/authAction';
-import { getBase64 } from '../../utils/getBase64';
 
 const cx = classNames.bind(styles);
 
@@ -80,7 +78,6 @@ const Register = () => {
                 value.gender === 'male'
                     ? require('../../assets/images/default_avatar.png')
                     : require('../../assets/images/default_avatar_female.png');
-            console.log(file);
             // let base64 = await getBase64(file);
             const user = {
                 email: value.email,
@@ -105,13 +102,8 @@ const Register = () => {
                 groupBlood: value.bloodGroup,
             };
             dispatch(registerAccount(user));
-            console.log(value, user);
         },
     });
-
-    // console.log(values);
-
-    // chon tinh/thanh pho, quan huyen, phuong xa
     const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm(true);
     const { cityOptions, districtOptions, wardOptions } = state;
 

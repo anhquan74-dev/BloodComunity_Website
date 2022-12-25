@@ -59,7 +59,6 @@ const DataTable = (props) => {
         default:
             break;
     }
-    console.log(listUsers);
 
     const handleDelete = (id) => {
         if (window.confirm(`Bạn có chắc chắn muốn xoá!`) === true) {
@@ -107,8 +106,6 @@ const DataTable = (props) => {
 
     const [query, setQuery] = useState('');
     const [status, setStatus] = useState('');
-    console.log(query);
-    // console.log(listUsers.filter((user) => user.email.toLowerCase().includes('7')));
     const search = (data) => {
         return data?.filter(
             (user) =>
@@ -117,7 +114,6 @@ const DataTable = (props) => {
                 user.lastName?.toLowerCase().includes(query) ||
                 user.hospitalName?.toLowerCase().includes(query) ||
                 user.groupBlood?.toLowerCase().includes(query),
-            // user.id.includes(query),
         );
     };
 

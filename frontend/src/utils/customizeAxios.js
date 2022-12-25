@@ -1,7 +1,8 @@
 import axios from "axios";
+import { DOMAIN_BACKEND } from "../config/settingSystem";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/api/',
+    baseURL: `${DOMAIN_BACKEND}/api/`,
     // timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'}
 });

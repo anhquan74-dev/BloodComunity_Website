@@ -9,15 +9,12 @@ const DeleteEvent = ({ show, handleClose, eventDelete }) => {
     const dispatch = useDispatch();
 
     const handleDeleteEvent = () => {
-        console.log(eventDelete.id);
         dispatch(deleteEvent(eventDelete.id));
         handleClose();
     };
 
     return (
         <div>
-            {console.log(eventDelete)}
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Xoá sự kiện</Modal.Title>

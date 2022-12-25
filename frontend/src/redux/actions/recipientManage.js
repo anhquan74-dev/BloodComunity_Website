@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DOMAIN_BACKEND } from '../../config/settingSystem';
 // import axios from '../../utils/customizeAxios';
 
 import {
@@ -18,9 +19,8 @@ export const fetchAllRecipient = () => {
     return async (dispatch, getState) => {
         dispatch(fetchRecipientRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-type', { params: { type: 'R4' } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-type`, { params: { type: 'R4' } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchRecipientSuccess(data));
         } catch (error) {
             console.log(error);
@@ -53,7 +53,7 @@ export const fetchRecipientById = (id) => {
     return async (dispatch, getState) => {
         dispatch(fetchRecipientByIdRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-id', { params: { id: id } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id`, { params: { id: id } });
             const data = res && res.data ? res.data : [];
             console.log(data);
             dispatch(fetchRecipientByIdSuccess(data));
@@ -88,7 +88,7 @@ export const updateRecipient = (recipient) => {
     return async (dispatch, getState) => {
         dispatch(updateRecipientRequest());
         try {
-            const res = await axios.put('http://localhost:8080/api/update-user', recipient);
+            const res = await axios.put(`${DOMAIN_BACKEND}/api/update-user`, recipient);
             const data = res && res.data ? res.data : [];
             dispatch(updateRecipientSuccess(data));
             dispatch(fetchAllRecipient());

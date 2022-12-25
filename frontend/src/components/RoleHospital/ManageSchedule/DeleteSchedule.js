@@ -10,15 +10,12 @@ const DeleteSchedule = ({ show, handleClose, scheduleDelete }) => {
     const dispatch = useDispatch();
 
     const handleDeleteSchedule = () => {
-        console.log(scheduleDelete);
         dispatch(deleteSchedule(scheduleDelete));
         handleClose();
     };
 
     return (
         <div>
-            {console.log(scheduleDelete)}
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Xoá lịch</Modal.Title>
