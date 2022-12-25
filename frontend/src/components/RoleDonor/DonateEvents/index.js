@@ -1,5 +1,11 @@
+import DonationEvents from '../../../pages/LandingPage/components/DonationEvents';
+
 function DonateEvents() {
-    return <h1>DonateEvents</h1>;
+    return (
+        <>
+            <DonationEvents text='donor'/>
+        </>
+    );
 }
 
 export default DonateEvents;

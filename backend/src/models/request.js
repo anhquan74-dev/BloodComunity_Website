@@ -30,15 +30,15 @@ module.exports = (sequelize, DataTypes) => {
   Request.init(
     {
       recipientId: DataTypes.INTEGER,
+      donorId: DataTypes.INTEGER,
       groupBlood: DataTypes.STRING,
-      unitRequire: DataTypes.STRING,
+      unitRequire: DataTypes.INTEGER,
       offerBenefit: DataTypes.STRING,
       status: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Request",
-      freezeTableName: true,
     }
   );
   return Request;

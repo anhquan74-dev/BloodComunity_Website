@@ -32,6 +32,9 @@ module.exports = {
       birthday: {
         type: Sequelize.STRING,
       },
+      ward: {
+        type: Sequelize.STRING,
+      },
       district: {
         type: Sequelize.STRING,
       },
@@ -53,12 +56,16 @@ module.exports = {
       numberOfDonation: {
         type: Sequelize.INTEGER,
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "active",
+      },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

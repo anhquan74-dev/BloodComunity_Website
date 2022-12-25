@@ -1,7 +1,10 @@
+import DataTable from "../../DataTable";
+
 function ManageDonor() {
     return (
         <>
-            <h1>ManageDonor</h1>
+            
+            <DataTable role='donor' />
         </>
     );
 }

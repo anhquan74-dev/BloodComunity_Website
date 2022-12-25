@@ -1,13 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
-import initWebRoutes from "./route/web";
+import initWebRoutes from "./route/index";
 import connectDB from "./config/connectDB";
-const swaggerUI = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
 // import cors from "cors";
 require("dotenv").config();
-
 let app = express();
 // app.use(cors({ origin: true }));
 app.use(function (req, res, next) {
@@ -33,32 +30,6 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-
-// swagger
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Library API",
-      version: "1.0.0",
-      description: "API documentation",
-    },
-    servers: [
-      {
-        url: "http://localhost:8080",
-      },
-    ],
-  },
-  apis: ["./route/*.js"],
-};
-
-const specs = swaggerJsDoc(options);
-// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-
-// // config app
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -67,6 +38,76 @@ initWebRoutes(app);
 connectDB();
 
 let port = process.env.PORT;
-app.listen(port, () => {
-  console.log("listening on port " + port);
+const server = app.listen(port, () => {
+  console.log("Listening on port " + port);
 });
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.URL_REACT,
+  },
+});
+
+io.on("connection", (socket) => {
+
+  socket.on("join_group_blood", (user) => {
+    switch (user.groupBlood) {
+      case "o":
+        socket.join(user.groupBlood);
+        break;
+      case "a":
+        socket.join(user.groupBlood);
+        break;
+      case "b":
+        socket.join(user.groupBlood);
+        break;
+      case "ab":
+        socket.join(user.groupBlood);
+        break;
+      default:  
+        break;
+    }
+    socket.on('new_request_from_recipient', (newRequestReceived) => {
+      socket.in(user.groupBlood).emit('request_received' , newRequestReceived)
+    })
+    socket.room = user.groupBlood;
+    socket.on("donor_confirm_request", (requestConfirmed) => {
+      socket.in(user.groupBlood).emit("recieved_donor_confirm", requestConfirmed);
+    });
+    socket.on("recipient_confirm_request", (requestConfirmedByRecipient) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_confirm", requestConfirmedByRecipient);
+    })
+    socket.on("recipient_delete_request", (requestDeleted) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_delete", requestDeleted);
+    })
+    socket.on("recipient_update_request", (requestUpdated) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_update", requestUpdated);
+    })
+  });
+
+  // ngat ket noi
+  socket.on("setup", (userData) => {
+    switch (user.groupBlood) {
+      case "o":
+        socket.join(user.groupBlood);
+        break;
+      case "a":
+        socket.join(user.groupBlood);
+        break;
+      case "b":
+        socket.join(user.groupBlood);
+        break;
+      case "ab":
+        socket.join(user.groupBlood);
+        break;
+      default:
+        break;
+    }
+  });
+  
+  socket.on("disconnect", function () {
+    
+  });
+});
+

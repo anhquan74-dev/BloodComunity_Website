@@ -10,6 +10,7 @@ module.exports = {
       },
       currentNumber: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       maxNumber: {
         type: Sequelize.INTEGER,
@@ -25,11 +26,11 @@ module.exports = {
         allowNull: false,
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

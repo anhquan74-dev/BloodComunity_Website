@@ -28,12 +28,18 @@ module.exports = {
       token: {
         type: Sequelize.STRING,
       },
+      formalityDonate: {
+        type: Sequelize.STRING,
+      },
+      bloodAmount: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });
