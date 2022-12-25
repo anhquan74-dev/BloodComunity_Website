@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { fetchRecipientRequest, fetchRequest, fetchRequestSuccess } from '../../../redux/actions/requestAction';
+import { fetchRecipientRequest } from '../../../redux/actions/requestAction';
 import Modal from "react-modal";
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 const customStyles = {
   content: {
     top: "50%",
@@ -20,7 +21,7 @@ const customStyles = {
     width: 400,
   },
 };
-const ENDPOINT = 'http://localhost:8080';
+const ENDPOINT = DOMAIN_BACKEND;
 var socket;
 socket = io(ENDPOINT);
 const cx = classNames.bind(styles);
@@ -28,7 +29,6 @@ function ManageBloodRequest() {
   const dispatch = useDispatch()
   const [socketConnected, setSocketConnected] = useState(false)
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  const groupBlood = useSelector((state) => state.auth.login.currentUser.groupBlood);
   const requests = useSelector((state) => state.request.listRequestsOfEachRecipients)
   const [modalOpen, setModalOpen] = useState(false);
   const [itemUpdate, setItemUpdate] = useState(null);
@@ -43,21 +43,18 @@ function ManageBloodRequest() {
   useEffect(() => {
     socket.on('recieved_donor_confirm', (requestConfirmed) => {
       // notification 
-      console.log("request confirmed from donor", requestConfirmed)
       dispatch(fetchRecipientRequest(currentUser.id))
     })
   }, [socket])
   const handleConfirmSuccess = async (item) => {
     const data = { id: item.id }
-    const res = await axios.put('http://localhost:8080/api/recipient-confirm-request-success', data)
-    console.log("res recipient confirm success", res.data)
+    await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-success`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
     socket.emit('recipient_confirm_request', (item));
   }
   const handleConfirmFailed = async (item) => {
     const data = { id: item.id }
-    const res = await axios.put('http://localhost:8080/api/recipient-confirm-request-failed', data)
-    console.log("res recipient confirm failed", res.data)
+    await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-failed`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
     socket.emit('recipient_confirm_request', (item));
   }
@@ -70,7 +67,7 @@ function ManageBloodRequest() {
     let notification = "Bạn chắc chắn muốn xóa yêu cầu này?"
     if (window.confirm(notification) === true) {
       const id = item.id
-      await axios.delete(`http://localhost:8080/api/delete-request`, { data: { id } })
+      await axios.delete(`${DOMAIN_BACKEND}/api/delete-request`, { data: { id } })
       dispatch(fetchRecipientRequest(currentUser.id))
       socket.emit('recipient_delete_request', (item));
     } else {
@@ -92,8 +89,7 @@ function ManageBloodRequest() {
         unitRequire: values.unitRequire,
         offerBenefit: values.offerBenefit
       }
-      const res = await axios.put(`http://localhost:8080/api/update-request`, dataUpdate)
-      console.log("res update", res.data)
+      await axios.put(`${DOMAIN_BACKEND}/api/update-request`, dataUpdate)
       dispatch(fetchRecipientRequest(currentUser.id))
       socket.emit('recipient_delete_request', (itemUpdate));
       setModalOpen(false)

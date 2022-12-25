@@ -5,7 +5,6 @@ import initWebRoutes from "./route/index";
 import connectDB from "./config/connectDB";
 // import cors from "cors";
 require("dotenv").config();
-console.log("hello world!");
 let app = express();
 // app.use(cors({ origin: true }));
 app.use(function (req, res, next) {
@@ -56,19 +55,15 @@ io.on("connection", (socket) => {
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);
-        console.log("user join room o");
         break;
       case "a":
         socket.join(user.groupBlood);
-        console.log("user join room a");
         break;
       case "b":
         socket.join(user.groupBlood);
-        console.log("user join room b");
         break;
       case "ab":
         socket.join(user.groupBlood);
-        console.log("user join room ab");
         break;
       default:  
         break;
@@ -93,8 +88,6 @@ io.on("connection", (socket) => {
 
   // ngat ket noi
   socket.on("setup", (userData) => {
-    console.log(user.roleId);
-    console.log(user.groupBlood);
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);

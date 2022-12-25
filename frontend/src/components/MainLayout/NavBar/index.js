@@ -5,17 +5,18 @@ import { faBell, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Tooltip from '@mui/material/Tooltip';
 import Popover from '@mui/material/Popover';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Buffer } from 'buffer';
-import { logout, logoutSuccess } from '../../../redux/actions/authAction';
+import { logout } from '../../../redux/actions/authAction';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
-const ENDPOINT = 'http://localhost:8080';
+const ENDPOINT = DOMAIN_BACKEND;
 var socket;
 socket = io(ENDPOINT);
 
@@ -28,8 +29,6 @@ function NavBar() {
     if (currentUser?.image) {
         previewImage = new Buffer(currentUser.image, 'base64').toString('binary');
     }
-    console.log(currentUser);
-
     const handleLogout = () => {
         dispatch(logout());
         navigate('/');

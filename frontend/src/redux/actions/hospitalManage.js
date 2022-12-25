@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DOMAIN_BACKEND } from '../../config/settingSystem';
 import { fetchAllDonor } from './donorManage';
 import { fetchAllRecipient } from './recipientManage';
 // import axios from '../../utils/customizeAxios';
@@ -19,8 +20,6 @@ import {
     DELETE_HOSPITAL_REQUEST,
     DELETE_HOSPITAL_SUCCESS,
     DELETE_HOSPITAL_ERROR,
-    FETCH_ALLCODE_SCHEDULE_TIME_FAILED,
-    FETCH_ALLCODE_SCHEDULE_TIME_SUCCESS,
 } from './types';
 
 // fetch all hospital
@@ -28,9 +27,8 @@ export const fetchAllHospital = () => {
     return async (dispatch, getState) => {
         dispatch(fetchHospitalRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-type', { params: { type: 'R2' } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-type`, { params: { type: 'R2' } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchHospitalSuccess(data));
         } catch (error) {
             console.log(error);
@@ -63,10 +61,8 @@ export const createUser = (user) => {
     return async (dispatch, getState) => {
         dispatch(createUserRequest());
         try {
-            const res = await axios.post('http://localhost:8080/api/create-new-user', user);
-            console.log(user);
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/create-new-user`, user);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(createUserSuccess(data));
             dispatch(fetchAllHospital());
         } catch (error) {
@@ -103,9 +99,8 @@ export const fetchHospitalById = (id) => {
     return async (dispatch, getState) => {
         dispatch(fetchHospitalByIdRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-id', { params: { id: id } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id`, { params: { id: id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchHospitalByIdSuccess(data));
         } catch (error) {
             console.log(error);
@@ -138,7 +133,7 @@ export const updateHospital = (hospital) => {
     return async (dispatch, getState) => {
         dispatch(updateHospitalRequest());
         try {
-            const res = await axios.put('http://localhost:8080/api/update-user', hospital);
+            const res = await axios.put(`${DOMAIN_BACKEND}/api/update-user`, hospital);
             const data = res && res.data ? res.data : [];
             dispatch(updateHospitalSuccess(data));
             dispatch(fetchAllHospital());
@@ -172,10 +167,8 @@ export const deleteUser = (id) => {
     return async (dispatch, getState) => {
         dispatch(deleteUserRequest());
         try {
-            console.log('dl', id);
-            const res = await axios.delete('http://localhost:8080/api/delete-user', { data: { id } });
+            const res = await axios.delete(`${DOMAIN_BACKEND}/api/delete-user`, { data: { id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(deleteUserSuccess(data));
             dispatch(fetchAllHospital());
             dispatch(fetchAllDonor());

@@ -5,7 +5,6 @@ require("dotenv").config();
 import emailService from "./emailService";
 let getAllRequestByRecipientIdService = async (id) => {
   try {
-    console.log("id::::::" , id);
     let requestsInfor = {};
     let requests = await db.Request.findAll({
       where: {
@@ -329,10 +328,6 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
-
-    console.log("user info login", checkUserEmail)
-
-
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";

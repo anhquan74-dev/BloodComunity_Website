@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
 const BookingHistoryItem = ({ donorBooking }) => {
-    console.log(donorBooking);
     const dispatch = useDispatch();
     const hospital = useSelector((state) => state.users.hospital);
 

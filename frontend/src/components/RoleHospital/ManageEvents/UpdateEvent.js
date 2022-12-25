@@ -19,7 +19,6 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
         setNameEvent(eventUpdate.nameEvent);
         setLocation(eventUpdate.location);
         if (eventUpdate.date) {
-            console.log(eventUpdate.date);
             let dateTime = eventUpdate.date.split(' ');
             const my_date = moment(new Date(dateTime[0].split('/').reverse().join('-'))).format('YYYY-MM-DD');
             setDate(`${my_date}T${dateTime[1]}`);
@@ -28,7 +27,6 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
     }, [show]);
 
     const handleUpdateEvent = () => {
-        console.log(nameEvent, location, date, desc);
         const data = {
             hospitalId: currentHospitalId,
             id: eventUpdate.id,
@@ -43,8 +41,6 @@ const UpdateEvent = ({ show, handleClose, eventUpdate }) => {
 
     return (
         <div>
-            {console.log(eventUpdate)}
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Cập nhật sự kiện</Modal.Title>

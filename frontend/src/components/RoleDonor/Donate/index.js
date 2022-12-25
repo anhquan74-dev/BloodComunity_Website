@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import ModalCheckMail from './ModalCheckMail/ModalCheckMail';
 import { fetchNewestDonorBooking } from '../../../redux/actions/hospitalServices';
 import { monthDiff } from '../../../utils/monthDiff';
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 // import { info } from 'console';
 Buffer.from('anything', 'base64');
 
@@ -57,7 +58,6 @@ function Donate() {
     useEffect(() => {
         dispatch(fetchNewestDonorBooking(user));
     }, []);
-    console.log(newestDonorBooking);
 
     useEffect(() => {
         let arrDate = [
@@ -89,7 +89,7 @@ function Donate() {
         // setDate('');
         dispatch(fetchHospitalById(hospitalId));
         axios
-            .get('http://localhost:8080/api/get-schedule-hospital-by-date', { params: { hospitalId, date } })
+            .get(`${DOMAIN_BACKEND}/api/get-schedule-hospital-by-date`, { params: { hospitalId, date } })
             .then((res) => {
                 setListScheduleByDate(res.data.content);
                 setIsNotFoundSchedule(null);
@@ -131,17 +131,14 @@ function Donate() {
             timeType: schedule.timeType,
             donorId: user.id,
         };
-        console.log(dataSend);
         setIsLoadingSendEmail(true);
-        const res = await axios.post('http://localhost:8080/api/donor-booking-schedule', dataSend);
-        // hiện loangding, nhận statusCode , tắt loadding, toast: hãy đến mail để check
+        const res = await axios.post(`${DOMAIN_BACKEND}/api/donor-booking-schedule`, dataSend);
         setIsLoadingSendEmail(false);
         if (res.data.statusCode === 201) {
             setStatusCode(201);
         } else {
             setStatusCode(null);
         }
-        console.log(dataSend);
         setShowModalCheckMail(true);
     };
 

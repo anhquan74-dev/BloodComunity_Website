@@ -5,7 +5,6 @@ function CustomeSelect({ name, options, value, className, onChange, placeholder,
     // chon tinh/thanh pho, quan huyen, phuong xa
     // const { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } = useLocationForm(true);
     // const { cityOptions, districtOptions, wardOptions, selectedCity, selectedDistrict, selectedWard } = state;
-    // console.log(options);
     const defaultValue = (options, value) => {
         return options ? options.find((option) => option.value === value) : '';
     };

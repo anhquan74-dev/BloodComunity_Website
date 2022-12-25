@@ -13,20 +13,11 @@ Buffer.from('anything', 'base64');
 const cx = classNames.bind(styles);
 
 function TopDonors() {
-    // const fetchTop4Donors = async () => {
-    //     const res = await axios.get('http://localhost:8080/');
-    //     const data = res && res.data ? res.data : [];
-    //     console.log(data);
-    // };
-
     const dispatch = useDispatch();
     const topDonors = useSelector((state) => state.statistic.topDonors);
-
     useEffect(() => {
         dispatch(getTopDonors());
     }, []);
-
-    console.log(topDonors);
     return (
         <div id="top-donors" className={cx('wrapper')}>
             <div className={cx('container')}>

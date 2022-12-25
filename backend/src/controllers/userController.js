@@ -203,7 +203,6 @@ let handleGetNewestBooking = async (req, res) => {
 let handleSearchUser = async (req, res) => {
   try {
     let keyWord = await req.query.keyWord;
-    console.log("key word: ", keyWord);
     let content = await userService.getUserSearchService(keyWord);
     res.status(content.statusCode).json({
       statusCode: content.statusCode,
@@ -427,7 +426,6 @@ let handleGetTopDonor = async (req, res) => {
 }
 let handleDeteleUser = async (req, res) => {
   try {
-    console.log("req.body", req.body);
     if (!req.body) {
       res.send({
         statusCode: 422,
@@ -511,11 +509,9 @@ let handleGetTotalRecipient = async (req, res) => {
 };
 let handlePostBookingSchedule = async (req, res) => {
   try {
-    console.log("req body khiem", req.body);
     let infor = await userService.postBookingScheduleService(req.body);
     return res.status(infor.statusCode).json(infor);
   } catch (e) {
-    console.log("Loi post booking",e);
     return res.status(500).json({
       statusCode: 500,
       message: "Lỗi từ Server",

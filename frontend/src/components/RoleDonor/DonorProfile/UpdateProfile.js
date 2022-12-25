@@ -36,7 +36,6 @@ const UpdateProfile = ({ show, handleClose, profileUpdate, menu }) => {
     }, [show]);
 
     const handleUpdateProfile = () => {};
-    console.log(menu);
     return (
         <>
             {menu === 'personal' && (

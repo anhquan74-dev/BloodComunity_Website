@@ -5,8 +5,9 @@ import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { fetchRequest } from '../../../redux/actions/requestAction';
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 
-const ENDPOINT = 'http://localhost:8080';
+const ENDPOINT = DOMAIN_BACKEND;
 var socket;
 socket = io(ENDPOINT);
 
@@ -48,10 +49,9 @@ function ViewBloodRequest() {
   }, [socket])
   const handleConfirm = async (item) => {
     const data = { id: item.id, donorId:  currentUser.id}
-    const res = await axios.put('http://localhost:8080/api/donor-confirm-request', data)
+    const res = await axios.put(`${DOMAIN_BACKEND}/api/donor-confirm-request`, data)
     dispatch(fetchRequest(groupBlood))
     socket.emit('donor_confirm_request',(item));
-    
   }
   return (
     <div className={cx('wrapper')}>
