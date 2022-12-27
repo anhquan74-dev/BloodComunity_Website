@@ -123,7 +123,7 @@ function BloodRequest() {
               </div>
               <div className="save-btn">
                 <Button variant="primary" type='Submit' onClick={formik.handleSubmit}>
-                  Lưu
+                  Gửi
                 </Button>
               </div>
             </Modal.Footer>

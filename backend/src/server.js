@@ -48,7 +48,7 @@ const io = require("socket.io")(server, {
     origin: process.env.URL_REACT,
   },
 });
-
+let onlineUser = []
 io.on("connection", (socket) => {
 
   socket.on("join_group_blood", (user) => {
@@ -107,7 +107,7 @@ io.on("connection", (socket) => {
   });
   
   socket.on("disconnect", function () {
-    
+    console.log("socet id disconnected: ", socket.id);
   });
 });
 
