@@ -1,9 +1,16 @@
 import {
   FETCH_REQUEST_SUCCESS,
   FETCH_REQUEST_EACH_RECIPIENT_SUCCESS,
+  MOVE_REQUEST_SUCCESS,
 } from './types';
 import axios from 'axios';
 import { DOMAIN_BACKEND } from '../../config/settingSystem';
+export const moveDataUpdateToRedux = (payload) => {
+  return {
+      type: MOVE_REQUEST_SUCCESS,
+      payload,
+  };
+};
 
 export const fetchRequest = (groupBlood) => {
   return async (dispatch) => {
