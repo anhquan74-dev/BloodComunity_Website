@@ -11,6 +11,7 @@ import Modal from "react-modal";
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 import '../BloodRequest/BloodRequest.css'
 import ModalUpdateRequest from './ModalUpdateRequest';
+import ModalInforDonor from './ModalInforDonor';
 const customStyles = {
   content: {
     top: "50%",
@@ -35,6 +36,9 @@ function ManageBloodRequest() {
   const [modalOpen, setModalOpen] = useState(false);
   const [itemUpdate, setItemUpdate] = useState(null);
   const [isOpenModalEdit, setOpenModalEdit] = useState(false);
+  const [isOpenModalInforDonor, setIsOpenModalInforDonor] = useState(false)
+  const [inforDonor, setInforDonor] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     dispatch(fetchRecipientRequest(currentUser.id))
   }, [])
@@ -76,27 +80,13 @@ function ManageBloodRequest() {
       return;
     }
   }
-  // const formik = useFormik({
-  //   initialValues: {
-  //     unitRequire: itemUpdate?.unitRequire,
-  //     offerBenefit: itemUpdate?.offerBenefit,
-  //     id: itemUpdate?.id,
-  //   },
-  //   validationSchema: Yup.object({
-  //     unitRequire: Yup.number().typeError('Số lượng máu phải là 1 số').required("Hãy nhập số lượng máu").positive("Số lượng máu phải lớn hơn 0").integer('Sai định dạng').max(Number.MAX_SAFE_INTEGER, "Số lượng máu phải nhỏ hơn 9007199254740991"),
-  //   }),
-  //   onSubmit: async (values) => {
-  //     let dataUpdate = {
-  //       id: itemUpdate.id,
-  //       unitRequire: values.unitRequire,
-  //       offerBenefit: values.offerBenefit
-  //     }
-  //     await axios.put(`${DOMAIN_BACKEND}/api/update-request`, dataUpdate)
-  //     dispatch(fetchRecipientRequest(currentUser.id))
-  //     socket.emit('recipient_delete_request', (itemUpdate));
-  //     setModalOpen(false)
-  //   },
-  // });
+  const handleShowInforDonor =async (item) => {
+    console.log("item infor" , item)
+    const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id?id=${item.donorId}`)
+    console.log(res.data.content)
+    setInforDonor(res.data.content)
+    setIsOpen(true)
+  }
   return (
     <div className={cx('wrapper')}>
       <h2>Yêu cầu nhận máu từ người cần máu</h2>
@@ -121,10 +111,11 @@ function ManageBloodRequest() {
                       }>Cập nhật</div>
                       <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleDeleteRequest(item)}>Hủy yêu cầu</div>
                     </div> : <>
-                      {item.status === "S3" ? <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')}>Hoàn thành</div> : <><div>
+                      {item.status === "S3" ? <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')}>Hoàn thành</div> : <div style={{display:'flex'}}>
                         <div style={{ width: "150px" }} className={cx(`button-pending`, 'button')} onClick={() => handleConfirmSuccess(item)}>Xác nhận nhận máu thành công</div>
                         <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleConfirmFailed(item)}>Xác nhận nhận máu thất bại</div>
-                      </div></>}
+                        <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')} onClick={() => handleShowInforDonor(item)}>Thông tin người hiến máu</div>
+                      </div>}
                     </>
                   }
                 </div>
@@ -250,6 +241,7 @@ function ManageBloodRequest() {
 
       </form> */}
       {isOpenModalEdit === true ? <ModalUpdateRequest isOpenModalEdit={isOpenModalEdit} setOpenModalEdit={setOpenModalEdit} /> : <></>}
+      {isOpen && <ModalInforDonor inforDonor={inforDonor} setIsOpen={setIsOpen} />}
     </div>
   );
 }

@@ -19,6 +19,7 @@ function BloodRequest() {
     socket = io(ENDPOINT)
     socket.emit('join_group_blood', currentUser)
     socket.on('connection', () => { setSocketConnected(true) })
+    socket.emit('newUser', currentUser)
   }, [])
 
   const formik = useFormik({

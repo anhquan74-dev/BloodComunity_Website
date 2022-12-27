@@ -48,10 +48,20 @@ function ViewBloodRequest() {
     })
   }, [socket])
   const handleConfirm = async (item) => {
+    console.log("item confirm" , item)
     const data = { id: item.id, donorId:  currentUser.id}
     const res = await axios.put(`${DOMAIN_BACKEND}/api/donor-confirm-request`, data)
     dispatch(fetchRequest(groupBlood))
     socket.emit('donor_confirm_request',(item));
+    const notify =  {
+      senderName: currentUser.firstName + ' ' + currentUser.lastName,
+      senderId: currentUser.id,
+      receiverName: item.recipientData.firstName + ' ' + item.recipientData.lastName,
+      receiverId: item.recipientId,
+      unitRequire: item.unitRequire,
+      type: 'donor_confirm'
+    }
+    socket.emit('send_notification_confirm_from_donor',(notify))
   }
   return (
     <div className={cx('wrapper')}>

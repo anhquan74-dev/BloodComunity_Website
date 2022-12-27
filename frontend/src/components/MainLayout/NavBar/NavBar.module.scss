@@ -174,22 +174,23 @@
   position: absolute;
   top: 50px;
   right: 0;
-  background-color: white;
+  background-color: #ddfccc;
   color: black;
   font-weight: 300;
-  
+  z-index: 9999;
   padding: 10px;
 }
 .notify {
   display: flex;
   flex-direction: column;
   span {
+    display: flex;
     padding: 5px;
     font-size: 14px;
-    margin: 5px 0;
+    margin: 5px 5px;
   }
-  span:hover{
-    cursor: pointer;
-    background-color: lightsalmon;
-  }
+  // span:hover{
+  //   cursor: pointer;
+  //   background-color: lightsalmon;
+  // }
 }

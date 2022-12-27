@@ -48,9 +48,17 @@ const io = require("socket.io")(server, {
     origin: process.env.URL_REACT,
   },
 });
-let onlineUser = []
+let onlineUsers = []
+const addNewUser = (username, userId, socketId) => {
+  !onlineUsers.some(user => user.userId === userId) && onlineUsers.push({username, userId, socketId})
+}
+const removeUser = (socketId) => {
+  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId)
+}
+const getUser = (userId) => {
+  return onlineUsers.find((user) => user.userId === userId)
+}
 io.on("connection", (socket) => {
-
   socket.on("join_group_blood", (user) => {
     switch (user.groupBlood) {
       case "o":
@@ -84,9 +92,26 @@ io.on("connection", (socket) => {
     socket.on("recipient_update_request", (requestUpdated) => {
       socket.in(user.groupBlood).emit("recieved_recipient_update", requestUpdated);
     })
+    socket.on("newUser" , (userInfo) => {
+      const fullName = userInfo.firstName + " " + userInfo.lastName
+      addNewUser(fullName, userInfo.id, socket.id)
+    })
+    socket.on('send_notification_confirm_from_donor', (data) => {
+      const receiver = getUser(data.receiverId)
+      if(receiver){
+        const dataSend = {
+          donorName: data.senderName,
+          type: data.type,
+          unitRequire: data.unitRequire
+        }
+        console.log("dataSend" , dataSend)
+        io.to(receiver.socketId).emit('get_notification_from_donor', (dataSend))
+      }else{
+        console.log("user offfline")
+      }
+      
+    })
   });
-
-  // ngat ket noi
   socket.on("setup", (userData) => {
     switch (user.groupBlood) {
       case "o":
@@ -105,9 +130,8 @@ io.on("connection", (socket) => {
         break;
     }
   });
-  
   socket.on("disconnect", function () {
-    console.log("socet id disconnected: ", socket.id);
+    removeUser(socket.id);
   });
 });
 
