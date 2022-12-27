@@ -8,6 +8,7 @@
   background-color: white;
   width           : 80vw;
   margin-left     : 20vw;
+  position: relative;
 }
 
 .welcome {
@@ -166,4 +167,30 @@
   top             : -2px;
   right           : -2px;
   color: #e4e6eb;
+}
+.notifications {
+  margin-top: 20px;
+  margin-right: 100px;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #ddfccc;
+  color: black;
+  font-weight: 300;
+  z-index: 9999;
+  padding: 10px;
+}
+.notify {
+  display: flex;
+  flex-direction: column;
+  span {
+    display: flex;
+    padding: 5px;
+    font-size: 14px;
+    margin: 5px 5px;
+  }
+  // span:hover{
+  //   cursor: pointer;
+  //   background-color: lightsalmon;
+  // }
 }

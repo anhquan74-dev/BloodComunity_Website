@@ -66,7 +66,7 @@
         }
 
         &:nth-child(3) {
-            width: 16%;
+            // width: 16%;
         }
 
         &:nth-child(4) {
@@ -78,7 +78,13 @@
         }
     }
 }
-
+.button-wait {
+  color: var(--wait);
+  background-color: rgba(0, 204, 240, 0.2);
+  &:hover {
+      border: 2px solid var(--wait);
+  }
+}
 .button-confirm {
   color: var(--success);
   background-color: rgba(86, 240, 0, 0.2);

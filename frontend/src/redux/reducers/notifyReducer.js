@@ -5,12 +5,11 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  listRequests: [],
-  listRequestsOfEachRecipients: [],
-  requestUpdate: null,
+  listNotify: [],
+  countNotify: 0
 };
 
-const requestReducer = (state = INITIAL_STATE, action) => {
+const notifyReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_REQUEST_SUCCESS:
       return {
@@ -32,4 +31,4 @@ const requestReducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 };
-export default requestReducer;
+export default notifyReducer;

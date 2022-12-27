@@ -33,6 +33,7 @@
         "react-dom": "^18.2.0",
         "react-flatpickr": "^3.10.13",
         "react-helmet": "^6.1.0",
+        "react-icons": "^4.7.1",
         "react-image-lightbox": "^5.1.4",
         "react-modal": "^3.16.1",
         "react-qr-code": "^2.0.8",

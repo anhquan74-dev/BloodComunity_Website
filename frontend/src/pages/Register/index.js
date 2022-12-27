@@ -343,14 +343,10 @@ const Register = () => {
                             name="bloodGroup"
                         >
                             <option value="">Chọn nhóm máu</option>
-                            <option value="oPositive">O+</option>
-                            <option value="oNegative">O-</option>
-                            <option value="aPositive">A+</option>
-                            <option value="aNegative">A-</option>
-                            <option value="bPositive">B+</option>
-                            <option value="bNegative">B-</option>
-                            <option value="abPositive">AB+</option>
-                            <option value="abNegative">AB-</option>
+                            <option value="o">O</option>
+                            <option value="a">A</option>
+                            <option value="b">B</option>
+                            <option value="ab">AB</option>
                         </select>
                         {errors.bloodGroup && touched.bloodGroup ? (
                             <div className={cx('error')}>{errors.bloodGroup}</div>
