@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 
 const cx = classNames.bind(styles);
 
@@ -21,20 +22,17 @@ const ManageDonorBooking = () => {
 
     useEffect(() => {
         const today = new Date(formatDate()).getTime();
-        console.log(today);
         axios
-            .get(`http://localhost:8080/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${today}`)
+            .get(`${DOMAIN_BACKEND}/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${today}`)
             .then((res) => setListDonorBooking(res.data.content))
             .catch((e) => setListDonorBooking(''));
     }, []);
 
-    console.log(listDonorBooking);
 
     useEffect(() => {
         const newDate = new Date(date).getTime();
-        console.log(newDate);
         axios
-            .get(`http://localhost:8080/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${newDate}`)
+            .get(`${DOMAIN_BACKEND}/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${newDate}`)
             .then((res) => setListDonorBooking(res.data.content))
             .catch((e) => setListDonorBooking(''));
     }, [date]);

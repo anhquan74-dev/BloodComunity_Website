@@ -1,5 +1,51 @@
 import userService from "../services/userService";
-let handleRecipientConfirmRequest = async (req, res) => {
+let handleGetAllRequestByRecipientId = async (req, res) =>{
+  try {
+    let id = req.query.id;
+    if (!id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu id!",
+      });
+    } else {
+      let requests = await userService.getAllRequestByRecipientIdService(id);
+      res.status(requests.statusCode).json({
+        statusCode: requests.statusCode,
+        message: requests.message,
+        content: requests.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleGetAllRequestByGroupBlood = async (req,res) => {
+  try {
+    let groupBlood = req.query.groupBlood;
+    if (!groupBlood) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu groupBlood!",
+      });
+    } else {
+      let requests = await userService.getAllRequestByGroupBloodService(groupBlood);
+      res.status(requests.statusCode).json({
+        statusCode: requests.statusCode,
+        message: requests.message,
+        content: requests.content,
+      });
+    }
+  } catch (e) {
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleRecipientConfirmRequestSuccess = async (req, res) => {
   try {
     if (!req.body.id) {
       res.send({
@@ -7,7 +53,26 @@ let handleRecipientConfirmRequest = async (req, res) => {
         message: "Thiếu request Id!",
       });
     } else {
-      let requestUpdated = await userService.recipientConfirmRequestService(req.body);
+      let requestUpdated = await userService.recipientConfirmRequestSuccessService(req.body);
+      res.status(200).json(requestUpdated);
+    }
+  } catch (e) {
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+let handleRecipientConfirmRequestFailed = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu request Id!",
+      });
+    } else {
+      let requestUpdated = await userService.recipientConfirmRequestFailedService(req.body);
       res.status(200).json(requestUpdated);
     }
   } catch (e) {
@@ -80,13 +145,14 @@ let handleCreateRequest = async (req, res) => {
     if (! req.body) {
       res.send({
         statusCode: 422,
-        message: "Missing require parameters!",
+        message: "Thiếu thông tin cần thiết!",
       });
     } else {
       let createRequest = await userService.createRequestService(req.body);
       res.status(createRequest.statusCode).json({
         statusCode: createRequest.statusCode,
         message: createRequest.message,
+        content: createRequest.content
       });
     }
   } catch (e) {
@@ -137,7 +203,6 @@ let handleGetNewestBooking = async (req, res) => {
 let handleSearchUser = async (req, res) => {
   try {
     let keyWord = await req.query.keyWord;
-    console.log("key word: ", keyWord);
     let content = await userService.getUserSearchService(keyWord);
     res.status(content.statusCode).json({
       statusCode: content.statusCode,
@@ -361,7 +426,6 @@ let handleGetTopDonor = async (req, res) => {
 }
 let handleDeteleUser = async (req, res) => {
   try {
-    console.log("req.body", req.body);
     if (!req.body) {
       res.send({
         statusCode: 422,
@@ -445,11 +509,9 @@ let handleGetTotalRecipient = async (req, res) => {
 };
 let handlePostBookingSchedule = async (req, res) => {
   try {
-    console.log("req body khiem", req.body);
     let infor = await userService.postBookingScheduleService(req.body);
     return res.status(infor.statusCode).json(infor);
   } catch (e) {
-    console.log("Loi post booking",e);
     return res.status(500).json({
       statusCode: 500,
       message: "Lỗi từ Server",
@@ -533,5 +595,8 @@ module.exports = {
   handleUpdateRequest,
   handleDeleteRequest,
   handleDonorConfirmRequest,
-  handleRecipientConfirmRequest
+  handleRecipientConfirmRequestSuccess,
+  handleRecipientConfirmRequestFailed,
+  handleGetAllRequestByGroupBlood,
+  handleGetAllRequestByRecipientId
 };

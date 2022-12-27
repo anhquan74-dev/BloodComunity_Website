@@ -6,13 +6,13 @@ const cx = classNames.bind(styles);
 function StatusButton({ status, handleOnclick }) {
     let stt = '';
     if (status === 'confirm') {
-        stt = 'Xác nhận';
+        stt = 'Đồng ý cho máu';
     } else if (status === 'reject') {
         stt = 'Từ chối';
     } else if (status === 'pending') {
         stt = 'Đang tiến hành';
     }
-    return <div className={cx(`button-${status}`, 'button')}>{stt}</div>;
+    return <div className={cx(`button-${status}`, 'button')} onClick={() => handleOnclick()}>{stt}</div>;
 }
 
 export default StatusButton;

@@ -11,13 +11,9 @@ const AddEvent = ({ show, handleClose }) => {
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
     const [desc, setDesc] = useState('');
-
     const dispatch = useDispatch();
     const currentHospitalId = useSelector((state) => state.auth.login.currentUser.id);
-    console.log(currentHospitalId);
-
     const handleAddNewEvent = () => {
-        // console.log(nameEvent, location, date, desc);
         const data = {
             hospitalId: currentHospitalId,
             nameEvent,
@@ -25,7 +21,6 @@ const AddEvent = ({ show, handleClose }) => {
             date: moment(date).format('DD/MM/YYYY hh:mm'),
             description: desc,
         };
-        console.log(data);
         dispatch(createEvent(data));
         setNameEvent('');
         setLocation('');

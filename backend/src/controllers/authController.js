@@ -23,7 +23,6 @@ const decodeToken = (token) => {
 const verifyTokenAdmin = (req, res, next) => {
   const token = req.headers.authorization;
   const checkToken = decodeToken(token);
-  console.log("check admin",checkToken.data.roleId);
   if (checkToken) {
     if (checkToken.data.roleId === "R1") {
       next();
@@ -62,7 +61,6 @@ const verifyTokenHospital = (req, res, next) => {
 const verifyTokenDonor = (req, res, next) => {
   const token = req.headers.authorization;
   const checkToken = decodeToken(token);
-  console.log("check donor khiem", checkToken.data.roleId)
   if (checkToken) {
     if (checkToken.data.roleId === "R3") {
       next();

@@ -82,7 +82,6 @@ function ManageSchedule() {
         });
         var date = new Date(startDate);
         var formatedDate = date.getTime();
-        console.log(formatedDate);
         if (selectedTime.length < 1) {
             toast.error('Bạn chưa chọn khung giờ');
             return;

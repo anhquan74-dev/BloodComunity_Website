@@ -14,7 +14,6 @@ let createSpecialty = (data) => {
           errMessage: "Missing parameters",
         });
       } else {
-        console.log("data.image: ", data.imageBase64);
         await db.Specialty.create({
           name: data.name,
           image: data.imageBase64,

@@ -3,7 +3,61 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
-let recipientConfirmRequestService = async (data) => {
+let getAllRequestByRecipientIdService = async (id) => {
+  try {
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        recipientId: id
+      },
+    });
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let getAllRequestByGroupBloodService = async (groupBlood) => {
+  try {
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        groupBlood
+      },
+      include: [{
+        model: db.User,
+        as: 'recipientData'
+      }],
+      raw: true,
+        nest: true,
+    });
+    // const recipientInfo = await db.User.findOne({
+    //   where: {id: requests.recipientId}
+    // })
+    
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let recipientConfirmRequestSuccessService = async (data) => {
   try {
     let requestUpdated = {};
     let checkRequestId = await db.Request.findOne({
@@ -20,6 +74,32 @@ let recipientConfirmRequestService = async (data) => {
       requestUpdated.content = getRequestInforAgain;
       requestUpdated.statusCode = 200;
       requestUpdated.message = "Người nhận máu đã xác nhận thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err donor confirm: ", e);
+  }
+}
+let recipientConfirmRequestFailedService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.status = "S1";
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Người nhận máu đã xác nhận nhận máu không thành công!";
     } else {
       requestUpdated.statusCode = 404;
       requestUpdated.message = "Không tìm thấy!";
@@ -114,15 +194,22 @@ let createRequestService = async (data) => {
       requestCreated.statusCode = 422;
       requestCreated.message = "Thiếu thông số bắt buộc!";
     }else{
-      await db.Request.create({
+      const request = await db.Request.create({
         recipientId: data.recipientId,
         groupBlood: data.groupBlood,
         unitRequire: data.unitRequire,
         offerBenefit: data.offerBenefit,
         status: "S1"
       });
+      const recipientInfo = await db.User.findOne({
+        where: { id: data.recipientId}
+      })
+      const content = {
+        request, recipientInfo
+      }
       requestCreated.statusCode = 201;
       requestCreated.message = "Tạo yêu cầu thành công!";
+      requestCreated.content = content;
     }
     return requestCreated;
   } catch (e) {
@@ -241,10 +328,6 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
-
-    console.log("user info login", checkUserEmail)
-
-
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";
@@ -740,5 +823,8 @@ module.exports = {
   deleteRequestByIdService,
   updateRequestService,
   donorConfirmRequestService,
-  recipientConfirmRequestService
+  recipientConfirmRequestSuccessService,
+  recipientConfirmRequestFailedService,
+  getAllRequestByGroupBloodService,
+  getAllRequestByRecipientIdService
 };

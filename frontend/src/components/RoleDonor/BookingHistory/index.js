@@ -20,7 +20,6 @@ const BookingHistory = () => {
     //     dispatch(fetchHospitalById(newestDonorBooking?.hospitalId));
     // }, [listBookings]);
 
-    console.log(listBookings);
     return (
         <div className={cx('wrapper')}>
             <h2>Lịch sử đặt hẹn</h2>

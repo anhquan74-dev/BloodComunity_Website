@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
-import { DOMAIN_FRONTEND } from '../../config/settingSystem';
+import { DOMAIN_BACKEND, DOMAIN_FRONTEND } from '../../config/settingSystem';
 import axios from 'axios';
 const cx = classNames.bind(styles);
 export default function Event() {
@@ -18,7 +18,7 @@ export default function Event() {
   const string = location.pathname
   let id = string.slice(7)
   useEffect(() => {
-    axios.get('http://localhost:8080/api/get-all-events').then((res) => {
+    axios.get(`${DOMAIN_BACKEND}/api/get-all-events`).then((res) => {
       setListEvents(res.data.content)
       const resultFind = res.data.content.find(item => item.id = parseInt(id));
       setResult(resultFind)
@@ -28,9 +28,6 @@ export default function Event() {
   //   setResult(listEvents)
   // },[listEvents])
   // const resultFind = listEvents.find(item => item.id = parseInt(id));
-  console.log("result find",result)
-  // console.log("result",result)
-  console.log("result res",listEvents)
   return (
     <>
       <div>Event pages</div>
