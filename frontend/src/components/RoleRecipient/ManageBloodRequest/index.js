@@ -54,7 +54,6 @@ function ManageBloodRequest() {
     })
   }, [socket])
   const handleConfirmSuccess = async (item) => {
-    console.log("item conform success", item)
     const data = { id: item.id }
     await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-success`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
@@ -68,12 +67,11 @@ function ManageBloodRequest() {
       donorDeleted: '0',
       recipientDeleted: '0'
     }
-    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`,dataNotify)
+    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`, dataNotify)
     socket.emit('recipient_confirm_notify_success', (item));
 
   }
   const handleConfirmFailed = async (item) => {
-    console.log("item confirm fail", item)
     const data = { id: item.id }
     await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-failed`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
@@ -87,10 +85,10 @@ function ManageBloodRequest() {
       donorDeleted: '0',
       recipientDeleted: '0'
     }
-    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`,dataNotify)
+    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`, dataNotify)
     socket.emit('recipient_confirm_notify_failed', (item));
   }
-  const handleUpdateRequest =  (item) => {
+  const handleUpdateRequest = (item) => {
     setOpenModalEdit(!isOpenModalEdit)
     dispatch(moveDataUpdateToRedux(item))
   }
@@ -105,10 +103,8 @@ function ManageBloodRequest() {
       return;
     }
   }
-  const handleShowInforDonor =async (item) => {
-    console.log("item infor" , item)
+  const handleShowInforDonor = async (item) => {
     const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id?id=${item.donorId}`)
-    console.log(res.data.content)
     setInforDonor(res.data.content)
     setIsOpen(true)
   }
@@ -136,7 +132,10 @@ function ManageBloodRequest() {
                       }>Cập nhật</div>
                       <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleDeleteRequest(item)}>Hủy yêu cầu</div>
                     </div> : <>
-                      {item.status === "S3" ? <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')}>Hoàn thành</div> : <div style={{display:'flex'}}>
+                      {item.status === "S3" ? <div style={{display: "flex"}}>
+                        <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')}>Hoàn thành</div>
+                        <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleDeleteRequest(item)}>Xóa khỏi lịch sử</div>
+                      </div> : <div style={{ display: 'flex' }}>
                         <div style={{ width: "150px" }} className={cx(`button-pending`, 'button')} onClick={() => handleConfirmSuccess(item)}>Xác nhận nhận máu thành công</div>
                         <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleConfirmFailed(item)}>Xác nhận nhận máu thất bại</div>
                         <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')} onClick={() => handleShowInforDonor(item)}>Thông tin người hiến máu</div>
