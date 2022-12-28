@@ -3,13 +3,15 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+const Op = require('Sequelize').Op;
 let getNotifyForRecipientService = async (recipientId) => {
   try {
     let notifiesInfor = {};
     let notifies = await db.Notify.findAll({
       where: {
         recipientId,
-        recipientDeleted: "0"
+        recipientDeleted: "0",
+        type: "donor_confirm"
       },
     });
     if (!notifies) {
@@ -32,7 +34,10 @@ let getNotifyForDonorService = async (donorId) => {
     let notifies = await db.Notify.findAll({
       where: {
         donorId,
-        donorDeleted: "0"
+        donorDeleted: "0",
+        type: {
+          [Op.or]: ["recipient_confirm_failed", "recipient_confirm_success"]
+        }
       },
     });
     if (!notifies) {

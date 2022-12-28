@@ -105,6 +105,24 @@ io.on("connection", (socket) => {
       }
       
     })
+    socket.on('recipient_confirm_notify_success' , data => {
+      console.log("recipient_confirm_notify_success: 123 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_success', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })
+    socket.on('recipient_confirm_notify_failed' , data => {
+      console.log("recipient_confirm_notify_failed: 456 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_failed', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })  
   });
   socket.on("setup", (userData) => {
     switch (user.groupBlood) {
