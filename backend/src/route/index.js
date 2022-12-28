@@ -116,6 +116,7 @@ let initWebRoutes = (app) => {
   // notify
   router.post('/api/create-notify', userController.handleCreateNotify)
   router.get('/api/get-notify-by-recipient-id', userController.handleGetNotifyForRecipient)
+  router.get('/api/get-notify-by-donor-id', userController.handleGetNotifyForDonor)
   router.put('/api/delete-notify-by-recipient', userController.handleDeleteNotifyByRecipient)
   router.put('/api/delete-notify-by-donor', userController.handleDeleteNotifyByDonor)
   //Home

@@ -54,16 +54,41 @@ function ManageBloodRequest() {
     })
   }, [socket])
   const handleConfirmSuccess = async (item) => {
+    console.log("item conform success", item)
     const data = { id: item.id }
     await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-success`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
     socket.emit('recipient_confirm_request', (item));
+    let dataNotify = {
+      donorId: item.donorId,
+      recipientName: currentUser.firstName + ' ' + currentUser.lastName,
+      recipientId: currentUser.id,
+      unitRequire: item.unitRequire,
+      type: 'recipient_confirm_success',
+      donorDeleted: '0',
+      recipientDeleted: '0'
+    }
+    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`,dataNotify)
+    socket.emit('recipient_confirm_notify_success', (item));
+
   }
   const handleConfirmFailed = async (item) => {
+    console.log("item confirm fail", item)
     const data = { id: item.id }
     await axios.put(`${DOMAIN_BACKEND}/api/recipient-confirm-request-failed`, data)
     dispatch(fetchRecipientRequest(currentUser.id))
     socket.emit('recipient_confirm_request', (item));
+    let dataNotify = {
+      donorId: item.donorId,
+      recipientName: currentUser.firstName + ' ' + currentUser.lastName,
+      recipientId: currentUser.id,
+      unitRequire: item.unitRequire,
+      type: 'recipient_confirm_failed',
+      donorDeleted: '0',
+      recipientDeleted: '0'
+    }
+    await axios.post(`${DOMAIN_BACKEND}/api/create-notify`,dataNotify)
+    socket.emit('recipient_confirm_notify_failed', (item));
   }
   const handleUpdateRequest =  (item) => {
     setOpenModalEdit(!isOpenModalEdit)
@@ -99,7 +124,7 @@ function ManageBloodRequest() {
         <div className={cx('body')}>
           {requests && requests.map((item, index) => {
             return (
-              <div className={cx('item')}>
+              <div key={index} className={cx('item')}>
                 <div>{item.unitRequire}</div>
                 <div>{item.offerBenefit}</div>
                 <div>
