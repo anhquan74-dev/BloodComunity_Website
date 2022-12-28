@@ -92,7 +92,7 @@ function ManageBloodRequest() {
       <h2>Yêu cầu nhận máu từ người cần máu</h2>
       <div className={cx('content')}>
         <div className={cx('header')}>
-          <p>Số lượng máu cần</p>
+          <p>Số lượng máu cần (ml)</p>
           <p>Hỗ trợ cho người hiến</p>
           <p>Trạng thái</p>
         </div>
@@ -124,122 +124,6 @@ function ManageBloodRequest() {
           })}
         </div>
       </div>
-      {/* <Modal
-        isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        style={customStyles}
-      >
-        <div>
-          <span>Số lượng máu(ml):</span>
-        </div>
-        <input
-          type="text"
-          name="unitRequire"
-          placeholder="Số lượng máu"
-          defaultValue={formik.initialValues.unitRequire}
-          onChange={formik.handleChange}
-        />
-        {formik.errors.unitRequire && (
-          <p style={{ color: 'red' }}>
-            {formik.errors.unitRequire}
-          </p>
-        )}
-        <div>
-          <span>Lợi ích cho người hiến máu:</span>
-        </div>
-        <input
-          type="text"
-          name="offerBenefit"
-          placeholder="Lợi ích của người hiến"
-          defaultValue={formik.initialValues.offerBenefit}
-          onChange={formik.handleChange}
-        />
-        {formik.errors.offerBenefit && (
-          <p style={{ color: 'red' }}>
-            {formik.errors.offerBenefit}
-          </p>
-        )}
-        <div>
-          <button style={{ backgroundColor: "red", marginRight: "10px",marginTop: "10px", color:"white" , padding: "2px 3px", borderRadius: "5px"}} onClick={() => {
-            setModalOpen(false)
-
-          }}>Đóng</button>
-          <button type='Submit'style={{ backgroundColor: "green", marginRight: "10px",marginTop: "10px", color:"white" , padding: "2px 3px", borderRadius: "5px"}} onClick={formik.handleSubmit}>
-            Lưu
-          </button>
-        </div>
-
-      </Modal> */}
-      {/* <form onSubmit={formik.handleSubmit}>
-        <div className={cx("Campaign-Model")}>
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Cập nhật cầu nhận máu</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ul className={cx("menu-list")}>
-                <li className={cx("menu-item")}>
-                  <div className={cx("Shared input-name")}>
-                    <div>
-                      <span>Số lượng máu cần(ml):</span>
-                    </div>
-                    <div className={cx("vali-form")}>
-                      <input
-                        type="text"
-                        name="unitRequire"
-                        placeholder="Hãy nhập số lượng máu:"
-                        value={formik.values.unitRequire}
-                        onChange={formik.handleChange}
-                        style={{border: '1px solid gray'}}
-                      />
-                      {formik.errors.unitRequire && (
-                        <p style={{ color: 'red' }}>
-                          {formik.errors.unitRequire}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </li>
-                <li className={cx("menu-item")}>
-                  <div className={cx("Shared input-name")}>
-                    <div>
-                      <span>Hỗ trợ người hiến máu:</span>
-                    </div>
-                    <div className={cx("vali-form")}>
-                      <input
-                        type="text"
-                        name="offerBenefit"
-                        placeholder="Hỗ trợ cho người hiến máu:"
-                        value={formik.values.offerBenefit}
-                        onChange={formik.handleChange}
-                        style={{border: '1px solid gray'}}
-                      />
-                      {formik.errors.offerBenefit && (
-                        <p style={{ color: 'red' }}>
-                          {formik.errors.offerBenefit}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </Modal.Body>
-            <Modal.Footer>
-            <div className={cx("close-btn")}>
-                <Button  onClick={handleClose}>
-                  Đóng
-                </Button>
-              </div>
-              <div className={cx("save-btn")}>
-                <Button variant="primary" type='Submit' onClick={formik.handleSubmit}>
-                  Lưu
-                </Button>
-              </div>
-            </Modal.Footer>
-          </Modal>
-        </div>
-
-      </form> */}
       {isOpenModalEdit === true ? <ModalUpdateRequest isOpenModalEdit={isOpenModalEdit} setOpenModalEdit={setOpenModalEdit} /> : <></>}
       {isOpen && <ModalInforDonor inforDonor={inforDonor} setIsOpen={setIsOpen} />}
     </div>
