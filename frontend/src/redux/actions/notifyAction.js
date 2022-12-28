@@ -23,7 +23,6 @@ export const getNotifyForDonor = (donorId) => {
       try {
         const resNotify = await axios.get(`${DOMAIN_BACKEND}/api/get-notify-by-donor-id?donorId=${donorId}`)
           const data = resNotify && resNotify.data ? resNotify.data : [];
-          console.log("data noti for donor", data)
           dispatch(fetchNotifyForDonorSuccess(data.content));
       } catch (error) {
           console.log(error);

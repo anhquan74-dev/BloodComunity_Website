@@ -55,7 +55,6 @@ export const fetchRecipientById = (id) => {
         try {
             const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id`, { params: { id: id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchRecipientByIdSuccess(data));
         } catch (error) {
             console.log(error);

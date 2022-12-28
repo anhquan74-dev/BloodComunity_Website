@@ -3,7 +3,6 @@ import styles from "./ModalInforDonor.module.css";
 import { RiCloseLine } from "react-icons/ri";
 
 const ModalInforDonor = ({ setIsOpen, inforDonor }) => {
-  console.log("Modal InforDonor", inforDonor)
   return (
     <>
       <div className={styles.darkBG} onClick={() => setIsOpen(false)} />

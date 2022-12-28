@@ -26,7 +26,6 @@ function NavBar() {
   const dispatch = useDispatch();
   const [openNotify, setOpenNotify] = useState(false);
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log('current user: ', currentUser)
   let previewImage = require('../../../assets/images/default_avatar.png');
   const navigate = useNavigate();
   const notificationsOfRecipient = useSelector((state) => state.notify.listNotifyOfRecipient);
@@ -41,17 +40,21 @@ function NavBar() {
   useEffect(() => {
     dispatch(getNotifyForRecipient(currentUser.id))
     dispatch(getNotifyForDonor(currentUser.id))
+
   }, [])
   const handleNotify = async () => {
+    // console.log("currentUser.roleId" , currentUser.roleId)
     if (currentUser.roleId === "R3") {
       socket.on('get_notification_from_recipient', (data) => {
         dispatch(getNotifyForDonor(currentUser.id))
       })
-      socket.on('get_recipient_confirm_notify_success', data => {
+      socket.on('get_recipient_confirm_notify_success', (data) => {
+        console.log("lang nghe su kien reci succeess")
         dispatch(getNotifyForDonor(currentUser.id))
       })
-      socket.on('get_recipient_confirm_notify_failed', data => {
+      socket.on('get_recipient_confirm_notify_failed', (data) => {
         dispatch(getNotifyForDonor(currentUser.id))
+        console.log(" lang nghe su kien failed")
       })
     } else {
       if (currentUser.roleId === "R4") {
@@ -79,7 +82,6 @@ function NavBar() {
   const handleDonorDeleteNotify = async (item) => {
     const id = { id: item.id }
     const res = await axios.put(`${DOMAIN_BACKEND}/api/delete-notify-by-donor`, id)
-    console.log("res delete 123:" , res)
     dispatch(getNotifyForDonor(currentUser.id))
   }
   return (
