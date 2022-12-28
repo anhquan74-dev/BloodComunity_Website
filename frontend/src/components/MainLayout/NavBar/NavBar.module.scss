@@ -188,6 +188,16 @@
     padding: 5px;
     font-size: 14px;
     margin: 5px 5px;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+    img {
+      width: 20px;
+      height: 20px;
+      margin-left: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
   // span:hover{
   //   cursor: pointer;

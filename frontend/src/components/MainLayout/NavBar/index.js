@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 import { FaTrashAlt } from "react-icons/fa";
+import axios from 'axios';
+import { getNotifyForRecipient } from '../../../redux/actions/notifyAction';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
@@ -28,8 +30,8 @@ function NavBar() {
   console.log('current user: ',currentUser)
   let previewImage = require('../../../assets/images/default_avatar.png');
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([])
-  const [countNotify , setCountNotify] = useState(0)
+  const notificationsOfRecipient = useSelector((state) => state.notify.listNotifyOfRecipient);
+  const notificationsOfDonor = useSelector((state) => state.notify.listNotifyOfDonor);
   if (currentUser?.image) {
     previewImage = new Buffer(currentUser.image, 'base64').toString('binary');
   }
@@ -37,14 +39,16 @@ function NavBar() {
     dispatch(logout());
     navigate('/');
   };
-  const handleNotify = () => {
+  useEffect(() => {
+    dispatch(getNotifyForRecipient(currentUser.id))
+  }, [])
+  const handleNotify = async () => {
     if (currentUser.roleId === "R3"){
 
     }else{
       if(currentUser.roleId === "R4"){
         socket.on('get_notification_from_donor', (data) => {
-          setNotifications((prev) => [...prev, data])
-
+          dispatch(getNotifyForRecipient(currentUser.id))
         })
       }else{
         return;
@@ -59,8 +63,13 @@ function NavBar() {
   useEffect(() => {
     handleNotify()
   },[socket])
-  console.log("thong bao :::" , notifications)
-  const handleDeleteNotify = (item) => {
+  const handleRecipientDeleteNotify = async (item) => {
+    console.log("item deleted" , item)
+    const  id = { id: item.id}
+    await axios.put(`${DOMAIN_BACKEND}/api/delete-notify-by-recipient`, id)
+    dispatch(getNotifyForRecipient(currentUser.id))
+  }
+  const handleDonorDeleteNotify = (item) => {
     console.log("item deleted" , item)
   }
   return (
@@ -85,22 +94,49 @@ function NavBar() {
         <Tooltip title={<p className={cx('tooltip')}>Thông báo</p>} placement="bottom">
           <div className={cx('notification')} onClick={() => setOpenNotify(!openNotify)}>
             <FontAwesomeIcon icon={faBell} />
-            <div className={cx('counter')}>{notifications && notifications.length > 0 ? notifications.length : 0}</div>
+            <div className={cx('counter')}>
+            {
+              currentUser.roleId === "R4" ? <div>{
+                notificationsOfRecipient && notificationsOfRecipient.length > 0 ? notificationsOfRecipient.length  : <>0</>
+              }
+              </div> : <div>{
+                  notificationsOfDonor && notificationsOfDonor.length > 0 ? notificationsOfDonor.length  : <>0</>
+                }</div>
+            }
+            </div>
           </div>
         </Tooltip>
         {openNotify && (
           <div className={cx('notifications')}>
             <div className={cx('notify')}>
-              {notifications && notifications.length > 0 && notifications.map((item, index) => {
+              { currentUser.roleId === "R4" && notificationsOfRecipient && notificationsOfRecipient.length > 0 ? notificationsOfRecipient.map((item, index) => {
                 return (
                   <>
-                    <span key={index}>{item.donorName} đã chấp nhận yêu cầu nhận máu ({item.unitRequire} ml) của bạn! <FaTrashAlt style={{marginLeft: "5px"}} onClick={() => handleDeleteNotify(item)}/></span>
-                    
+                    <span key={index}>{item.donorName} đã chấp nhận hiến máu cho yêu cầu nhận máu ({item.unitRequire} ml) của bạn! <img
+                      onClick={() => handleRecipientDeleteNotify(item)}
+                        src={
+                          require('../../../assets/images/deleteIcon.png')
+                        }
+                        alt="delete"
+                      />   </span>
                   </>
-                  
-                  
                 )
-              })}
+              }) : <>{
+                currentUser.roleId === "R3" && notificationsOfDonor && notificationsOfDonor.length > 0 ? notificationsOfDonor.map((item, index) => {
+                  return (
+                    <>
+                      <span key={index}>{item.recipientName} đã chấp nhận hiến máu cho yêu cầu nhận máu ({item.unitRequire} ml) của bạn! <img
+                        onClick={() => handleDonorDeleteNotify(item)}
+                          src={
+                            require('../../../assets/images/deleteIcon.png')
+                          }
+                          alt="delete"
+                        />   </span>
+                    </>
+                  )
+                }) : <></>
+              }</>
+            }
             </div>
           </div>
         )}

@@ -1,32 +1,26 @@
 import {
-  FETCH_REQUEST_EACH_RECIPIENT_SUCCESS,
-  FETCH_REQUEST_SUCCESS,
-  MOVE_REQUEST_SUCCESS,
+  FETCH_NOTIFY_FOR_DONOR_SUCCESS,
+  FETCH_NOTIFY_FOR_RECIPIENT_SUCCESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  listNotify: [],
-  countNotify: 0
+  listNotifyOfRecipient: [],
+  listNotifyOfDonor: [],
 };
 
 const notifyReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case FETCH_REQUEST_SUCCESS:
+    case FETCH_NOTIFY_FOR_RECIPIENT_SUCCESS:
       return {
         ...state,
-        listRequests: action.payload,
+        listNotifyOfRecipient: action.payload,
       };
-    case FETCH_REQUEST_EACH_RECIPIENT_SUCCESS:
+      case FETCH_NOTIFY_FOR_DONOR_SUCCESS:
       return {
         ...state,
-        listRequestsOfEachRecipients: action.payload,
+        listNotifyOfDonor: action.payload,
       };
-    case MOVE_REQUEST_SUCCESS: {
-      return {
-        ...state,
-        requestUpdate: action.payload,
-      }
-    }
+    
     default:
       return state;
   }

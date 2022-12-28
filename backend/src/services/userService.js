@@ -3,6 +3,52 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
+let getNotifyForRecipientService = async (recipientId) => {
+  try {
+    let notifiesInfor = {};
+    let notifies = await db.Notify.findAll({
+      where: {
+        recipientId,
+        recipientDeleted: "0"
+      },
+    });
+    if (!notifies) {
+      notifiesInfor.statusCode = 404;
+      notifiesInfor.message = "Không tìm thấy!";
+      notifiesInfor.content = {};
+    } else {
+      notifiesInfor.statusCode = 200;
+      notifiesInfor.message = "Lấy thông tin thành công!";
+      notifiesInfor.content = notifies;
+    }
+    return notifiesInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let getNotifyForDonorService = async (donorId) => {
+  try {
+    let notifiesInfor = {};
+    let notifies = await db.Notify.findAll({
+      where: {
+        donorId,
+        donorDeleted: "0"
+      },
+    });
+    if (!notifies) {
+      notifiesInfor.statusCode = 404;
+      notifiesInfor.message = "Không tìm thấy!";
+      notifiesInfor.content = {};
+    } else {
+      notifiesInfor.statusCode = 200;
+      notifiesInfor.message = "Lấy thông tin thành công!";
+      notifiesInfor.content = notifies;
+    }
+    return notifiesInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
 let getAllRequestByRecipientIdService = async (id) => {
   try {
     let requestsInfor = {};
@@ -39,10 +85,6 @@ let getAllRequestByGroupBloodService = async (groupBlood) => {
       raw: true,
         nest: true,
     });
-    // const recipientInfo = await db.User.findOne({
-    //   where: {id: requests.recipientId}
-    // })
-    
     if (!requests) {
       requestsInfor.statusCode = 404;
       requestsInfor.message = "Không tìm thấy!";
@@ -186,7 +228,6 @@ let deleteRequestByIdService = async (data) => {
     console.log(e);
   }
 }
-
 let createRequestService = async (data) => {
   try {
     let requestCreated = {};
@@ -212,6 +253,29 @@ let createRequestService = async (data) => {
       requestCreated.content = content;
     }
     return requestCreated;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let createNotifyService = async (data) => {
+  try {
+    let notifyCreated = {};
+    
+      const notify = await db.Notify.create({
+        recipientId: data.recipientId,
+        recipientName: data.recipientName,
+        donorId: data.donorId,
+        donorName: data.donorName,
+        donorDeleted: data.donorDeleted,
+        recipientDeleted: data.recipientDeleted,
+        type: data.type,
+        unitRequire: data.unitRequire,
+      });
+      notifyCreated.statusCode = 201;
+      notifyCreated.message = "Tạo thông báo thành công!";
+      notifyCreated.content = notify;
+    
+    return notifyCreated;
   } catch (e) {
     console.log(e);
   }
@@ -826,5 +890,8 @@ module.exports = {
   recipientConfirmRequestSuccessService,
   recipientConfirmRequestFailedService,
   getAllRequestByGroupBloodService,
-  getAllRequestByRecipientIdService
+  getAllRequestByRecipientIdService,
+  createNotifyService,
+  getNotifyForRecipientService,
+  getNotifyForDonorService
 };
