@@ -20,7 +20,7 @@ function EditRecipient() {
     const [recipient, setRecipient] = useState({
         // id: '',
         email: '',
-        password: '',
+        // password: '',
         firstName: '',
         lastName: '',
         gender: '',
@@ -50,7 +50,7 @@ function EditRecipient() {
 
     const {
         email,
-        password,
+        // password,
         firstName,
         lastName,
         gender,
@@ -197,10 +197,11 @@ function EditRecipient() {
                             label="Mật khẩu"
                             variant="filled"
                             color="info"
-                            value={password || ''}
+                            // value={password || ''}
                             type="text"
                             name="password"
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            disabled
                         />
                         <br />
                         <TextField

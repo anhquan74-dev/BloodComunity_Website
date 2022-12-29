@@ -19,7 +19,7 @@ const cx = classNames.bind(styles);
 function EditDonor() {
     const [donor, setDonor] = useState({
         email: '',
-        password: '',
+        // password: '',
         firstName: '',
         lastName: '',
         gender: '',
@@ -34,7 +34,7 @@ function EditDonor() {
     });
     const {
         email,
-        password,
+        // password,
         firstName,
         lastName,
         gender,
@@ -192,10 +192,11 @@ function EditDonor() {
                             label="Mật khẩu"
                             variant="filled"
                             color="info"
-                            value={password || ''}
+                            // value={password || ''}
                             type="text"
                             name="password"
-                            onChange={handleInputChange}
+                            // onChange={handleInputChange}
+                            disabled
                         />
                         <br />
                         <TextField
