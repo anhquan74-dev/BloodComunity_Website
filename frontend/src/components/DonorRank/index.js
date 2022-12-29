@@ -19,13 +19,9 @@ function DonorRank() {
             restDonor.push(item);
         }
     });
-    console.log(restDonor);
     useEffect(() => {
         dispatch(getTopDonors());
     }, []);
-
-    console.log(topDonors);
-
     return (
         <div className={cx('wrapper')}>
             <h2>Bảng xếp hạng người hiến máu</h2>

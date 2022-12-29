@@ -57,14 +57,11 @@ const hospitalReducer = (state = INITIAL_STATE, action) => {
             toast.success(action.payload.message);
             return state;
         case FETCH_NEWEST_DONOR_BOOKING_ERROR:
-            console.log(action.payload);
-            console.log('error', state.newestDonorBooking);
             return {
                 ...state,
                 newestDonorBooking: null,
             };
         case FETCH_NEWEST_DONOR_BOOKING_SUCCESS:
-            console.log('success');
             return {
                 ...state,
                 newestDonorBooking: action.payload,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DOMAIN_BACKEND } from '../../config/settingSystem';
 import {
     CREATE_EVENT_SUCCESS,
     CREATE_SCHEDULES_FAILED,
@@ -16,11 +17,10 @@ import {
 export const fetchAllSchedulesById = (id) => {
     return async (dispatch, getState) => {
         try {
-            const res = await axios.get('http://localhost:8080/api/get-schedule-hospital-by-id', {
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-schedule-hospital-by-id`, {
                 params: { id: id },
             });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchSchedulesByIdSuccess(data));
         } catch (error) {
             console.log(error);
@@ -37,11 +37,9 @@ export const fetchSchedulesByIdSuccess = (payload) => {
 
 export const deleteSchedule = (item) => {
     return async (dispatch, getState) => {
-        console.log(item.hospitalId);
         try {
-            const res = await axios.delete('http://localhost:8080/api/delete-schedule', { data: { id: item.id } });
+            const res = await axios.delete(`${DOMAIN_BACKEND}/api/delete-schedule`, { data: { id: item.id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(deleteScheduleSuccess(data));
             dispatch(fetchAllSchedulesById(item.hospitalId));
         } catch (error) {
@@ -60,7 +58,7 @@ export const deleteScheduleSuccess = (payload) => {
 export const createSchedule = (data) => {
     return async (dispatch) => {
         try {
-            const res = await axios.post('http://localhost:8080/api/create-schedule', data);
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/create-schedule`, data);
             dispatch(createSchedulesSuccess(res.data));
             dispatch(fetchAllSchedulesById(data.hospitalId));
         } catch (e) {
@@ -84,9 +82,8 @@ export const createSchedulesFail = (payload) => {
 export const fetchAllEvents = () => {
     return async (dispatch, getState) => {
         try {
-            const res = await axios.get('http://localhost:8080/api/get-all-events');
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-all-events`);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchEventsSuccess(data));
         } catch (error) {
             console.log(error);
@@ -104,9 +101,8 @@ export const fetchEventsSuccess = (payload) => {
 export const createEvent = (event) => {
     return async (dispatch, getState) => {
         try {
-            const res = await axios.post('http://localhost:8080/api/create-event', event);
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/create-event`, event);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(createEventSuccess(data));
             dispatch(fetchAllEvents(data));
         } catch (error) {
@@ -125,9 +121,8 @@ export const createEventSuccess = (payload) => {
 export const updateEvent = (event) => {
     return async (dispatch, getState) => {
         try {
-            const res = await axios.put('http://localhost:8080/api/update-event', event);
+            const res = await axios.put(`${DOMAIN_BACKEND}/api/update-event`, event);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(updateEventSuccess(data));
             dispatch(fetchAllEvents(data));
         } catch (error) {
@@ -146,10 +141,8 @@ export const updateEventSuccess = (payload) => {
 export const deleteEvent = (id) => {
     return async (dispatch, getState) => {
         try {
-            console.log(id);
-            const res = await axios.delete('http://localhost:8080/api/delete-event', { data: { id } });
+            const res = await axios.delete(`${DOMAIN_BACKEND}/api/delete-event`, { data: { id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(deleteEventSuccess(data));
             dispatch(fetchAllEvents(data));
         } catch (error) {
@@ -169,10 +162,8 @@ export const deleteEventSuccess = (payload) => {
 export const fetchNewestDonorBooking = (donor) => {
     return async (dispatch, getState) => {
         try {
-            console.log(donor.id);
-            const res = await axios.post('http://localhost:8080/api/get-newest-booking-of-user', { id: donor.id });
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/get-newest-booking-of-user`, { id: donor.id });
             const data = res && res.data ? res.data : [];
-            console.log('hhh', res);
             dispatch(fetchNewestDonorBookingSuccess(data.content[0]));
         } catch (error) {
             dispatch(fetchNewestDonorBookingError(error));
@@ -197,8 +188,7 @@ export const fetchNewestDonorBookingError = (payload) => {
 export const fetchAllBookingByDonorId = (donorId) => {
     return async (dispatch, getState) => {
         try {
-            console.log(donorId);
-            const res = await axios.get('http://localhost:8080/api/get-all-booking-by-donor-id', {
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-all-booking-by-donor-id`, {
                 params: { donorId: donorId },
             });
             const data = res && res.data ? res.data : [];

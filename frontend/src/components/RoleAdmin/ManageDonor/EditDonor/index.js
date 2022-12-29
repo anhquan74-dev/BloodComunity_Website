@@ -45,7 +45,6 @@ function EditDonor() {
         numberOfDonation,
         image,
         status,
-        roleId,
     } = donor;
     const [previewImageUpload, setPreviewImageUpload] = useState('');
     const [err, setErr] = useState('');
@@ -68,9 +67,7 @@ function EditDonor() {
     let previewImageDisplay = '';
     let imageBase64 = '';
     if (image) {
-        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
-        console.log(imageBase64);
         previewImageDisplay = imageBase64;
     }
 
@@ -87,7 +84,6 @@ function EditDonor() {
         if (image && typeof image === 'object') {
             donor.image = new Buffer(image, 'base64').toString('binary');
         }
-        console.log(donor);
         dispatch(updateDonor(donor));
         history('/admin/manage_donor/');
         setErr('');

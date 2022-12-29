@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DOMAIN_BACKEND } from '../../config/settingSystem';
 // import axios from '../../utils/customizeAxios';
 
 import {
@@ -18,9 +19,8 @@ export const fetchAllDonor = () => {
     return async (dispatch, getState) => {
         dispatch(fetchDonorRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-type', { params: { type: 'R3' } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-type`, { params: { type: 'R3' } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchDonorSuccess(data));
         } catch (error) {
             console.log(error);
@@ -53,9 +53,8 @@ export const fetchDonorById = (id) => {
     return async (dispatch, getState) => {
         dispatch(fetchDonorByIdRequest());
         try {
-            const res = await axios.get('http://localhost:8080/api/get-user-by-id', { params: { id: id } });
+            const res = await axios.get(`${DOMAIN_BACKEND}/api/get-user-by-id`, { params: { id: id } });
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(fetchDonorByIdSuccess(data));
         } catch (error) {
             console.log(error);
@@ -88,9 +87,8 @@ export const updateDonor = (donor) => {
     return async (dispatch, getState) => {
         dispatch(updateDonorRequest());
         try {
-            const res = await axios.put('http://localhost:8080/api/update-user', donor);
+            const res = await axios.put(`${DOMAIN_BACKEND}/api/update-user`, donor);
             const data = res && res.data ? res.data : [];
-            console.log(res,data, donor);
             dispatch(updateDonorSuccess(data));
             dispatch(fetchAllDonor());
         } catch (error) {

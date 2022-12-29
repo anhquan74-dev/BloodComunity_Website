@@ -8,15 +8,14 @@ import {
     LOGOUT_SUCCESS,
 } from './types';
 import axios from 'axios';
+import { DOMAIN_BACKEND } from '../../config/settingSystem';
 
 export const registerAccount = (user) => {
     return async (dispatch, getState) => {
         dispatch(registerAccountRequest());
         try {
-            const res = await axios.post('http://localhost:8080/api/create-new-user', user);
-            console.log(user);
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/create-new-user`, user);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             dispatch(registerAccountSuccess(data));
         } catch (error) {
             console.log(error);
@@ -51,9 +50,8 @@ export const loginAccount = (user) => {
     return async (dispatch, getState) => {
         dispatch(loginAccountRequest());
         try {
-            const res = await axios.post('http://localhost:8080/api/login', user);
+            const res = await axios.post(`${DOMAIN_BACKEND}/api/login`, user);
             const data = res && res.data ? res.data : [];
-            console.log(data);
             if (data && data.content) {
                 localStorage.setItem('user', JSON.stringify(data.content));
             }

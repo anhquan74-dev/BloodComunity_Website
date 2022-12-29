@@ -26,25 +26,18 @@ function ManageEvents() {
 
     const dispatch = useDispatch();
     const listEvents = useSelector((state) => state.hospital.listEvents);
-    console.log(listEvents);
 
     useEffect(() => {
-        // axios
-        //     .get('http://localhost:8080/api/get-all-events')
-        //     .then((res) => console.log(res))
-        //     .catch((e) => console.log(e));
         dispatch(fetchAllEvents());
     }, []);
 
     const handleShowModalAddNew = () => setShowModalAddNew(true);
 
     const handleShowModalUpdate = (event) => {
-        console.log(event);
         setEventUpdate(event);
         setShowModalUpdate(true);
     };
     const handleShowModalDelete = (event) => {
-        console.log(event);
         setEventDelete(event);
         setShowModalDelete(true);
     };

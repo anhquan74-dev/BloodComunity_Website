@@ -254,7 +254,6 @@ let getScheduleByIdService = async (inputId) => {
       scheduleData.statusCode = 422;
       scheduleData.message = "Thiếu thông số bắt buộc!";
     } else {
-      console.log("input id", inputId);
       let data = await db.Schedule.findAll({
         where: {
           hospitalId: inputId,

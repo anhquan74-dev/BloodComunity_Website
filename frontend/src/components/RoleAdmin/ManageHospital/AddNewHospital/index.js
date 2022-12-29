@@ -44,7 +44,6 @@ function AddNewHospital() {
         if (!hospitalName || !email || !password || !phoneNumber || !address || !image) {
             setErr('Vui lòng nhập đầy đủ thông tin');
         } else {
-            console.log(hospital);
             dispatch(createUser(hospital));
             history('/admin/manage_hospital/');
             setErr('');

@@ -4,15 +4,15 @@ import { Modal } from 'react-bootstrap';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 
 const cx = classNames.bind(styles);
 
 const ModalDeleteBooking = ({ show, handleClose, donorBooking }) => {
-    console.log(donorBooking);
     const navigate = useNavigate();
     const handleDeleleBooking = () => {
         axios
-            .delete('http://localhost:8080/api/delete-booking-by-id', {
+            .delete(`${DOMAIN_BACKEND}/api/delete-booking-by-id`, {
                 data: {
                     id: donorBooking.id,
                 },

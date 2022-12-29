@@ -3,7 +3,108 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
-let recipientConfirmRequestService = async (data) => {
+const Op = require('Sequelize').Op;
+let getNotifyForRecipientService = async (recipientId) => {
+  try {
+    let notifiesInfor = {};
+    let notifies = await db.Notify.findAll({
+      where: {
+        recipientId,
+        recipientDeleted: "0",
+        type: "donor_confirm"
+      },
+    });
+    if (!notifies) {
+      notifiesInfor.statusCode = 404;
+      notifiesInfor.message = "Không tìm thấy!";
+      notifiesInfor.content = {};
+    } else {
+      notifiesInfor.statusCode = 200;
+      notifiesInfor.message = "Lấy thông tin thành công!";
+      notifiesInfor.content = notifies;
+    }
+    return notifiesInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let getNotifyForDonorService = async (donorId) => {
+  try {
+    let notifiesInfor = {};
+    let notifies = await db.Notify.findAll({
+      where: {
+        donorId,
+        donorDeleted: "0",
+        type: {
+          [Op.or]: ["recipient_confirm_failed", "recipient_confirm_success"]
+        }
+      },
+    });
+    if (!notifies) {
+      notifiesInfor.statusCode = 404;
+      notifiesInfor.message = "Không tìm thấy!";
+      notifiesInfor.content = {};
+    } else {
+      notifiesInfor.statusCode = 200;
+      notifiesInfor.message = "Lấy thông tin thành công!";
+      notifiesInfor.content = notifies;
+    }
+    return notifiesInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let getAllRequestByRecipientIdService = async (id) => {
+  try {
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        recipientId: id
+      },
+    });
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let getAllRequestByGroupBloodService = async (groupBlood) => {
+  try {
+    let requestsInfor = {};
+    let requests = await db.Request.findAll({
+      where: {
+        groupBlood
+      },
+      include: [{
+        model: db.User,
+        as: 'recipientData'
+      }],
+      raw: true,
+        nest: true,
+    });
+    if (!requests) {
+      requestsInfor.statusCode = 404;
+      requestsInfor.message = "Không tìm thấy!";
+      requestsInfor.content = {};
+    } else {
+      requestsInfor.statusCode = 200;
+      requestsInfor.message = "Lấy thông tin thành công!";
+      requestsInfor.content = requests;
+    }
+    return requestsInfor;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let recipientConfirmRequestSuccessService = async (data) => {
   try {
     let requestUpdated = {};
     let checkRequestId = await db.Request.findOne({
@@ -20,6 +121,32 @@ let recipientConfirmRequestService = async (data) => {
       requestUpdated.content = getRequestInforAgain;
       requestUpdated.statusCode = 200;
       requestUpdated.message = "Người nhận máu đã xác nhận thành công!";
+    } else {
+      requestUpdated.statusCode = 404;
+      requestUpdated.message = "Không tìm thấy!";
+    }
+    return requestUpdated;
+  } catch (e) {
+    console.log("err donor confirm: ", e);
+  }
+}
+let recipientConfirmRequestFailedService = async (data) => {
+  try {
+    let requestUpdated = {};
+    let checkRequestId = await db.Request.findOne({
+      where: { id: data.id },
+      raw: false,
+    });
+    if (checkRequestId) {
+      checkRequestId.status = "S1";
+      await checkRequestId.save();
+      let getRequestInforAgain = await db.Request.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      requestUpdated.content = getRequestInforAgain;
+      requestUpdated.statusCode = 200;
+      requestUpdated.message = "Người nhận máu đã xác nhận nhận máu không thành công!";
     } else {
       requestUpdated.statusCode = 404;
       requestUpdated.message = "Không tìm thấy!";
@@ -106,7 +233,6 @@ let deleteRequestByIdService = async (data) => {
     console.log(e);
   }
 }
-
 let createRequestService = async (data) => {
   try {
     let requestCreated = {};
@@ -114,17 +240,47 @@ let createRequestService = async (data) => {
       requestCreated.statusCode = 422;
       requestCreated.message = "Thiếu thông số bắt buộc!";
     }else{
-      await db.Request.create({
+      const request = await db.Request.create({
         recipientId: data.recipientId,
         groupBlood: data.groupBlood,
         unitRequire: data.unitRequire,
         offerBenefit: data.offerBenefit,
         status: "S1"
       });
+      const recipientInfo = await db.User.findOne({
+        where: { id: data.recipientId}
+      })
+      const content = {
+        request, recipientInfo
+      }
       requestCreated.statusCode = 201;
       requestCreated.message = "Tạo yêu cầu thành công!";
+      requestCreated.content = content;
     }
     return requestCreated;
+  } catch (e) {
+    console.log(e);
+  }
+}
+let createNotifyService = async (data) => {
+  try {
+    let notifyCreated = {};
+    
+      const notify = await db.Notify.create({
+        recipientId: data.recipientId,
+        recipientName: data.recipientName,
+        donorId: data.donorId,
+        donorName: data.donorName,
+        donorDeleted: data.donorDeleted,
+        recipientDeleted: data.recipientDeleted,
+        type: data.type,
+        unitRequire: data.unitRequire,
+      });
+      notifyCreated.statusCode = 201;
+      notifyCreated.message = "Tạo thông báo thành công!";
+      notifyCreated.content = notify;
+    
+    return notifyCreated;
   } catch (e) {
     console.log(e);
   }
@@ -241,10 +397,6 @@ let loginService = async (email, password) => {
     let checkUserEmail = await db.User.findOne({
       where: { email },
     });
-
-    console.log("user info login", checkUserEmail)
-
-
     if (!checkUserEmail) {
       userData.statusCode = 404;
       userData.message = "Email này không tồn tại trong hệ thống!";
@@ -740,5 +892,11 @@ module.exports = {
   deleteRequestByIdService,
   updateRequestService,
   donorConfirmRequestService,
-  recipientConfirmRequestService
+  recipientConfirmRequestSuccessService,
+  recipientConfirmRequestFailedService,
+  getAllRequestByGroupBloodService,
+  getAllRequestByRecipientIdService,
+  createNotifyService,
+  getNotifyForRecipientService,
+  getNotifyForDonorService
 };

@@ -24,7 +24,7 @@ function ViewHospital() {
         image: '',
         roleId: 'R2',
     });
-    const { hospitalName, email, password, phoneNumber, address, image, roleId } = hospital;
+    const { hospitalName, email, phoneNumber, address, image } = hospital;
     const [isOpen, setIsOpen] = useState(false);
     const [err, setErr] = useState('');
     const { id } = useParams();
@@ -46,13 +46,10 @@ function ViewHospital() {
     let previewImage = '';
     let imageBase64 = '';
     if (image) {
-        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
-        console.log(imageBase64);
     }
     previewImage = imageBase64;
 
-    console.log(hospitalState);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('back')} onClick={() => history('/admin/manage_hospital/')}>

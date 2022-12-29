@@ -36,7 +36,6 @@ const Login = () => {
             break;
     }
 
-    console.log(currentUser, status, message);
     // xu ly form submit
     const { values, isValid, dirty, handleBlur, touched, errors, handleChange, handleSubmit } = useFormik({
         initialValues: {
@@ -59,8 +58,6 @@ const Login = () => {
         }),
         onSubmit: (value) => {
             dispatch(loginAccount(value));
-
-            console.log(value);
         },
     });
     if (isLoggedIn) {

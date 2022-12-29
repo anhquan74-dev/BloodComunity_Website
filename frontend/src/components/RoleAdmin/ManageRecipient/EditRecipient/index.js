@@ -79,7 +79,6 @@ function EditRecipient() {
         imageBase64 = new Buffer(image, 'base64').toString('binary');
     }
     previewImageDisplay = imageBase64;
-    console.log(previewImageDisplay);
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;

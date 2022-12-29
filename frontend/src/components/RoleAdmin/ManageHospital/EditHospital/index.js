@@ -42,7 +42,6 @@ function EditHospital() {
 
     useEffect(() => {
         if (hospitalState) {
-            console.log(hospitalState);
             setHospital({ ...hospitalState });
         }
     }, [hospitalState]);
@@ -50,17 +49,13 @@ function EditHospital() {
     let previewImageDisplay = image || '';
     let imageBase64 = '';
     if (image && typeof image === 'object') {
-        console.log(image);
         imageBase64 = new Buffer(image, 'base64').toString('binary');
         previewImageDisplay = imageBase64;
     }
-    console.log(previewImageDisplay);
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        console.log(name, value);
         setHospital({ ...hospital, [name]: value });
-        console.log(hospital);
     };
 
     const handleSubmit = (e) => {
@@ -71,7 +66,6 @@ function EditHospital() {
             if (image && typeof image === 'object') {
                 hospital.image = new Buffer(image, 'base64').toString('binary');
             }
-            console.log(hospital);
             dispatch(updateHospital(hospital));
             history('/admin/manage_hospital/');
             setErr('');
@@ -84,7 +78,6 @@ function EditHospital() {
         if (file) {
             setPreviewImageUpload(URL.createObjectURL(file));
             let base64 = await getBase64(file);
-            console.log(base64);
             setHospital({ ...hospital, image: base64 });
         }
     };

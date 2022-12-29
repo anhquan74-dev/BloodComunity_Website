@@ -3,11 +3,8 @@ import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/index";
 import connectDB from "./config/connectDB";
-// const swaggerUI = require("swagger-ui-express");
-// const swaggerJsDoc = require("swagger-jsdoc");
 // import cors from "cors";
 require("dotenv").config();
-console.log("hello world!");
 let app = express();
 // app.use(cors({ origin: true }));
 app.use(function (req, res, next) {
@@ -33,32 +30,6 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-
-// swagger
-// const options = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "Library API",
-//       version: "1.0.0",
-//       description: "API documentation",
-//     },
-//     servers: [
-//       {
-//         url: "http://localhost:8080",
-//       },
-//     ],
-//   },
-//   apis: ["./route/*.js"],
-// };
-
-// const specs = swaggerJsDoc(options);
-// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-
-// // config app
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -77,15 +48,83 @@ const io = require("socket.io")(server, {
     origin: process.env.URL_REACT,
   },
 });
-
+let onlineUsers = []
+const addNewUser = (username, userId, socketId) => {
+  !onlineUsers.some(user => user.userId === userId) && onlineUsers.push({username, userId, socketId})
+}
+const removeUser = (socketId) => {
+  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId)
+}
+const getUser = (userId) => {
+  return onlineUsers.find((user) => user.userId === userId)
+}
 io.on("connection", (socket) => {
-  console.log("co nguoi ket noi: ", socket.id);
-  console.log("tat ca rooms ", socket.adapter.rooms);
-  // 4 room
-  socket.on("join room", (user) => {
-    console.log("user ket noi: ", user.roleId, user.id);
-    console.log(user.roleId);
-    console.log(user.groupBlood);
+  socket.on("join_group_blood", (user) => {
+    switch (user.groupBlood) {
+      case "o":
+        socket.join(user.groupBlood);
+        break;
+      case "a":
+        socket.join(user.groupBlood);
+        break;
+      case "b":
+        socket.join(user.groupBlood);
+        break;
+      case "ab":
+        socket.join(user.groupBlood);
+        break;
+      default:  
+        break;
+    }
+    socket.on('new_request_from_recipient', (newRequestReceived) => {
+      socket.in(user.groupBlood).emit('request_received' , newRequestReceived)
+    })
+    socket.room = user.groupBlood;
+    socket.on("donor_confirm_request", (requestConfirmed) => {
+      socket.in(user.groupBlood).emit("recieved_donor_confirm", requestConfirmed);
+    });
+    socket.on("recipient_confirm_request", (requestConfirmedByRecipient) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_confirm", requestConfirmedByRecipient);
+    })
+    socket.on("recipient_delete_request", (requestDeleted) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_delete", requestDeleted);
+    })
+    socket.on("recipient_update_request", (requestUpdated) => {
+      socket.in(user.groupBlood).emit("recieved_recipient_update", requestUpdated);
+    })
+    socket.on("newUser" , (userInfo) => {
+      const fullName = userInfo.firstName + " " + userInfo.lastName
+      addNewUser(fullName, userInfo.id, socket.id)
+    })
+    socket.on('send_notification_confirm_from_donor', (data) => {
+      const receiver = getUser(data.recipientId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_notification_from_donor', (data))
+      }else{
+        console.log("user offfline")
+      }
+      
+    })
+    socket.on('recipient_confirm_notify_success' , data => {
+      console.log("recipient_confirm_notify_success: 123 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_success', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })
+    socket.on('recipient_confirm_notify_failed' , data => {
+      console.log("recipient_confirm_notify_failed: 456 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_failed', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })  
+  });
+  socket.on("setup", (userData) => {
     switch (user.groupBlood) {
       case "o":
         socket.join(user.groupBlood);
@@ -102,52 +141,9 @@ io.on("connection", (socket) => {
       default:
         break;
     }
-    socket.phong = user.groupBlood;
-
-    console.log("tat ca rooms after join", socket.adapter.rooms);
-    socket.on("send blood request", (user) => {
-      io.sockets.in(socket.phong).emit("recieve blood request", user);
-    });
-
-    socket.on("donor confirm", (user) => {
-      io.sockets.in(socket.phong).emit("recieve donor confirm", user);
-    });
   });
-  // socket.on("send request blood group", (data) => {
-  //   // socket.join(room);
-  //   console.log(
-  //     "Recipient send blood request: " + data.id + " ",
-  //     data.groupBlood
-  //   );
-  //   io.sockets.emit("receive blood request", data);
-  // });
-
-  // ngat ket noi
   socket.on("disconnect", function () {
-    console.log(socket.id, " ngat ket noi");
+    removeUser(socket.id);
   });
 });
 
-// } else if (user.roleId === "R3") {
-//   switch (user.groupBlood) {
-//     case "o":
-//       socket.join("room o");
-//       socket.join("room a");
-//       socket.join("room b");
-//       socket.join("room ab");
-//       break;
-//     case "a":
-//       socket.join("room a");
-//       socket.join("room ab");
-//       break;
-//     case "b":
-//       socket.join("room b");
-//       socket.join("room ab");
-//       break;
-//     case "ab":
-//       socket.join("room ab");
-//       break;
-//     default:
-//       break;
-//   }
-// }
