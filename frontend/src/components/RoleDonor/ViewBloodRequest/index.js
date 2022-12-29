@@ -21,7 +21,6 @@ function ViewBloodRequest() {
   const requests = useSelector((state) => state.request.listRequests)
   const [notification , setNotification] = useState([])
   useEffect(() => {
-    
     dispatch(fetchRequest(groupBlood))
   }, [])
   useEffect(() => {
@@ -48,20 +47,22 @@ function ViewBloodRequest() {
     })
   }, [socket])
   const handleConfirm = async (item) => {
-    console.log("item confirm" , item)
     const data = { id: item.id, donorId:  currentUser.id}
-    const res = await axios.put(`${DOMAIN_BACKEND}/api/donor-confirm-request`, data)
+    await axios.put(`${DOMAIN_BACKEND}/api/donor-confirm-request`, data)
     dispatch(fetchRequest(groupBlood))
     socket.emit('donor_confirm_request',(item));
     const notify =  {
-      senderName: currentUser.firstName + ' ' + currentUser.lastName,
-      senderId: currentUser.id,
-      receiverName: item.recipientData.firstName + ' ' + item.recipientData.lastName,
-      receiverId: item.recipientId,
+      donorName: currentUser.firstName + ' ' + currentUser.lastName,
+      donorId: currentUser.id,
+      recipientName: item.recipientData.firstName + ' ' + item.recipientData.lastName,
+      recipientId: item.recipientId,
       unitRequire: item.unitRequire,
-      type: 'donor_confirm'
+      type: 'donor_confirm',
+      donorDeleted: '0',
+      recipientDeleted: '0'
     }
-    socket.emit('send_notification_confirm_from_donor',(notify))
+    const resNotify = await axios.post(`${DOMAIN_BACKEND}/api/create-notify`, notify)
+    socket.emit('send_notification_confirm_from_donor',(resNotify.data.content))
   }
   return (
     <div className={cx('wrapper')}>
@@ -71,8 +72,8 @@ function ViewBloodRequest() {
           <p>Người cần máu</p>
           <p>Điện thoại</p>
           <p>Địa chỉ</p>
-          <p>Hỗ trợ từ người nhận</p>
-          <p>Số lượng máu</p>
+          <p style={{marginRight: "70px"}}>Hỗ trợ từ người nhận</p>
+          <p style={{marginRight: "80px"}}>Số lượng máu (ml)</p>
           <p>Trạng thái</p>
         </div>
         <div className={cx('body')}>

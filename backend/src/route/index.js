@@ -112,6 +112,13 @@ let initWebRoutes = (app) => {
   router.put('/api/recipient-confirm-request-failed', userController.handleRecipientConfirmRequestFailed)
   router.get('/api/get-all-request-by-group-blood', userController.handleGetAllRequestByGroupBlood)
   router.get('/api/get-all-request-by-recipient-id', userController.handleGetAllRequestByRecipientId)
+
+  // notify
+  router.post('/api/create-notify', userController.handleCreateNotify)
+  router.get('/api/get-notify-by-recipient-id', userController.handleGetNotifyForRecipient)
+  router.get('/api/get-notify-by-donor-id', userController.handleGetNotifyForDonor)
+  router.put('/api/delete-notify-by-recipient', userController.handleDeleteNotifyByRecipient)
+  router.put('/api/delete-notify-by-donor', userController.handleDeleteNotifyByDonor)
   //Home
   return app.use("/", router);
 };

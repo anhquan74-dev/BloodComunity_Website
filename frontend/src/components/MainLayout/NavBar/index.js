@@ -13,7 +13,8 @@ import { logout } from '../../../redux/actions/authAction';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
-import { FaTrashAlt } from "react-icons/fa";
+import axios from 'axios';
+import { getNotifyForDonor, getNotifyForRecipient } from '../../../redux/actions/notifyAction';
 Buffer.from('anything', 'base64');
 
 const cx = classNames.bind(styles);
@@ -25,11 +26,10 @@ function NavBar() {
   const dispatch = useDispatch();
   const [openNotify, setOpenNotify] = useState(false);
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  console.log('current user: ',currentUser)
   let previewImage = require('../../../assets/images/default_avatar.png');
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([])
-  const [countNotify , setCountNotify] = useState(0)
+  const notificationsOfRecipient = useSelector((state) => state.notify.listNotifyOfRecipient);
+  const notificationsOfDonor = useSelector((state) => state.notify.listNotifyOfDonor);
   if (currentUser?.image) {
     previewImage = new Buffer(currentUser.image, 'base64').toString('binary');
   }
@@ -37,16 +37,31 @@ function NavBar() {
     dispatch(logout());
     navigate('/');
   };
-  const handleNotify = () => {
-    if (currentUser.roleId === "R3"){
+  useEffect(() => {
+    dispatch(getNotifyForRecipient(currentUser.id))
+    dispatch(getNotifyForDonor(currentUser.id))
 
-    }else{
-      if(currentUser.roleId === "R4"){
+  }, [])
+  const handleNotify = async () => {
+    // console.log("currentUser.roleId" , currentUser.roleId)
+    if (currentUser.roleId === "R3") {
+      socket.on('get_notification_from_recipient', (data) => {
+        dispatch(getNotifyForDonor(currentUser.id))
+      })
+      socket.on('get_recipient_confirm_notify_success', (data) => {
+        console.log("lang nghe su kien reci succeess")
+        dispatch(getNotifyForDonor(currentUser.id))
+      })
+      socket.on('get_recipient_confirm_notify_failed', (data) => {
+        dispatch(getNotifyForDonor(currentUser.id))
+        console.log(" lang nghe su kien failed")
+      })
+    } else {
+      if (currentUser.roleId === "R4") {
         socket.on('get_notification_from_donor', (data) => {
-          setNotifications((prev) => [...prev, data])
-
+          dispatch(getNotifyForRecipient(currentUser.id))
         })
-      }else{
+      } else {
         return;
       }
     }
@@ -58,10 +73,16 @@ function NavBar() {
   }, [socket, currentUser])
   useEffect(() => {
     handleNotify()
-  },[socket])
-  console.log("thong bao :::" , notifications)
-  const handleDeleteNotify = (item) => {
-    console.log("item deleted" , item)
+  }, [socket])
+  const handleRecipientDeleteNotify = async (item) => {
+    const id = { id: item.id }
+    await axios.put(`${DOMAIN_BACKEND}/api/delete-notify-by-recipient`, id)
+    dispatch(getNotifyForRecipient(currentUser.id))
+  }
+  const handleDonorDeleteNotify = async (item) => {
+    const id = { id: item.id }
+    const res = await axios.put(`${DOMAIN_BACKEND}/api/delete-notify-by-donor`, id)
+    dispatch(getNotifyForDonor(currentUser.id))
   }
   return (
     <div className={cx('wrapper')}>
@@ -85,22 +106,60 @@ function NavBar() {
         <Tooltip title={<p className={cx('tooltip')}>Thông báo</p>} placement="bottom">
           <div className={cx('notification')} onClick={() => setOpenNotify(!openNotify)}>
             <FontAwesomeIcon icon={faBell} />
-            <div className={cx('counter')}>{notifications && notifications.length > 0 ? notifications.length : 0}</div>
+            <div className={cx('counter')}>
+              {
+                currentUser.roleId === "R4" ? <div>{
+                  notificationsOfRecipient && notificationsOfRecipient.length > 0 ? notificationsOfRecipient.length : <>0</>
+                }
+                </div> : <div>{
+                  notificationsOfDonor && notificationsOfDonor.length > 0 ? notificationsOfDonor.length : <>0</>
+                }</div>
+              }
+            </div>
           </div>
         </Tooltip>
         {openNotify && (
           <div className={cx('notifications')}>
             <div className={cx('notify')}>
-              {notifications && notifications.length > 0 && notifications.map((item, index) => {
+              {currentUser.roleId === "R4" && notificationsOfRecipient && notificationsOfRecipient.length > 0 ? notificationsOfRecipient.map((item, index) => {
                 return (
                   <>
-                    <span key={index}>{item.donorName} đã chấp nhận yêu cầu nhận máu ({item.unitRequire} ml) của bạn! <FaTrashAlt style={{marginLeft: "5px"}} onClick={() => handleDeleteNotify(item)}/></span>
-                    
+                    <span className={cx('success-notify')} key={index}>{item.donorName} đã chấp nhận hiến máu cho yêu cầu nhận máu ({item.unitRequire} ml) của bạn! <img
+                      onClick={() => handleRecipientDeleteNotify(item)}
+                      src={
+                        require('../../../assets/images/deleteIcon.png')
+                      }
+                      alt="delete"
+                    />   </span>
                   </>
-                  
-                  
                 )
-              })}
+              }) : <>{
+                currentUser.roleId === "R3" && notificationsOfDonor && notificationsOfDonor.length > 0 ? notificationsOfDonor.map((item, index) => {
+                  return (
+                    <>{
+                      item.type === "recipient_confirm_success" ? <span className={cx('success-notify')}>
+                        {item.recipientName} đã xác nhận hoàn thành quá trình hiến máu cho yêu cầu nhận máu ({item.unitRequire} ml)!<img
+                          onClick={() => handleDonorDeleteNotify(item)}
+                          src={
+                            require('../../../assets/images/deleteIcon.png')
+                          }
+                          alt="delete"
+                        />
+                      </span> : <span className={cx('failed-notify')}>
+                        {item.recipientName} đã xác nhận quá trình hiến máu cho yêu cầu nhận máu ({item.unitRequire} ml) đã không hoàn thành!<img
+                          onClick={() => handleDonorDeleteNotify(item)}
+                          src={
+                            require('../../../assets/images/deleteIcon.png')
+                          }
+                          alt="delete"
+                        />
+                      </span>
+                    }
+                    </>
+                  )
+                }) : <></>
+              }</>
+              }
             </div>
           </div>
         )}

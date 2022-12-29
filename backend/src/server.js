@@ -97,20 +97,32 @@ io.on("connection", (socket) => {
       addNewUser(fullName, userInfo.id, socket.id)
     })
     socket.on('send_notification_confirm_from_donor', (data) => {
-      const receiver = getUser(data.receiverId)
+      const receiver = getUser(data.recipientId)
       if(receiver){
-        const dataSend = {
-          donorName: data.senderName,
-          type: data.type,
-          unitRequire: data.unitRequire
-        }
-        console.log("dataSend" , dataSend)
-        io.to(receiver.socketId).emit('get_notification_from_donor', (dataSend))
+        io.to(receiver.socketId).emit('get_notification_from_donor', (data))
       }else{
         console.log("user offfline")
       }
       
     })
+    socket.on('recipient_confirm_notify_success' , data => {
+      console.log("recipient_confirm_notify_success: 123 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_success', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })
+    socket.on('recipient_confirm_notify_failed' , data => {
+      console.log("recipient_confirm_notify_failed: 456 " , data)
+      const receiver = getUser(data.donorId)
+      if(receiver){
+        io.to(receiver.socketId).emit('get_recipient_confirm_notify_failed', (data))
+      }else{
+        console.log("user offfline")
+      }
+    })  
   });
   socket.on("setup", (userData) => {
     switch (user.groupBlood) {
