@@ -300,6 +300,29 @@ let handleDeleteBookingById = async (req, res) => {
     });
   }
 }
+
+let handleGetBookingById = async (req, res) => {
+  try{  
+    let id = req.query.id;
+    console.log(id)
+    if (!id) {
+      res.send({
+        statusCode: 422,
+        message: "Thiếu thông tin cần thiết!",
+      });
+    } else {
+      let booking = await userService.getBookingByIdService(id);
+      res.status(booking.statusCode).json(booking);
+    }
+  }catch(e){
+    console.log(e);
+    res.send({
+      statusCode: 500,
+      message: "Lỗi từ Server!",
+    });
+  }
+}
+
 let handleGetNewestBooking = async (req, res) => {
   try{  
     if (!req.body) {
@@ -723,4 +746,5 @@ module.exports = {
   handleGetNotifyForDonor,
   handleDeleteNotifyByRecipient,
   handleDeleteNotifyByDonor,
+  handleGetBookingById
 };

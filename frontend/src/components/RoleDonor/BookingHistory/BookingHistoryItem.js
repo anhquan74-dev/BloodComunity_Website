@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import { useEffect } from 'react';
 import { fetchHospitalById } from '../../../redux/actions/hospitalManage';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -13,6 +14,7 @@ const BookingHistoryItem = ({ donorBooking }) => {
     useEffect(() => {
         dispatch(fetchHospitalById(donorBooking?.hospitalId));
     }, []);
+    console.log(donorBooking);
 
     let time = '';
     switch (donorBooking?.timeType) {
@@ -83,12 +85,16 @@ const BookingHistoryItem = ({ donorBooking }) => {
                         className={cx('status', {
                             done: donorBooking.status === 'S3',
                             inprogress: donorBooking.status === 'S2',
-                            'confirm-email': donorBooking.status === 'S1'
+                            'confirm-email': donorBooking.status === 'S1',
                         })}
                     >
-                        {donorBooking.status === 'S3' ? 'Đã hiến máu': (donorBooking.status === 'S2' ? 'Đã hẹn lịch' : 'Chưa xác nhận email')}
+                        {donorBooking.status === 'S3'
+                            ? 'Đã hiến máu'
+                            : donorBooking.status === 'S2'
+                            ? 'Đã hẹn lịch'
+                            : 'Chưa xác nhận email'}
                     </p>
-                    <a href="#">Xem chi tiết</a>
+                    <NavLink to={`/donor/booking_history/${donorBooking.id}`}>Xem chi tiết</NavLink>
                 </div>
             </div>
         </div>
