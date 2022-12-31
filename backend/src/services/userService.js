@@ -3,7 +3,7 @@ import authController from "../controllers/authController";
 import { v4 as uuidv4 } from "uuid";
 require("dotenv").config();
 import emailService from "./emailService";
-const Op = require('Sequelize').Op;
+const Op = require("Sequelize").Op;
 let getNotifyForRecipientService = async (recipientId) => {
   try {
     let notifiesInfor = {};
@@ -11,7 +11,7 @@ let getNotifyForRecipientService = async (recipientId) => {
       where: {
         recipientId,
         recipientDeleted: "0",
-        type: "donor_confirm"
+        type: "donor_confirm",
       },
     });
     if (!notifies) {
@@ -27,7 +27,7 @@ let getNotifyForRecipientService = async (recipientId) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let getNotifyForDonorService = async (donorId) => {
   try {
     let notifiesInfor = {};
@@ -36,8 +36,8 @@ let getNotifyForDonorService = async (donorId) => {
         donorId,
         donorDeleted: "0",
         type: {
-          [Op.or]: ["recipient_confirm_failed", "recipient_confirm_success"]
-        }
+          [Op.or]: ["recipient_confirm_failed", "recipient_confirm_success"],
+        },
       },
     });
     if (!notifies) {
@@ -53,13 +53,13 @@ let getNotifyForDonorService = async (donorId) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let getAllRequestByRecipientIdService = async (id) => {
   try {
     let requestsInfor = {};
     let requests = await db.Request.findAll({
       where: {
-        recipientId: id
+        recipientId: id,
       },
     });
     if (!requests) {
@@ -75,20 +75,22 @@ let getAllRequestByRecipientIdService = async (id) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let getAllRequestByGroupBloodService = async (groupBlood) => {
   try {
     let requestsInfor = {};
     let requests = await db.Request.findAll({
       where: {
-        groupBlood
+        groupBlood,
       },
-      include: [{
-        model: db.User,
-        as: 'recipientData'
-      }],
+      include: [
+        {
+          model: db.User,
+          as: "recipientData",
+        },
+      ],
       raw: true,
-        nest: true,
+      nest: true,
     });
     if (!requests) {
       requestsInfor.statusCode = 404;
@@ -103,7 +105,7 @@ let getAllRequestByGroupBloodService = async (groupBlood) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let recipientConfirmRequestSuccessService = async (data) => {
   try {
     let requestUpdated = {};
@@ -129,7 +131,7 @@ let recipientConfirmRequestSuccessService = async (data) => {
   } catch (e) {
     console.log("err donor confirm: ", e);
   }
-}
+};
 let recipientConfirmRequestFailedService = async (data) => {
   try {
     let requestUpdated = {};
@@ -146,7 +148,8 @@ let recipientConfirmRequestFailedService = async (data) => {
       });
       requestUpdated.content = getRequestInforAgain;
       requestUpdated.statusCode = 200;
-      requestUpdated.message = "Người nhận máu đã xác nhận nhận máu không thành công!";
+      requestUpdated.message =
+        "Người nhận máu đã xác nhận nhận máu không thành công!";
     } else {
       requestUpdated.statusCode = 404;
       requestUpdated.message = "Không tìm thấy!";
@@ -155,7 +158,7 @@ let recipientConfirmRequestFailedService = async (data) => {
   } catch (e) {
     console.log("err donor confirm: ", e);
   }
-}
+};
 let donorConfirmRequestService = async (data) => {
   try {
     let requestUpdated = {};
@@ -182,7 +185,7 @@ let donorConfirmRequestService = async (data) => {
   } catch (e) {
     console.log("err donor confirm: ", e);
   }
-}
+};
 let updateRequestService = async (data) => {
   try {
     let requestUpdated = {};
@@ -211,7 +214,7 @@ let updateRequestService = async (data) => {
   } catch (e) {
     console.log("err update: ", e);
   }
-}
+};
 let deleteRequestByIdService = async (data) => {
   try {
     let message = {};
@@ -232,27 +235,28 @@ let deleteRequestByIdService = async (data) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let createRequestService = async (data) => {
   try {
     let requestCreated = {};
-    if(!data.recipientId || !data.groupBlood){
+    if (!data.recipientId || !data.groupBlood) {
       requestCreated.statusCode = 422;
       requestCreated.message = "Thiếu thông số bắt buộc!";
-    }else{
+    } else {
       const request = await db.Request.create({
         recipientId: data.recipientId,
         groupBlood: data.groupBlood,
         unitRequire: data.unitRequire,
         offerBenefit: data.offerBenefit,
-        status: "S1"
+        status: "S1",
       });
       const recipientInfo = await db.User.findOne({
-        where: { id: data.recipientId}
-      })
+        where: { id: data.recipientId },
+      });
       const content = {
-        request, recipientInfo
-      }
+        request,
+        recipientInfo,
+      };
       requestCreated.statusCode = 201;
       requestCreated.message = "Tạo yêu cầu thành công!";
       requestCreated.content = content;
@@ -261,33 +265,33 @@ let createRequestService = async (data) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 let createNotifyService = async (data) => {
   try {
     let notifyCreated = {};
-    
-      const notify = await db.Notify.create({
-        recipientId: data.recipientId,
-        recipientName: data.recipientName,
-        donorId: data.donorId,
-        donorName: data.donorName,
-        donorDeleted: data.donorDeleted,
-        recipientDeleted: data.recipientDeleted,
-        type: data.type,
-        unitRequire: data.unitRequire,
-      });
-      notifyCreated.statusCode = 201;
-      notifyCreated.message = "Tạo thông báo thành công!";
-      notifyCreated.content = notify;
-    
+
+    const notify = await db.Notify.create({
+      recipientId: data.recipientId,
+      recipientName: data.recipientName,
+      donorId: data.donorId,
+      donorName: data.donorName,
+      donorDeleted: data.donorDeleted,
+      recipientDeleted: data.recipientDeleted,
+      type: data.type,
+      unitRequire: data.unitRequire,
+    });
+    notifyCreated.statusCode = 201;
+    notifyCreated.message = "Tạo thông báo thành công!";
+    notifyCreated.content = notify;
+
     return notifyCreated;
   } catch (e) {
     console.log(e);
   }
-}
+};
 let getNewestBookingService = async (data) => {
-  try{
-    let bookingSearch = {}
+  try {
+    let bookingSearch = {};
     const [results, metadata] = await sequelize.query(
       `SELECT * FROM bookings where bookings.donorId = ${data.id} ORDER BY id DESC LIMIT 1`,
       { tupleFormat: "array" }
@@ -301,14 +305,13 @@ let getNewestBookingService = async (data) => {
       bookingSearch.content = results;
     }
     return bookingSearch;
-  }catch(e){
+  } catch (e) {
     console.log(e);
   }
-
-}
+};
 let getUserSearchService = async (keyWord) => {
   try {
-    let userSearch = {}
+    let userSearch = {};
     const [results, metadata] = await sequelize.query(
       `SELECT * FROM users WHERE email LIKE '%${keyWord}%' OR firstName LIKE '%${keyWord}%' OR lastName LIKE '%${keyWord}%' OR hospitalName LIKE '%${keyWord}%'`,
       { tupleFormat: "array" }
@@ -325,37 +328,38 @@ let getUserSearchService = async (keyWord) => {
   } catch (e) {
     console.log(e);
   }
-
-}
+};
 let searchUserPaginationService = async (body) => {
   try {
-    let userSearch = {}
+    let userSearch = {};
     const { keyWord, pageNumber, numOfElement } = body;
     if (!pageNumber || !numOfElement) {
       userSearch.statusCode = 422;
-      userSearch.message = "Không thể xác định số trang hay số phần tử trên trang";
+      userSearch.message =
+        "Không thể xác định số trang hay số phần tử trên trang";
     } else {
       const page = parseInt(pageNumber);
       const limit = parseInt(numOfElement);
       const [results, metadata] = await sequelize.query(
-        `SELECT * FROM users WHERE email LIKE '%${keyWord}%' OR firstName LIKE '%${keyWord}%' OR lastName LIKE '%${keyWord}%' OR hospitalName LIKE '%${keyWord}%' LIMIT ${limit} OFFSET ${(page - 1) * limit
+        `SELECT * FROM users WHERE email LIKE '%${keyWord}%' OR firstName LIKE '%${keyWord}%' OR lastName LIKE '%${keyWord}%' OR hospitalName LIKE '%${keyWord}%' LIMIT ${limit} OFFSET ${
+          (page - 1) * limit
         }`,
         { tupleFormat: "array" }
       );
       if (results.length === 0) {
         userSearch.statusCode = 404;
-        userSearch.message = "Không tìm thấy người dùng nào!"
+        userSearch.message = "Không tìm thấy người dùng nào!";
       } else {
         userSearch.statusCode = 200;
-        userSearch.message = "Tìm kiếm thành công!"
-        userSearch.content = results
+        userSearch.message = "Tìm kiếm thành công!";
+        userSearch.content = results;
       }
     }
     return userSearch;
   } catch (error) {
     console.log(error);
   }
-}
+};
 let registerService = async (data) => {
   try {
     let userSignup = {};
@@ -404,7 +408,7 @@ let loginService = async (email, password) => {
     } else {
       if (checkUserEmail.status === "inactive") {
         userData.statusCode = 403;
-        userData.message = "Tài khoản của bạn đã bị khóa!"
+        userData.message = "Tài khoản của bạn đã bị khóa!";
       }
       if (checkUserEmail.status === "active") {
         let checkPassword = await authController.comparePassword(
@@ -418,8 +422,8 @@ let loginService = async (email, password) => {
         } else {
           const infoToGenerateToken = {
             roleId: checkUserEmail.roleId,
-            email: checkUserEmail.email
-          }
+            email: checkUserEmail.email,
+          };
           const token = authController.generateToken(infoToGenerateToken);
           const data = {
             id: checkUserEmail.id,
@@ -472,9 +476,7 @@ let getTopDonorService = async () => {
       attributes: {
         exclude: ["password"],
       },
-      order: [
-        ["numberOfDonation", "DESC"],
-      ],
+      order: [["numberOfDonation", "DESC"]],
     });
     return allUsers;
   } catch (e) {
@@ -572,7 +574,28 @@ let deleteBookingByIdService = async (data) => {
   } catch (e) {
     console.log(e);
   }
-}
+};
+
+let getBookingByIdService = async (idBooking) => {
+  try {
+    let message = {};
+    let booking = await db.Booking.findOne({
+      where: { id: idBooking },
+    });
+    if (!booking) {
+      message.statusCode = 404;
+      message.message = "Không tìm thấy!!";
+    } else {
+      message.statusCode = 200;
+      message.message = "Lấy thông tin booking thành công!";
+      message.content = booking;
+    }
+    return message;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 let deleteUserService = async (data) => {
   try {
     let message = {};
@@ -898,5 +921,6 @@ module.exports = {
   getAllRequestByRecipientIdService,
   createNotifyService,
   getNotifyForRecipientService,
-  getNotifyForDonorService
+  getNotifyForDonorService,
+  getBookingByIdService,
 };
