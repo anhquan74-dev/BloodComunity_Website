@@ -53,7 +53,6 @@ function DonationEvents({ text }) {
                                             <FontAwesomeIcon icon={faLocationDot} />
                                             <span>{event.location}</span>
                                         </div>
-                                        <div> Like and share</div>
                                         <div>
                                             <div id="fb-root"></div>
                                             <div
