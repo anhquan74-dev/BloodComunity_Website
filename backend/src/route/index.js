@@ -103,6 +103,8 @@ let initWebRoutes = (app) => {
   router.post('/api/hospital-confirm-booking', hospitalController.handleConfirmBookingByHospital)
   router.get('/api/get-all-booking-by-donor-id',hospitalController.handleGetBookingsByDonorId)
   router.get('/api/get-all-booking-by-hospital-id', hospitalController.getAllBookingByHospitalId) 
+  router.get('/api/get-booking-by-id', userController.handleGetBookingById) 
+
   // request
   router.post('/api/create-request', userController.handleCreateRequest)
   router.put('/api/update-request', userController.handleUpdateRequest)

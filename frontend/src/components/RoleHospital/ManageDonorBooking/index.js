@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
+import ModalConfirmDonate from './ModalConfirmDonate';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,8 @@ const ManageDonorBooking = () => {
     // const [date, setDate] = useState();
     const [date, setDate] = useState(formatDate());
     const [listDonorBooking, setListDonorBooking] = useState();
+    const [showModalConfirm, setShowModalConfirm] = useState(false);
+    const [donorBooking, setDonorBooking] = useState();
 
     // new Date(formatDate()).getTime()
 
@@ -28,7 +31,6 @@ const ManageDonorBooking = () => {
             .catch((e) => setListDonorBooking(''));
     }, []);
 
-
     useEffect(() => {
         const newDate = new Date(date).getTime();
         axios
@@ -37,8 +39,27 @@ const ManageDonorBooking = () => {
             .catch((e) => setListDonorBooking(''));
     }, [date]);
 
+    const handleClose = () => {
+        setShowModalConfirm(false);
+    };
+
+    const handleShowModalConfirm = (item) => {
+        setDonorBooking(item);
+        setShowModalConfirm(true);
+    };
+
+
+    console.log(listDonorBooking);
+
     return (
         <div className={cx('wrapper')}>
+            {showModalConfirm && (
+                <ModalConfirmDonate
+                    handleClose={handleClose}
+                    show={showModalConfirm}
+                    donorBooking={donorBooking}
+                />
+            )}
             <h1>Quản lý lịch hẹn hiến máu của bệnh nhân</h1>
             <div className={cx('pick-schedule')}>
                 <div>
@@ -90,13 +111,16 @@ const ManageDonorBooking = () => {
                                             <td>{item.donorData.phoneNumber}</td>
                                             <td>{item.donorData.groupBlood}</td>
                                             <td>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="success"
-                                                    // onClick={() => handleShowModalDelete(item)}
-                                                >
-                                                    Xác nhận
-                                                </Button>
+                                                {item.status !== 'S3' && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="success"
+                                                        onClick={() => handleShowModalConfirm(item)}
+                                                    >
+                                                        Xác nhận
+                                                    </Button>
+                                                )}
+                                                {item.status === 'S3' && <div className={cx('confirm')}>Đã hiến máu</div>}
                                             </td>
                                         </tr>
                                     );
