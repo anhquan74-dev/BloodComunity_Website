@@ -52,7 +52,6 @@ export default function Event() {
               <FontAwesomeIcon icon={faLocationDot} />
               <span>{result.location}</span>
             </div>
-            <div> Like and share</div>
             <div>
               <div id="fb-root"></div>
               <div className="fb-like" data-href={`${DOMAIN_FRONTEND}/event/${result.id}`} data-width="" data-layout="button_count" data-action="like" data-size="small" data-share="true"></div>

@@ -7,6 +7,7 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 import './BloodRequest.css'
+import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
 const ENDPOINT = DOMAIN_BACKEND;
 var socket
@@ -42,6 +43,7 @@ function BloodRequest() {
       const res = await axios.post(`${DOMAIN_BACKEND}/api/create-request`, dataSubmit)
       socket.emit('new_request_from_recipient', (res.data.content))
       setShow(false)
+      toast.success("Tạo yêu cầu thành công")
     },
   });
   const handleClose = () => {

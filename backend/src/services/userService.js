@@ -575,7 +575,6 @@ let deleteBookingByIdService = async (data) => {
     console.log(e);
   }
 };
-
 let getBookingByIdService = async (idBooking) => {
   try {
     let message = {};
@@ -595,7 +594,6 @@ let getBookingByIdService = async (idBooking) => {
     console.log(e);
   }
 };
-
 let deleteUserService = async (data) => {
   try {
     let message = {};
@@ -617,7 +615,6 @@ let deleteUserService = async (data) => {
     console.log(e);
   }
 };
-
 let updateUserService = async (data) => {
   try {
     let userUpdated = {};
