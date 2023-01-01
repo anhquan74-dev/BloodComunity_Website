@@ -36,7 +36,7 @@ export default function ForgotPassword() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className='fg-container'>
-        <div className='fg-form'>
+        <div className='fg-form1'>
           <h1>Đặt lại mật khẩu</h1>
           <p>Hãy nhập chính xác email của bạn.</p>
           <input type='text' name='email' value={formik.values.email}
