@@ -39,16 +39,22 @@ import VerifyBooking from './pages/VerifyBooking';
 import BookingHistory from './components/RoleDonor/BookingHistory';
 import ManageDonorBooking from './components/RoleHospital/ManageDonorBooking';
 import BookingHistoryDetail from './components/RoleDonor/BookingHistory/BookingHistoryDetail';
+import ForgotPassword from './pages/ForgotPassword';
+import ForgotPasswordAgain from './pages/ForgotPasswordAgain';
+import Loading from './components/Loading';
 
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
     return (
         <Router>
             <div className="App">
+            <Loading />
                 <Routes>
                     <Route path="/" exact element={<LandingPage />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
+                    <Route path="/reset-password" element={<ForgotPasswordAgain />}></Route>
+                    <Route path="/forgot-password" element={<ForgotPassword />}></Route>
                     <Route path="/event/:id" element={<Event />}></Route>
                     <Route
                         path="/admin"

@@ -436,7 +436,7 @@ let handleResetPassword = async (req, res) => {
     if (!email) {
       res.send({
         statusCode: 422,
-        message: "Missing email address!",
+        message: "Thiếu email!",
       });
     } else {
       let userData = await userService.postResetPasswordService(email);

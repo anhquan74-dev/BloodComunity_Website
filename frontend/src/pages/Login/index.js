@@ -172,8 +172,14 @@ const Login = () => {
                     <hr />
                     <p className={cx('footer')}>
                         Bạn chưa có tài khoản?
-                        <NavLink to="/register" className={cx('btn-register')}>
+                        <NavLink style={{marginLeft: "5px", marginTop: "10px"}} to="/register" className={cx('btn-register')}>
                             Đăng ký
+                        </NavLink>
+                    </p>
+                    <p className={cx('footer')}>
+                        Quên mật khẩu?
+                        <NavLink style={{marginLeft: "5px"}} to="/forgot-password" className={cx('btn-register')}>
+                            Lấy lại mật khẩu
                         </NavLink>
                     </p>
                 </div>
