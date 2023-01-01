@@ -60,6 +60,10 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: "active",
       },
+      tokenPassword: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE,

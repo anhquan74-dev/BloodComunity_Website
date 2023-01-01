@@ -63,7 +63,8 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.BLOB("long"),
       groupBlood: DataTypes.STRING, //allcode
       numberOfDonation: DataTypes.INTEGER,
-      status: DataTypes.STRING
+      status: DataTypes.STRING,
+      tokenPassword: DataTypes.STRING
     },
     {
       sequelize,

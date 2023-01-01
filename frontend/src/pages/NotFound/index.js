@@ -1,6 +1,8 @@
 import { requirePropFactory } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './NotFound.css'
 function NotFound() {
+  const navigate = useNavigate()
   return (
     <div>
       <div className="logo-brand">
@@ -24,7 +26,7 @@ function NotFound() {
           </li>
         </ul>
         <p>
-          <a className="Button_home" href="#">Truy cập trang chủ</a>
+          <a className="Button_home" href="/">Truy cập trang chủ</a>
         </p>
       </div>
     </div>
