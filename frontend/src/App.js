@@ -42,13 +42,15 @@ import BookingHistoryDetail from './components/RoleDonor/BookingHistory/BookingH
 import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordAgain from './pages/ForgotPasswordAgain';
 import Loading from './components/Loading';
+import RecipientProfile from './components/RoleRecipient/RecipientProfile';
+import DonorDashboard from './components/RoleDonor/DonorDashboard';
 
 function App() {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
     return (
         <Router>
             <div className="App">
-            <Loading />
+                <Loading />
                 <Routes>
                     <Route path="/" exact element={<LandingPage />}></Route>
                     <Route path="/login" element={<Login />}></Route>
@@ -92,8 +94,8 @@ function App() {
                         }
                         // element={<HospitalPage />}
                     >
-                        <Route index element={<Dashboard />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route index element={<ManageSchedule />} />
+                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
                         <Route path="manage_schedule" element={<ManageSchedule />} />
                         <Route path="manage_events" element={<ManageEvents />} />
                         <Route path="donor_booking" element={<ManageDonorBooking />} />
@@ -110,8 +112,8 @@ function App() {
                         }
                         //  element={<DonorPage />}
                     >
-                        <Route index element={<Dashboard />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route index element={<DonorDashboard />} />
+                        <Route path="dashboard" element={<DonorDashboard />} />
                         <Route path="blood_request" element={<ViewBloodRequest />} />
                         <Route path="donate" element={<Donate />} />
                         <Route path="manage_schedule" element={<ManageDonateSchedule />} />
@@ -134,12 +136,12 @@ function App() {
                         }
                         //  element={<RecipientPage />}
                     >
-                        <Route index element={<Dashboard />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route index element={<BloodRequest />} />
+                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
                         <Route path="blood_request" element={<BloodRequest />} />
                         <Route path="manage_request" element={<ManageBloodRequest />} />
                         <Route path="reward" element={<DonorRank />} />
-                        <Route path="account" element={<Account />} />
+                        <Route path="account" element={<RecipientProfile />} />
                     </Route>
                     {/* Catch all */}
                     <Route path="*" element={<NotFound />}></Route>
