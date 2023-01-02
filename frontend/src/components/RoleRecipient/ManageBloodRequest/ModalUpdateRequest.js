@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 import { io } from 'socket.io-client';
+import { toast } from 'react-toastify';
 import { fetchRecipientRequest } from '../../../redux/actions/requestAction';
 const ENDPOINT = DOMAIN_BACKEND;
 var socket
@@ -48,6 +49,7 @@ function ModalUpdateRequest({ isOpenModalEdit, setOpenModalEdit }) {
       dispatch(fetchRecipientRequest(currentUser.id))
       socket.emit('recipient_delete_request', (dataUpdate));
       setOpenModalEdit(false)
+      toast.success("Cập nhật thành công!")
     },
   });
   useEffect(() => {

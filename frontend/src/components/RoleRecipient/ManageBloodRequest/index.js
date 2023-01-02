@@ -4,26 +4,13 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { fetchRecipientRequest, moveDataUpdateToRedux } from '../../../redux/actions/requestAction';
-import Modal from "react-modal";
 import { DOMAIN_BACKEND } from '../../../config/settingSystem';
 import '../BloodRequest/BloodRequest.css'
 import ModalUpdateRequest from './ModalUpdateRequest';
 import ModalInforDonor from './ModalInforDonor';
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "white",
-    width: 400,
-  },
-};
+import { toast } from 'react-toastify';
+
 const ENDPOINT = DOMAIN_BACKEND;
 var socket;
 socket = io(ENDPOINT);
@@ -33,10 +20,7 @@ function ManageBloodRequest() {
   const [socketConnected, setSocketConnected] = useState(false)
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const requests = useSelector((state) => state.request.listRequestsOfEachRecipients)
-  const [modalOpen, setModalOpen] = useState(false);
-  const [itemUpdate, setItemUpdate] = useState(null);
   const [isOpenModalEdit, setOpenModalEdit] = useState(false);
-  const [isOpenModalInforDonor, setIsOpenModalInforDonor] = useState(false)
   const [inforDonor, setInforDonor] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -49,7 +33,6 @@ function ManageBloodRequest() {
   }, [])
   useEffect(() => {
     socket.on('recieved_donor_confirm', (requestConfirmed) => {
-      // notification 
       dispatch(fetchRecipientRequest(currentUser.id))
     })
   }, [socket])
@@ -69,6 +52,7 @@ function ManageBloodRequest() {
     }
     await axios.post(`${DOMAIN_BACKEND}/api/create-notify`, dataNotify)
     socket.emit('recipient_confirm_notify_success', (item));
+    toast.success("Quá trình nhận máu đã hoàn thành!")
 
   }
   const handleConfirmFailed = async (item) => {
@@ -87,6 +71,7 @@ function ManageBloodRequest() {
     }
     await axios.post(`${DOMAIN_BACKEND}/api/create-notify`, dataNotify)
     socket.emit('recipient_confirm_notify_failed', (item));
+    toast.success("Yêu cầu này của bạn sẽ được gửi lại!")
   }
   const handleUpdateRequest = (item) => {
     setOpenModalEdit(!isOpenModalEdit)
@@ -99,6 +84,7 @@ function ManageBloodRequest() {
       await axios.delete(`${DOMAIN_BACKEND}/api/delete-request`, { data: { id } })
       dispatch(fetchRecipientRequest(currentUser.id))
       socket.emit('recipient_delete_request', (item));
+      toast.success("Xóa thành công!")
     } else {
       return;
     }
@@ -132,7 +118,7 @@ function ManageBloodRequest() {
                       }>Cập nhật</div>
                       <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleDeleteRequest(item)}>Hủy yêu cầu</div>
                     </div> : <>
-                      {item.status === "S3" ? <div style={{display: "flex"}}>
+                      {item.status === "S3" ? <div style={{ display: "flex" }}>
                         <div style={{ width: "150px" }} className={cx(`button-confirm`, 'button')}>Hoàn thành</div>
                         <div style={{ width: "150px" }} className={cx(`button-reject`, 'button')} onClick={() => handleDeleteRequest(item)}>Xóa khỏi lịch sử</div>
                       </div> : <div style={{ display: 'flex' }}>

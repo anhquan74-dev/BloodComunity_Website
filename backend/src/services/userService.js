@@ -575,7 +575,6 @@ let deleteBookingByIdService = async (data) => {
     console.log(e);
   }
 };
-
 let getBookingByIdService = async (idBooking) => {
   try {
     let message = {};
@@ -595,7 +594,6 @@ let getBookingByIdService = async (idBooking) => {
     console.log(e);
   }
 };
-
 let deleteUserService = async (data) => {
   try {
     let message = {};
@@ -617,7 +615,6 @@ let deleteUserService = async (data) => {
     console.log(e);
   }
 };
-
 let updateUserService = async (data) => {
   try {
     let userUpdated = {};
@@ -834,8 +831,8 @@ let postVerifyBookingSchedule = async (data) => {
     console.log(e);
   }
 };
-let buildUrlResetPassword = (email) => {
-  let result = `${process.env.URL_REACT}/reset-password?email=${email}`;
+let buildUrlResetPassword = (email,token) => {
+  let result = `${process.env.URL_REACT}/reset-password?token=${token}&email=${email}`;
   return result;
 };
 let postResetPasswordService = async (emailReset) => {
@@ -848,11 +845,18 @@ let postResetPasswordService = async (emailReset) => {
       dataReset.statusCode = 404;
       dataReset.message = "Email này không tồn tại trong hệ thống!";
     } else {
+      let token = uuidv4();
       await emailService.sendEmailResetPassword({
         receiverEmail: emailReset,
-        // language: data.language,
-        redirectLink: buildUrlResetPassword(emailReset),
+        redirectLink: buildUrlResetPassword(emailReset,token),
       });
+      const user = await db.User.findOne({
+        where: {
+          email: emailReset
+        },
+      });
+      user.tokenPassword = token;
+      user.save();
       dataReset.statusCode = 200;
       dataReset.message = "Email đã được gửi thành công!";
     }
@@ -869,7 +873,10 @@ let postVerifyResetPassword = async (data) => {
       dataReset.message = "Thiếu thông số bắt buộc!";
     } else {
       let checkUserEmail = await db.User.findOne({
-        where: { email: data.email },
+        where: { 
+          email: data.email ,
+          tokenPassword: data.token
+        },
         raw: false,
       });
       if (checkUserEmail) {

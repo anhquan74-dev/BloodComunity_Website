@@ -5,10 +5,6 @@ import hospitalController from "../controllers/hospitalController";
 import authController from "../controllers/authController";
 
 let initWebRoutes = (app) => {
-  //login with socials  
-  //realtime api
-  // add like and share
-
   //Home page
   router.get("/api/get-total-donation", userController.handleGetTotalDonation);
   router.get("/api/get-total-donor", userController.handleGetTotalDonor);
