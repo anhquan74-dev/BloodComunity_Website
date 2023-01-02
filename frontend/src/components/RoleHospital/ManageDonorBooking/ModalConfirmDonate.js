@@ -8,7 +8,7 @@ import { DOMAIN_BACKEND } from '../../../config/settingSystem.js';
 
 const cx = classNames.bind(styles);
 
-const ModalConfirmDonate = ({ show, handleClose, donorBooking }) => {
+const ModalConfirmDonate = ({ show, handleClose, donorBooking, handleChangeStatus }) => {
     const [formalityDonate, setFormalityDonate] = useState('');
     const [bloodAmount, setBloodAmount] = useState('');
 
@@ -24,6 +24,7 @@ const ModalConfirmDonate = ({ show, handleClose, donorBooking }) => {
                 console.log(data);
             })
             .catch((e) => console.log(e));
+        handleChangeStatus();
         handleClose();
     };
 

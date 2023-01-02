@@ -14,7 +14,6 @@ function DonorProfile() {
         setShowModalUpdate(false);
     };
 
-
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.login.currentUser);
     let address =
@@ -30,22 +29,26 @@ function DonorProfile() {
                         <img src={require('../../../assets/images/default_avatar.png')} alt="avatar" />
                         <p>{`${user.firstName} ${user.lastName}`}</p>
                     </div>
-                    <div className={cx('left-detail')}>
-                        <p>Huy hiệu</p>
-                        <p>Vàng</p>
-                    </div>
-                    <div className={cx('left-detail')}>
-                        <p>Thứ hạng</p>
-                        <p>5</p>
-                    </div>
-                    <div className={cx('left-detail')}>
-                        <p>Số lần đặt lịch hiến máu tại bệnh viện</p>
-                        <p>10</p>
-                    </div>
-                    <div className={cx('left-detail')}>
-                        <p>Số lần hiến máu khẩn cấp</p>
-                        <p>5</p>
-                    </div>
+                    {user && user.roleId === 'R3' && (
+                        <>
+                            <div className={cx('left-detail')}>
+                                <p>Huy hiệu</p>
+                                <p>Vàng</p>
+                            </div>
+                            <div className={cx('left-detail')}>
+                                <p>Thứ hạng</p>
+                                <p>5</p>
+                            </div>
+                            <div className={cx('left-detail')}>
+                                <p>Số lần đặt lịch hiến máu tại bệnh viện</p>
+                                <p>10</p>
+                            </div>
+                            <div className={cx('left-detail')}>
+                                <p>Số lần hiến máu khẩn cấp</p>
+                                <p>5</p>
+                            </div>
+                        </>
+                    )}
                 </div>
                 <div className={cx('right')}>
                     <div className={cx('menu')}>
