@@ -18,6 +18,7 @@ const ManageDonorBooking = () => {
     const [listDonorBooking, setListDonorBooking] = useState();
     const [showModalConfirm, setShowModalConfirm] = useState(false);
     const [donorBooking, setDonorBooking] = useState();
+    const [statusBooking, setStatusBooking] = useState('S2');
 
     // new Date(formatDate()).getTime()
 
@@ -39,6 +40,18 @@ const ManageDonorBooking = () => {
             .catch((e) => setListDonorBooking(''));
     }, [date]);
 
+    useEffect(() => {
+        const newDate = new Date(date).getTime();
+        axios
+            .get(`${DOMAIN_BACKEND}/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${newDate}`)
+            .then((res) => setListDonorBooking(res.data.content))
+            .catch((e) => setListDonorBooking(''));
+    }, [statusBooking]);
+
+    const handleChangeStatus = () => {
+        setStatusBooking('S3');
+    };
+
     const handleClose = () => {
         setShowModalConfirm(false);
     };
@@ -47,7 +60,6 @@ const ManageDonorBooking = () => {
         setDonorBooking(item);
         setShowModalConfirm(true);
     };
-
 
     console.log(listDonorBooking);
 
@@ -58,6 +70,7 @@ const ManageDonorBooking = () => {
                     handleClose={handleClose}
                     show={showModalConfirm}
                     donorBooking={donorBooking}
+                    handleChangeStatus={handleChangeStatus}
                 />
             )}
             <h1>Quản lý lịch hẹn hiến máu của bệnh nhân</h1>
@@ -120,7 +133,9 @@ const ManageDonorBooking = () => {
                                                         Xác nhận
                                                     </Button>
                                                 )}
-                                                {item.status === 'S3' && <div className={cx('confirm')}>Đã hiến máu</div>}
+                                                {item.status === 'S3' && (
+                                                    <div className={cx('confirm')}>Đã hiến máu</div>
+                                                )}
                                             </td>
                                         </tr>
                                     );

@@ -1,5 +1,5 @@
 export const DonorRoutes = [
-    { to: '/donor/dashboard', content: 'Dashboard' },
+    { to: '/donor/dashboard', content: 'Bảng điều khiển' },
     { to: '/donor/blood_request', content: 'Xem yêu cầu nhận máu' },
     { to: '/donor/donate', content: 'Đặt lịch hiến máu' },
     { to: '/donor/manage_schedule', content: 'Quản lý lịch hẹn' },
