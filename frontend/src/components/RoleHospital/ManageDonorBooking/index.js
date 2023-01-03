@@ -40,16 +40,17 @@ const ManageDonorBooking = () => {
             .catch((e) => setListDonorBooking(''));
     }, [date]);
 
-    useEffect(() => {
-        const newDate = new Date(date).getTime();
+    // useEffect(() => {
+
+    // }, [statusBooking]);
+
+    const handleChangeStatus = (date1) => {
+        date1 = new Date(Number(date1));
+        const newDate = new Date(formatDate(date1)).getTime();
         axios
             .get(`${DOMAIN_BACKEND}/api/get-all-booking-by-hospital-id?hospitalId=${hospitalId}&date=${newDate}`)
             .then((res) => setListDonorBooking(res.data.content))
             .catch((e) => setListDonorBooking(''));
-    }, [statusBooking]);
-
-    const handleChangeStatus = () => {
-        setStatusBooking('S3');
     };
 
     const handleClose = () => {

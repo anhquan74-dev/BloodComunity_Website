@@ -15,11 +15,13 @@ function Dashboard() {
     const dispatch = useDispatch();
     const listEvents = useSelector((state) => state.hospital.listEvents);
     const totalDonation = useSelector((state) => state.statistic.totalDonation);
+    const currentUser = useSelector((state) => state.auth.login.currentUser);
     useEffect(() => {
         dispatch(fetchAllEvents());
         dispatch(getTotalDonation());
     }, []);
     console.log(totalDonation);
+    console.log(currentUser);
 
     return (
         <div className={cx('wrapper')}>
@@ -31,7 +33,7 @@ function Dashboard() {
                 </div>
                 <div>
                     <p>Số lần hiến máu</p>
-                    <h3>17</h3>
+                    <h3>{currentUser?.numberOfDonation}</h3>
                 </div>
             </div>
             <div className={cx('item', 'item2')}>
