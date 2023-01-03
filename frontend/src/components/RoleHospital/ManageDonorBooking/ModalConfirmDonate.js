@@ -13,6 +13,7 @@ const ModalConfirmDonate = ({ show, handleClose, donorBooking, handleChangeStatu
     const [bloodAmount, setBloodAmount] = useState('');
 
     const handleConfirmDonate = () => {
+        let date = new Date();
         console.log(donorBooking.id, formalityDonate, bloodAmount);
         axios
             .post(`${DOMAIN_BACKEND}/api/hospital-confirm-booking`, {
@@ -22,9 +23,11 @@ const ModalConfirmDonate = ({ show, handleClose, donorBooking, handleChangeStatu
             })
             .then((data) => {
                 console.log(data);
+                date = data.data.content.date;
+                console.log(date);
+                handleChangeStatus(date);
             })
             .catch((e) => console.log(e));
-        handleChangeStatus();
         handleClose();
     };
 
